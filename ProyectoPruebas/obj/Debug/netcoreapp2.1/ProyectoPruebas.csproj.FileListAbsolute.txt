@@ -1,0 +1,11 @@
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\bin\Debug\netcoreapp2.1\ProyectoPruebas.deps.json
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\bin\Debug\netcoreapp2.1\ProyectoPruebas.runtimeconfig.json
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\bin\Debug\netcoreapp2.1\ProyectoPruebas.runtimeconfig.dev.json
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\bin\Debug\netcoreapp2.1\ProyectoPruebas.dll
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\bin\Debug\netcoreapp2.1\ProyectoPruebas.pdb
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\obj\Debug\netcoreapp2.1\ProyectoPruebas.csprojAssemblyReference.cache
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\obj\Debug\netcoreapp2.1\ProyectoPruebas.csproj.CoreCompileInputs.cache
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\obj\Debug\netcoreapp2.1\ProyectoPruebas.AssemblyInfoInputs.cache
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\obj\Debug\netcoreapp2.1\ProyectoPruebas.AssemblyInfo.cs
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\obj\Debug\netcoreapp2.1\ProyectoPruebas.dll
+C:\Users\Ale\Documents\Compiladores\ProyectoPruebas\ProyectoPruebas\obj\Debug\netcoreapp2.1\ProyectoPruebas.pdb

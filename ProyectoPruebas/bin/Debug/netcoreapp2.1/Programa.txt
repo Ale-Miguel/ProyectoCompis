@@ -1,0 +1,9 @@
+Var Int x = 0;	
+
+Function Void ExampleFunction():
+	Print("adsf");
+EndFunction
+
+MoveForward;
+x = 323;
+ExampleFunction();
