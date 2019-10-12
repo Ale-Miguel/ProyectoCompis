@@ -1,9 +1,32 @@
-Var Int x = 0;	
+Var Int x = 0;
+Var Float  y = 0.0;
 
 Function Void ExampleFunction():
-	Print("adsf");
+	Print(x);
 EndFunction
 
-MoveForward;
-x = 323;
-ExampleFunction();
+x  = ExampleFunction();
+
+For (x < 10)	
+	MoveForward;
+	x = x + 1;
+	Print(x);
+EndFor
+
+Loop 5
+	MoveForward;
+	Print("Moving Forward");
+EndLoop
+
+If(x > 10)
+	x = 20;
+EndIf
+
+If(x < 20)
+	x = 30;
+ElseIf(x == 20)
+	x = 20 + 30;
+Else
+	ExampleFunction();
+
+EndIf

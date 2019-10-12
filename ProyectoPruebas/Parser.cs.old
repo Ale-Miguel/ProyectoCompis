@@ -286,7 +286,11 @@ public class Parser {
 	void PRINT() {
 		Expect(6);
 		Expect(14);
-		NUMBER();
+		if (la.kind == 20) {
+			Get();
+		} else if (la.kind == 1) {
+			Get();
+		} else SynErr(54);
 		Expect(15);
 	}
 
@@ -295,7 +299,7 @@ public class Parser {
 			FOR();
 		} else if (la.kind == 45) {
 			LOOP();
-		} else SynErr(54);
+		} else SynErr(55);
 	}
 
 	void FOR() {
@@ -316,7 +320,7 @@ public class Parser {
 			Get();
 		} else if (la.kind == 1) {
 			Get();
-		} else SynErr(55);
+		} else SynErr(56);
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
@@ -340,21 +344,22 @@ public class Parser {
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		if (StartOf(5)) {
+		if (la.kind == 11 || la.kind == 12) {
 			CONDITION_ELSE();
 		}
 		Expect(13);
 	}
 
 	void CONDITION_ELSE() {
-		if (StartOf(1)) {
+		if (la.kind == 11) {
 			ELSE();
 		} else if (la.kind == 12) {
 			ELSEIF();
-		} else SynErr(56);
+		} else SynErr(57);
 	}
 
 	void ELSE() {
+		Expect(11);
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
@@ -370,7 +375,7 @@ public class Parser {
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		if (StartOf(5)) {
+		if (la.kind == 11 || la.kind == 12) {
 			CONDITION_ELSE();
 		}
 	}
@@ -378,15 +383,15 @@ public class Parser {
 	void ASGMT_OR_FUNCT() {
 		Expect(1);
 		if (la.kind == 14) {
-			FUNCTCALL();
+			FUNCTCALL_ONLY();
 		} else if (la.kind == 25) {
 			ASSIGNMENT();
-		} else SynErr(57);
+		} else SynErr(58);
 	}
 
-	void FUNCTCALL() {
+	void FUNCTCALL_ONLY() {
 		Expect(14);
-		if (StartOf(6)) {
+		if (StartOf(5)) {
 			FUNCT_PARAMS();
 		}
 		Expect(15);
@@ -395,11 +400,11 @@ public class Parser {
 
 	void ASSIGNMENT() {
 		Expect(25);
-		if (StartOf(6)) {
+		if (StartOf(5)) {
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
-		} else SynErr(58);
+		} else SynErr(59);
 		Expect(9);
 	}
 
@@ -409,6 +414,14 @@ public class Parser {
 			Get();
 			EXPR();
 		}
+	}
+
+	void FUNCTCALL() {
+		Expect(14);
+		if (StartOf(5)) {
+			FUNCT_PARAMS();
+		}
+		Expect(15);
 	}
 
 	void EXPRESSION_1() {
@@ -443,7 +456,7 @@ public class Parser {
 			Get();
 			break;
 		}
-		default: SynErr(59); break;
+		default: SynErr(60); break;
 		}
 	}
 
@@ -462,14 +475,14 @@ public class Parser {
 	void FACTOR() {
 		if (la.kind == 14) {
 			FACTOR_1();
-		} else if (StartOf(7)) {
+		} else if (StartOf(6)) {
 			FACTOR_2();
-		} else SynErr(60);
+		} else SynErr(61);
 	}
 
 	void FACTOR_1() {
 		Expect(14);
-		EXPRESSION();
+		EXPR();
 		Expect(15);
 	}
 
@@ -485,7 +498,7 @@ public class Parser {
 			Get();
 		} else if (la.kind == 22) {
 			Get();
-		} else SynErr(61);
+		} else SynErr(62);
 	}
 
 	void FACTOR_VALUES() {
@@ -496,7 +509,7 @@ public class Parser {
 			}
 		} else if (la.kind == 18 || la.kind == 19) {
 			NUMBER();
-		} else SynErr(62);
+		} else SynErr(63);
 	}
 
 
@@ -516,7 +529,6 @@ public class Parser {
 		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_T, _T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
 		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_x, _x,_x,_x,_x, _x},
 		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
-		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_T, _x,_T,_x,_x, _x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x}
 
@@ -586,15 +598,16 @@ public class Errors {
 			case 51: s = "invalid TYPE"; break;
 			case 52: s = "invalid NUMBER"; break;
 			case 53: s = "invalid COMMAND_LIST"; break;
-			case 54: s = "invalid CYCLE"; break;
-			case 55: s = "invalid LOOP"; break;
-			case 56: s = "invalid CONDITION_ELSE"; break;
-			case 57: s = "invalid ASGMT_OR_FUNCT"; break;
-			case 58: s = "invalid ASSIGNMENT"; break;
-			case 59: s = "invalid RELOPS"; break;
-			case 60: s = "invalid FACTOR"; break;
-			case 61: s = "invalid SIGNS"; break;
-			case 62: s = "invalid FACTOR_VALUES"; break;
+			case 54: s = "invalid PRINT"; break;
+			case 55: s = "invalid CYCLE"; break;
+			case 56: s = "invalid LOOP"; break;
+			case 57: s = "invalid CONDITION_ELSE"; break;
+			case 58: s = "invalid ASGMT_OR_FUNCT"; break;
+			case 59: s = "invalid ASSIGNMENT"; break;
+			case 60: s = "invalid RELOPS"; break;
+			case 61: s = "invalid FACTOR"; break;
+			case 62: s = "invalid SIGNS"; break;
+			case 63: s = "invalid FACTOR_VALUES"; break;
 
 			default: s = "error " + n; break;
 		}

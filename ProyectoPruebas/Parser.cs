@@ -344,14 +344,14 @@ public class Parser {
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		if (StartOf(5)) {
+		if (la.kind == 11 || la.kind == 12) {
 			CONDITION_ELSE();
 		}
 		Expect(13);
 	}
 
 	void CONDITION_ELSE() {
-		if (StartOf(1)) {
+		if (la.kind == 11) {
 			ELSE();
 		} else if (la.kind == 12) {
 			ELSEIF();
@@ -359,6 +359,7 @@ public class Parser {
 	}
 
 	void ELSE() {
+		Expect(11);
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
@@ -374,7 +375,7 @@ public class Parser {
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		if (StartOf(5)) {
+		if (la.kind == 11 || la.kind == 12) {
 			CONDITION_ELSE();
 		}
 	}
@@ -386,25 +387,24 @@ public class Parser {
 		} else if (la.kind == 25) {
 			ASSIGNMENT();
 		} else SynErr(58);
+		Expect(9);
 	}
 
 	void FUNCTCALL() {
 		Expect(14);
-		if (StartOf(6)) {
+		if (StartOf(5)) {
 			FUNCT_PARAMS();
 		}
 		Expect(15);
-		Expect(9);
 	}
 
 	void ASSIGNMENT() {
 		Expect(25);
-		if (StartOf(6)) {
+		if (StartOf(5)) {
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
 		} else SynErr(59);
-		Expect(9);
 	}
 
 	void FUNCT_PARAMS() {
@@ -466,14 +466,14 @@ public class Parser {
 	void FACTOR() {
 		if (la.kind == 14) {
 			FACTOR_1();
-		} else if (StartOf(7)) {
+		} else if (StartOf(6)) {
 			FACTOR_2();
 		} else SynErr(61);
 	}
 
 	void FACTOR_1() {
 		Expect(14);
-		EXPRESSION();
+		EXPR();
 		Expect(15);
 	}
 
@@ -520,7 +520,6 @@ public class Parser {
 		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_T, _T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
 		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_x, _x,_x,_x,_x, _x},
 		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
-		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_T, _x,_T,_x,_x, _x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x}
 

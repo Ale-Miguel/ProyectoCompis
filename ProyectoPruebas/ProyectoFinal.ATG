@@ -95,7 +95,7 @@ LOOP = Loop (CTE_I | Id) STATUTE {STATUTE} EndLoop.
 
 CONDITION = If LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE}  [CONDITION_ELSE] EndIf.
 CONDITION_ELSE = ELSE | ELSEIF.
-ELSE = STATUTE {STATUTE}.
+ELSE = Else STATUTE {STATUTE}.
 ELSEIF = ElseIf LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE} [CONDITION_ELSE].
 
 STATUTE = COMMAND 
@@ -103,12 +103,12 @@ STATUTE = COMMAND
           | CYCLE 
           | ASGMT_OR_FUNCT.
           
-ASGMT_OR_FUNCT = Id (FUNCTCALL | ASSIGNMENT).
+ASGMT_OR_FUNCT = Id (FUNCTCALL | ASSIGNMENT) Semicolon.
 
-FUNCTCALL = LeftParenthesis [FUNCT_PARAMS] RightParenthesis Semicolon.
+FUNCTCALL = LeftParenthesis [FUNCT_PARAMS] RightParenthesis.
 FUNCT_PARAMS = EXPR {Comma EXPR}.
 
-ASSIGNMENT = Equal (EXPR | CTE_S) Semicolon.
+ASSIGNMENT = Equal (EXPR | CTE_S).
 
 EXPRESSION = EXPR [EXPRESSION_1].
 EXPRESSION_1 = RELOPS EXPR.
@@ -124,10 +124,13 @@ EXPR = TERM {(Plus | Minus) TERM}.
 
 TERM = FACTOR {(Asterisk | Slash) FACTOR}.
 
-FACTOR = FACTOR_1 | FACTOR_2.
-FACTOR_1 = LeftParenthesis EXPRESSION RightParenthesis.
+FACTOR = FACTOR_1 
+        | FACTOR_2.
+FACTOR_1 = LeftParenthesis EXPR RightParenthesis.
 FACTOR_2 = [SIGNS] FACTOR_VALUES.
-FACTOR_VALUES = Id [FUNCTCALL] | NUMBER.
-SIGNS = Plus | Minus.
+FACTOR_VALUES = Id [FUNCTCALL] 
+                | NUMBER.
+SIGNS = Plus 
+        | Minus.
 	
 END ProyectoFinal.
