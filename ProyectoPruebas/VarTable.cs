@@ -9,6 +9,7 @@ namespace ProyectoPruebas {
         public const int UNDEF_VAR = 0;
 
         private Variable variables;
+        private Function functions;
         private Parser parser;
         
 
@@ -16,6 +17,7 @@ namespace ProyectoPruebas {
            
             this.parser = parser;
             this.variables = new Variable("undefVar", UNDEF_VAR);
+            this.functions = new Function("undefFunct", UNDEF_VAR);
         }
         
         //Función paa agregar variables a la tabla de variables
@@ -58,6 +60,47 @@ namespace ProyectoPruebas {
 
             //Si no encontro la variable, actualVar es null
             return actualVar;
+        }
+
+        public void addFunction(Function function) {
+
+            Function lastFunction = functions;
+
+            //Se busca la ultima función (function.next == nulll) o se interrumpe si se ecuentra una función con el
+            //mismo nombre
+            while (lastFunction.getName() != function.getName() && lastFunction.getNext() != null) {
+
+                lastFunction = lastFunction.getNext();
+            }
+
+            //Si se encuentra una función con el mismo nombre (lastFunction != null), es un error, ya que se 
+            //está declarando dos veces la función
+            if (lastFunction.getNext() != null || lastFunction.getName() == function.getName()) {
+                parser.SemErr("Sevaral declarations of " + lastFunction.getName());
+            }
+
+            //Se guarda la función a la tabla de funciones
+            lastFunction.setNext(function);
+
+        }
+
+        public Function findFunction(string name) {
+
+            Function actualFunction = functions;
+
+            //Mientras actualFunction tenga un valor
+            while (actualFunction != null) {
+                //Si se encuentra la función que se está buscando por nombre
+                //(los nombres de función deben de ser únicas)
+                if (actualFunction.getName() == name) {
+                    break;
+                }
+
+                actualFunction = actualFunction.getNext();
+            }
+
+            //Si no encontro la función, actualFunction es null
+            return actualFunction;
         }
     }
 }
