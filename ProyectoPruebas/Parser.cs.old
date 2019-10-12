@@ -64,6 +64,19 @@ public class Parser {
 	public Token la;   // lookahead token
 	int errDist = minErrDist;
 
+const int TYPE_UNDEF = 0;
+  const int TYPE_INT = 1;
+  const int TYPE_FLOAT = 2;
+  const int TYPE_BOOL = 3;
+  const int TYPE_STRING = 4;
+
+  string variableName;
+
+  private ProyectoPruebas.VarTable tab;
+
+    internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
+    internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
+
 
 
 	public Parser(Scanner scanner) {
@@ -178,8 +191,13 @@ public class Parser {
 
 	void VAR() {
 		Expect(3);
+		string name; int type; 
 		TYPE();
+		type = t.kind;
 		Expect(1);
+		name =  t.val; 
+		ProyectoPruebas.Variable var = new ProyectoPruebas.Variable(name, type);
+		tab.addVariable(var);
 		Expect(25);
 		if (la.kind == 18 || la.kind == 19) {
 			NUMBER();
@@ -382,38 +400,13 @@ public class Parser {
 
 	void ASGMT_OR_FUNCT() {
 		Expect(1);
+		variableName = t.val; 
 		if (la.kind == 14) {
-			FUNCTCALL_ONLY();
+			FUNCTCALL();
 		} else if (la.kind == 25) {
 			ASSIGNMENT();
 		} else SynErr(58);
-	}
-
-	void FUNCTCALL_ONLY() {
-		Expect(14);
-		if (StartOf(5)) {
-			FUNCT_PARAMS();
-		}
-		Expect(15);
 		Expect(9);
-	}
-
-	void ASSIGNMENT() {
-		Expect(25);
-		if (StartOf(5)) {
-			EXPR();
-		} else if (la.kind == 20) {
-			Get();
-		} else SynErr(59);
-		Expect(9);
-	}
-
-	void FUNCT_PARAMS() {
-		EXPR();
-		while (la.kind == 7) {
-			Get();
-			EXPR();
-		}
 	}
 
 	void FUNCTCALL() {
@@ -422,6 +415,26 @@ public class Parser {
 			FUNCT_PARAMS();
 		}
 		Expect(15);
+	}
+
+	void ASSIGNMENT() {
+		Expect(25);
+		if(tab.findVariable(variableName) == null){
+		  SemErr("Variable " + variable +  " not declared");
+		}
+		if (StartOf(5)) {
+			EXPR();
+		} else if (la.kind == 20) {
+			Get();
+		} else SynErr(59);
+	}
+
+	void FUNCT_PARAMS() {
+		EXPR();
+		while (la.kind == 7) {
+			Get();
+			EXPR();
+		}
 	}
 
 	void EXPRESSION_1() {

@@ -5,7 +5,7 @@ Function Void ExampleFunction():
 	Print(x);
 EndFunction
 
-x  = ExampleFunction();
+xzz  = ExampleFunction();
 
 For (x < 10)	
 	MoveForward;

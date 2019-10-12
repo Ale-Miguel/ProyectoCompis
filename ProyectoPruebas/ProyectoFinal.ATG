@@ -1,5 +1,19 @@
 COMPILER ProyectoFinal
 
+  const int TYPE_UNDEF = 0;
+  const int TYPE_INT = 1;
+  const int TYPE_FLOAT = 2;
+  const int TYPE_BOOL = 3;
+  const int TYPE_STRING = 4;
+
+  string variableName;
+  string functionName;
+
+  private ProyectoPruebas.VarTable tab;
+
+    internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
+    internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
+
 CHARACTERS
   Letter = 'A'..'Z' + 'a'..'z'. 
   Digit = '0'..'9'.
@@ -63,7 +77,14 @@ PRODUCTIONS
 ProyectoFinal = PROGRAM.
 PROGRAM = VARS {MODULE} STATUTE {STATUTE}.
 VARS = {VAR}.
-VAR = Var TYPE Id Equal (NUMBER | CTE_S) Semicolon.
+
+VAR                   
+    = Var   (. string name; int type; .)
+      TYPE  (. type = t.kind;.)
+      Id    (. name =  t.val; 
+               ProyectoPruebas.Variable var = new ProyectoPruebas.Variable(name, type);
+               tab.addVariable(var);.)
+    Equal (NUMBER | CTE_S) Semicolon. 
 NUMBER = CTE_I 
         | CTE_F.
 MODULE = Function (TYPE | Void) Id PARAMS Colon STATUTE {STATUTE} [MODULE_RETURN] EndFunction.
@@ -103,12 +124,18 @@ STATUTE = COMMAND
           | CYCLE 
           | ASGMT_OR_FUNCT.
           
-ASGMT_OR_FUNCT = Id (FUNCTCALL | ASSIGNMENT) Semicolon.
+ASGMT_OR_FUNCT = 
+                Id (. variableName = t.val; .)
+                (FUNCTCALL | ASSIGNMENT) Semicolon.
 
 FUNCTCALL = LeftParenthesis [FUNCT_PARAMS] RightParenthesis.
 FUNCT_PARAMS = EXPR {Comma EXPR}.
 
-ASSIGNMENT = Equal (EXPR | CTE_S).
+ASSIGNMENT = 
+            Equal (. if(tab.findVariable(variableName) == null){
+                        SemErr("Variable " + variableName +  " not declared");
+                      }.)
+            (EXPR | CTE_S).
 
 EXPRESSION = EXPR [EXPRESSION_1].
 EXPRESSION_1 = RELOPS EXPR.
