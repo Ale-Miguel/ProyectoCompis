@@ -52,12 +52,13 @@ namespace ProyectoPruebas {
                 //Si se encuentra la variable que se está buscando por nombre
                 //(los nombres de variables deben de ser únicas)
                 if(actualVar.getName() == name) {
-                    break;
+                    return actualVar;
                 }
 
                 actualVar = actualVar.getNext();
             }
 
+            parser.SemErr("Variable " + name + " not declared.");
             //Si no encontro la variable, actualVar es null
             return actualVar;
         }
@@ -93,12 +94,13 @@ namespace ProyectoPruebas {
                 //Si se encuentra la función que se está buscando por nombre
                 //(los nombres de función deben de ser únicas)
                 if (actualFunction.getName() == name) {
-                    break;
+                    return actualFunction;
                 }
 
                 actualFunction = actualFunction.getNext();
             }
 
+            parser.SemErr("Function " + name + " not declared.");
             //Si no encontro la función, actualFunction es null
             return actualFunction;
         }

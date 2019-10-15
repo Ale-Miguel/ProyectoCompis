@@ -71,11 +71,12 @@ const int TYPE_UNDEF = 0;
   const int TYPE_STRING = 4;
 
   string variableName;
+  string functionName;
 
   private ProyectoPruebas.VarTable tab;
 
-    internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
-    internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
+  internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
+  internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
 
 
 
@@ -159,12 +160,18 @@ const int TYPE_UNDEF = 0;
 
 	void MODULE() {
 		Expect(31);
+		string functName; int type;
 		if (StartOf(2)) {
 			TYPE();
 		} else if (la.kind == 32) {
 			Get();
 		} else SynErr(48);
+		type = t.kind;
 		Expect(1);
+		functName = t.val; 
+		ProyectoPruebas.Function fun = new ProyectoPruebas.Function(functName, type);
+		tab.addFunction(fun);
+		
 		PARAMS();
 		Expect(8);
 		STATUTE();
@@ -197,13 +204,15 @@ const int TYPE_UNDEF = 0;
 		Expect(1);
 		name =  t.val; 
 		ProyectoPruebas.Variable var = new ProyectoPruebas.Variable(name, type);
-		tab.addVariable(var);
+		
 		Expect(25);
 		if (la.kind == 18 || la.kind == 19) {
 			NUMBER();
 		} else if (la.kind == 20) {
 			Get();
 		} else SynErr(50);
+		var.setValue(t.val);
+		tab.addVariable(var);
 		Expect(9);
 	}
 
@@ -411,6 +420,9 @@ const int TYPE_UNDEF = 0;
 
 	void FUNCTCALL() {
 		Expect(14);
+		if(tab.findFunction(variableName) == null){
+		    SemErr("Function " + variableName + " not declared");
+		}
 		if (StartOf(5)) {
 			FUNCT_PARAMS();
 		}
@@ -419,9 +431,10 @@ const int TYPE_UNDEF = 0;
 
 	void ASSIGNMENT() {
 		Expect(25);
-		if(tab.findVariable(variableName) == null){
-		  SemErr("Variable " + variableName +  " not declared");
+		if( tab.findVariable(variableName) == null){
+		 SemErr("Variable " + variableName +  " not declared");
 		}
+		
 		if (StartOf(5)) {
 			EXPR();
 		} else if (la.kind == 20) {
@@ -517,8 +530,14 @@ const int TYPE_UNDEF = 0;
 	void FACTOR_VALUES() {
 		if (la.kind == 1) {
 			Get();
+			variableName = t.val;
+			bool enterFunction = false;
 			if (la.kind == 14) {
+				enterFunction = true; 
 				FUNCTCALL();
+			}
+			if(!enterFunction){
+			  tab.findVariable(variableName);
 			}
 		} else if (la.kind == 18 || la.kind == 19) {
 			NUMBER();

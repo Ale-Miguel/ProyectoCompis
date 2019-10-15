@@ -1,11 +1,11 @@
 Var Int x = 0;
 Var Float  y = 0.0;
 
-Function Void ExampleFunction():
+Function Int ExampleFunction():
 	Print(x);
 EndFunction
 
-x  = ExampleFunction();
+y = ExampleFunction();
 
 For (x < 10)	
 	MoveForward;
