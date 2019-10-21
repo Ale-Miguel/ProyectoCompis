@@ -6,7 +6,7 @@ namespace ProyectoPruebas {
     class Function {
 
         private string name;        //Atributo que almacena el nombre de función
-        private int returnValue;    //Atributo que almacena el tipo de retorno
+        private int returnType;    //Atributo que almacena el tipo de retorno
         private Function next;      //Atributo que almacena la función siguiente de la lista
 
         public void setNext(Function next) {
@@ -20,14 +20,14 @@ namespace ProyectoPruebas {
             return name;
         }
 
-        public int getReturnValue() {
-            return returnValue;
+        public int getReturnType() {
+            return returnType;
         }
 
 
         public Function(string name, int returnValue) {
             this.name = name;
-            this.returnValue = returnValue;
+            this.returnType = returnValue;
             next = null;
         }
     }

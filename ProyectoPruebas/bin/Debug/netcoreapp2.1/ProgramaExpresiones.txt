@@ -1,0 +1,16 @@
+Var Int x = 0;
+Var Int z = 0;
+Var Float y = 0.0;
+
+x = 1;
+
+x = (6 + 2) * (z - x) / 5;
+
+y = y / x;
+
+x = x + 1;
+
+If( x < 2)
+	x = 10;
+
+EndIf

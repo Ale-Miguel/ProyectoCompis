@@ -30,28 +30,29 @@ public class Parser {
 	public const int _Asterisk = 23;
 	public const int _Slash = 24;
 	public const int _Equal = 25;
-	public const int _GreaterThan = 26;
-	public const int _LesserThan = 27;
-	public const int _NotEqual = 28;
-	public const int _GreaterThanOrEqual = 29;
-	public const int _LessThanOrEqual = 30;
-	public const int _Function = 31;
-	public const int _Void = 32;
-	public const int _Return = 33;
-	public const int _EndFunction = 34;
-	public const int _Bool = 35;
-	public const int _String = 36;
-	public const int _TurnLeft = 37;
-	public const int _TurnRight = 38;
-	public const int _Shoot = 39;
-	public const int _Wait = 40;
-	public const int _MoveForward = 41;
-	public const int _Interact = 42;
-	public const int _For = 43;
-	public const int _EndFor = 44;
-	public const int _Loop = 45;
-	public const int _EndLoop = 46;
-	public const int maxT = 47;
+	public const int _EqualThan = 26;
+	public const int _GreaterThan = 27;
+	public const int _LesserThan = 28;
+	public const int _NotEqual = 29;
+	public const int _GreaterThanOrEqual = 30;
+	public const int _LessThanOrEqual = 31;
+	public const int _Function = 32;
+	public const int _Void = 33;
+	public const int _Return = 34;
+	public const int _EndFunction = 35;
+	public const int _Bool = 36;
+	public const int _String = 37;
+	public const int _TurnLeft = 38;
+	public const int _TurnRight = 39;
+	public const int _Shoot = 40;
+	public const int _Wait = 41;
+	public const int _MoveForward = 42;
+	public const int _Interact = 43;
+	public const int _For = 44;
+	public const int _EndFor = 45;
+	public const int _Loop = 46;
+	public const int _EndLoop = 47;
+	public const int maxT = 48;
 
 	const bool _T = true;
 	const bool _x = false;
@@ -64,16 +65,12 @@ public class Parser {
 	public Token la;   // lookahead token
 	int errDist = minErrDist;
 
-const int TYPE_UNDEF = 0;
-  const int TYPE_INT = 1;
-  const int TYPE_FLOAT = 2;
-  const int TYPE_BOOL = 3;
-  const int TYPE_STRING = 4;
-
-  string variableName;
+string variableName;
   string functionName;
 
   private ProyectoPruebas.VarTable tab;
+
+  int constCont = 0;
 
   internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
   internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
@@ -143,7 +140,7 @@ const int TYPE_UNDEF = 0;
 
 	void PROGRAM() {
 		VARS();
-		while (la.kind == 31) {
+		while (la.kind == 32) {
 			MODULE();
 		}
 		STATUTE();
@@ -159,13 +156,13 @@ const int TYPE_UNDEF = 0;
 	}
 
 	void MODULE() {
-		Expect(31);
+		Expect(32);
 		string functName; int type;
 		if (StartOf(2)) {
 			TYPE();
-		} else if (la.kind == 32) {
+		} else if (la.kind == 33) {
 			Get();
-		} else SynErr(48);
+		} else SynErr(49);
 		type = t.kind;
 		Expect(1);
 		functName = t.val; 
@@ -178,10 +175,10 @@ const int TYPE_UNDEF = 0;
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		if (la.kind == 33) {
+		if (la.kind == 34) {
 			MODULE_RETURN();
 		}
-		Expect(34);
+		Expect(35);
 	}
 
 	void STATUTE() {
@@ -189,11 +186,11 @@ const int TYPE_UNDEF = 0;
 			COMMAND();
 		} else if (la.kind == 10) {
 			CONDITION();
-		} else if (la.kind == 43 || la.kind == 45) {
+		} else if (la.kind == 44 || la.kind == 46) {
 			CYCLE();
 		} else if (la.kind == 1) {
 			ASGMT_OR_FUNCT();
-		} else SynErr(49);
+		} else SynErr(50);
 	}
 
 	void VAR() {
@@ -210,7 +207,7 @@ const int TYPE_UNDEF = 0;
 			NUMBER();
 		} else if (la.kind == 20) {
 			Get();
-		} else SynErr(50);
+		} else SynErr(51);
 		var.setValue(t.val);
 		tab.addVariable(var);
 		Expect(9);
@@ -221,11 +218,11 @@ const int TYPE_UNDEF = 0;
 			Get();
 		} else if (la.kind == 4) {
 			Get();
+		} else if (la.kind == 37) {
+			Get();
 		} else if (la.kind == 36) {
 			Get();
-		} else if (la.kind == 35) {
-			Get();
-		} else SynErr(51);
+		} else SynErr(52);
 	}
 
 	void NUMBER() {
@@ -233,7 +230,7 @@ const int TYPE_UNDEF = 0;
 			Get();
 		} else if (la.kind == 19) {
 			Get();
-		} else SynErr(52);
+		} else SynErr(53);
 	}
 
 	void PARAMS() {
@@ -245,19 +242,26 @@ const int TYPE_UNDEF = 0;
 	}
 
 	void MODULE_RETURN() {
-		Expect(33);
+		Expect(34);
 		EXPR();
 	}
 
 	void EXPR() {
 		TERM();
+		
 		while (la.kind == 21 || la.kind == 22) {
 			if (la.kind == 21) {
 				Get();
 			} else {
 				Get();
 			}
+			tab.codeGenerator.pushOperatorStack(t.kind);
 			TERM();
+			if(!tab.codeGenerator.solveSumAndMinus()){
+			 SemErr("Type dismatch");
+			}
+			
+			
 		}
 	}
 
@@ -278,10 +282,6 @@ const int TYPE_UNDEF = 0;
 
 	void COMMAND_LIST() {
 		switch (la.kind) {
-		case 37: {
-			Get();
-			break;
-		}
 		case 38: {
 			Get();
 			break;
@@ -302,11 +302,15 @@ const int TYPE_UNDEF = 0;
 			Get();
 			break;
 		}
+		case 43: {
+			Get();
+			break;
+		}
 		case 6: {
 			PRINT();
 			break;
 		}
-		default: SynErr(53); break;
+		default: SynErr(54); break;
 		}
 	}
 
@@ -317,20 +321,20 @@ const int TYPE_UNDEF = 0;
 			Get();
 		} else if (la.kind == 1) {
 			Get();
-		} else SynErr(54);
+		} else SynErr(55);
 		Expect(15);
 	}
 
 	void CYCLE() {
-		if (la.kind == 43) {
+		if (la.kind == 44) {
 			FOR();
-		} else if (la.kind == 45) {
+		} else if (la.kind == 46) {
 			LOOP();
-		} else SynErr(55);
+		} else SynErr(56);
 	}
 
 	void FOR() {
-		Expect(43);
+		Expect(44);
 		Expect(14);
 		EXPRESSION();
 		Expect(15);
@@ -338,21 +342,21 @@ const int TYPE_UNDEF = 0;
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		Expect(44);
+		Expect(45);
 	}
 
 	void LOOP() {
-		Expect(45);
+		Expect(46);
 		if (la.kind == 18) {
 			Get();
 		} else if (la.kind == 1) {
 			Get();
-		} else SynErr(56);
+		} else SynErr(57);
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		Expect(46);
+		Expect(47);
 	}
 
 	void EXPRESSION() {
@@ -382,7 +386,7 @@ const int TYPE_UNDEF = 0;
 			ELSE();
 		} else if (la.kind == 12) {
 			ELSEIF();
-		} else SynErr(57);
+		} else SynErr(58);
 	}
 
 	void ELSE() {
@@ -414,14 +418,23 @@ const int TYPE_UNDEF = 0;
 			FUNCTCALL();
 		} else if (la.kind == 25) {
 			ASSIGNMENT();
-		} else SynErr(58);
+		} else SynErr(59);
 		Expect(9);
 	}
 
 	void FUNCTCALL() {
 		Expect(14);
-		if(tab.findFunction(variableName) == null){
+		ProyectoPruebas.Function fun = tab.findFunction(variableName);
+		if(fun == null){
 		    SemErr("Function " + variableName + " not declared");
+		}
+		else{
+		
+		    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable("FUNCT"+fun.getName(), fun.getReturnType());
+		
+		    tab.codeGenerator.pushSymbolStack(functVar);
+		
+		
 		}
 		if (StartOf(5)) {
 			FUNCT_PARAMS();
@@ -431,15 +444,25 @@ const int TYPE_UNDEF = 0;
 
 	void ASSIGNMENT() {
 		Expect(25);
-		if( tab.findVariable(variableName) == null){
-		 SemErr("Variable " + variableName +  " not declared");
+		ProyectoPruebas.Variable var = tab.findVariable(variableName);
+		if(var == null){
+		SemErr("Variable " + variableName +  " not declared");
 		}
+		else{
+		tab.codeGenerator.pushOperatorStack(t.kind);
+		tab.codeGenerator.pushSymbolStack(var);
+		}
+		
+		
 		
 		if (StartOf(5)) {
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
-		} else SynErr(59);
+		} else SynErr(60);
+		if(!tab.codeGenerator.solveAssignment()){
+		     SemErr("Type  dismatch at assignment");
+		}
 	}
 
 	void FUNCT_PARAMS() {
@@ -452,21 +475,14 @@ const int TYPE_UNDEF = 0;
 
 	void EXPRESSION_1() {
 		RELOPS();
+		tab.codeGenerator.pushOperatorStack(t.kind);
 		EXPR();
+		tab.codeGenerator.solveRelOp();
 	}
 
 	void RELOPS() {
 		switch (la.kind) {
-		case 25: {
-			Get();
-			Expect(25);
-			break;
-		}
 		case 26: {
-			Get();
-			break;
-		}
-		case 29: {
 			Get();
 			break;
 		}
@@ -482,7 +498,15 @@ const int TYPE_UNDEF = 0;
 			Get();
 			break;
 		}
-		default: SynErr(60); break;
+		case 31: {
+			Get();
+			break;
+		}
+		case 29: {
+			Get();
+			break;
+		}
+		default: SynErr(61); break;
 		}
 	}
 
@@ -494,7 +518,13 @@ const int TYPE_UNDEF = 0;
 			} else {
 				Get();
 			}
+			tab.codeGenerator.pushOperatorStack(t.kind);
 			FACTOR();
+			if(!tab.codeGenerator.solveMultAndDiv()){
+			   SemErr("Type dismatch");
+			}
+			
+			
 		}
 	}
 
@@ -503,13 +533,15 @@ const int TYPE_UNDEF = 0;
 			FACTOR_1();
 		} else if (StartOf(6)) {
 			FACTOR_2();
-		} else SynErr(61);
+		} else SynErr(62);
 	}
 
 	void FACTOR_1() {
 		Expect(14);
+		tab.codeGenerator.pushOperatorStack(t.kind);
 		EXPR();
 		Expect(15);
+		tab.codeGenerator.popOperatorStack();
 	}
 
 	void FACTOR_2() {
@@ -524,24 +556,36 @@ const int TYPE_UNDEF = 0;
 			Get();
 		} else if (la.kind == 22) {
 			Get();
-		} else SynErr(62);
+		} else SynErr(63);
 	}
 
 	void FACTOR_VALUES() {
 		if (la.kind == 1) {
 			Get();
 			variableName = t.val;
+			
+			//Variable que dice si entrÃ³ a una funciÃ³n o no
 			bool enterFunction = false;
 			if (la.kind == 14) {
 				enterFunction = true; 
 				FUNCTCALL();
 			}
 			if(!enterFunction){
-			  tab.findVariable(variableName);
+			 ProyectoPruebas.Variable varId = tab.findVariable(variableName);
+			 if(varId != null){
+			    tab.codeGenerator.pushSymbolStack(varId);
+			 }
 			}
 		} else if (la.kind == 18 || la.kind == 19) {
 			NUMBER();
-		} else SynErr(63);
+			string constNumber = t.val;
+			int constType = t.kind;
+			
+			ProyectoPruebas.Variable constVar = new ProyectoPruebas.Variable(constNumber, constType);
+			
+			tab.codeGenerator.pushSymbolStack(constVar);
+			
+		} else SynErr(64);
 	}
 
 
@@ -556,13 +600,13 @@ const int TYPE_UNDEF = 0;
 	}
 	
 	static readonly bool[,] set = {
-		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
-		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_T, _x,_T,_x,_x, _x},
-		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_T, _T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
-		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_x, _x,_x,_x,_x, _x},
-		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_T,_T,_T, _T,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
-		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
-		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x}
+		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
+		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
+		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
+		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x},
+		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
+		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
+		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x}
 
 	};
 } // end Parser
@@ -602,44 +646,45 @@ public class Errors {
 			case 23: s = "Asterisk expected"; break;
 			case 24: s = "Slash expected"; break;
 			case 25: s = "Equal expected"; break;
-			case 26: s = "GreaterThan expected"; break;
-			case 27: s = "LesserThan expected"; break;
-			case 28: s = "NotEqual expected"; break;
-			case 29: s = "GreaterThanOrEqual expected"; break;
-			case 30: s = "LessThanOrEqual expected"; break;
-			case 31: s = "Function expected"; break;
-			case 32: s = "Void expected"; break;
-			case 33: s = "Return expected"; break;
-			case 34: s = "EndFunction expected"; break;
-			case 35: s = "Bool expected"; break;
-			case 36: s = "String expected"; break;
-			case 37: s = "TurnLeft expected"; break;
-			case 38: s = "TurnRight expected"; break;
-			case 39: s = "Shoot expected"; break;
-			case 40: s = "Wait expected"; break;
-			case 41: s = "MoveForward expected"; break;
-			case 42: s = "Interact expected"; break;
-			case 43: s = "For expected"; break;
-			case 44: s = "EndFor expected"; break;
-			case 45: s = "Loop expected"; break;
-			case 46: s = "EndLoop expected"; break;
-			case 47: s = "??? expected"; break;
-			case 48: s = "invalid MODULE"; break;
-			case 49: s = "invalid STATUTE"; break;
-			case 50: s = "invalid VAR"; break;
-			case 51: s = "invalid TYPE"; break;
-			case 52: s = "invalid NUMBER"; break;
-			case 53: s = "invalid COMMAND_LIST"; break;
-			case 54: s = "invalid PRINT"; break;
-			case 55: s = "invalid CYCLE"; break;
-			case 56: s = "invalid LOOP"; break;
-			case 57: s = "invalid CONDITION_ELSE"; break;
-			case 58: s = "invalid ASGMT_OR_FUNCT"; break;
-			case 59: s = "invalid ASSIGNMENT"; break;
-			case 60: s = "invalid RELOPS"; break;
-			case 61: s = "invalid FACTOR"; break;
-			case 62: s = "invalid SIGNS"; break;
-			case 63: s = "invalid FACTOR_VALUES"; break;
+			case 26: s = "EqualThan expected"; break;
+			case 27: s = "GreaterThan expected"; break;
+			case 28: s = "LesserThan expected"; break;
+			case 29: s = "NotEqual expected"; break;
+			case 30: s = "GreaterThanOrEqual expected"; break;
+			case 31: s = "LessThanOrEqual expected"; break;
+			case 32: s = "Function expected"; break;
+			case 33: s = "Void expected"; break;
+			case 34: s = "Return expected"; break;
+			case 35: s = "EndFunction expected"; break;
+			case 36: s = "Bool expected"; break;
+			case 37: s = "String expected"; break;
+			case 38: s = "TurnLeft expected"; break;
+			case 39: s = "TurnRight expected"; break;
+			case 40: s = "Shoot expected"; break;
+			case 41: s = "Wait expected"; break;
+			case 42: s = "MoveForward expected"; break;
+			case 43: s = "Interact expected"; break;
+			case 44: s = "For expected"; break;
+			case 45: s = "EndFor expected"; break;
+			case 46: s = "Loop expected"; break;
+			case 47: s = "EndLoop expected"; break;
+			case 48: s = "??? expected"; break;
+			case 49: s = "invalid MODULE"; break;
+			case 50: s = "invalid STATUTE"; break;
+			case 51: s = "invalid VAR"; break;
+			case 52: s = "invalid TYPE"; break;
+			case 53: s = "invalid NUMBER"; break;
+			case 54: s = "invalid COMMAND_LIST"; break;
+			case 55: s = "invalid PRINT"; break;
+			case 56: s = "invalid CYCLE"; break;
+			case 57: s = "invalid LOOP"; break;
+			case 58: s = "invalid CONDITION_ELSE"; break;
+			case 59: s = "invalid ASGMT_OR_FUNCT"; break;
+			case 60: s = "invalid ASSIGNMENT"; break;
+			case 61: s = "invalid RELOPS"; break;
+			case 62: s = "invalid FACTOR"; break;
+			case 63: s = "invalid SIGNS"; break;
+			case 64: s = "invalid FACTOR_VALUES"; break;
 
 			default: s = "error " + n; break;
 		}

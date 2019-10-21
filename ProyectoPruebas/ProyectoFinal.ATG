@@ -1,15 +1,11 @@
 COMPILER ProyectoFinal
 
-  const int TYPE_UNDEF = 0;
-  const int TYPE_INT = 1;
-  const int TYPE_FLOAT = 2;
-  const int TYPE_BOOL = 3;
-  const int TYPE_STRING = 4;
-
   string variableName;
   string functionName;
 
   private ProyectoPruebas.VarTable tab;
+
+  int constCont = 0;
 
   internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
   internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
@@ -49,6 +45,7 @@ TOKENS
   Asterisk = '*'.
   Slash = '/'.
   Equal = '='.
+  EqualThan = "==".
   GreaterThan = '>'.
   LesserThan = '<'.
   NotEqual = "<>".
@@ -138,48 +135,110 @@ ASGMT_OR_FUNCT =
                 (FUNCTCALL | ASSIGNMENT) Semicolon.
 
 FUNCTCALL  = 
-            LeftParenthesis (. if(tab.findFunction(variableName) == null){
+            LeftParenthesis (. ProyectoPruebas.Function fun = tab.findFunction(variableName);
+                                if(fun == null){
                                     SemErr("Function " + variableName + " not declared");
+                                }
+                                else{
+
+                                    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable("FUNCT"+fun.getName(), fun.getReturnType());
+
+                                    tab.codeGenerator.pushSymbolStack(functVar);
+
+
                                 }.)
             [FUNCT_PARAMS] RightParenthesis.
 FUNCT_PARAMS = EXPR {Comma EXPR}.
 
 ASSIGNMENT = 
-            Equal (.   
-                      if( tab.findVariable(variableName) == null){
+            Equal (.   ProyectoPruebas.Variable var = tab.findVariable(variableName);
+                      if(var == null){
                         SemErr("Variable " + variableName +  " not declared");
                       }
+                      else{
+                        tab.codeGenerator.pushOperatorStack(t.kind);
+                        tab.codeGenerator.pushSymbolStack(var);
+                      }
+
+                      
                       .)
-            (EXPR | CTE_S).
+            (EXPR | CTE_S)
+              (.if(!tab.codeGenerator.solveAssignment()){
+                      SemErr("Type  dismatch at assignment");
+                }.)
+            .
 
 EXPRESSION = EXPR [EXPRESSION_1].
-EXPRESSION_1 = RELOPS EXPR.
+EXPRESSION_1 = RELOPS (.tab.codeGenerator.pushOperatorStack(t.kind);.)
+              EXPR
+              (. tab.codeGenerator.solveRelOp();.)
+              .
 
-RELOPS = Equal Equal 
+RELOPS = EqualThan
         | GreaterThan 
         | GreaterThanOrEqual 
         | LesserThan 
         | LessThanOrEqual 
         | NotEqual.
 
-EXPR = TERM {(Plus | Minus) TERM}.
 
-TERM = FACTOR {(Asterisk | Slash) FACTOR}.
+
+EXPR = TERM   (. //Console.WriteLine(t.kind + " " + t.line);
+                .)
+              {
+              (Plus | Minus)  (.tab.codeGenerator.pushOperatorStack(t.kind);.)
+               TERM
+                 (. if(!tab.codeGenerator.solveSumAndMinus()){
+                      SemErr("Type dismatch");
+                     }
+
+                  .)
+               }.
+
+TERM = FACTOR 
+      { 
+      (Asterisk | Slash)  (.tab.codeGenerator.pushOperatorStack(t.kind);.)
+       FACTOR
+         (. if(!tab.codeGenerator.solveMultAndDiv()){
+                SemErr("Type dismatch");
+            }
+
+            .)
+        }
+       .
 
 FACTOR = FACTOR_1 
         | FACTOR_2.
-FACTOR_1 = LeftParenthesis EXPR RightParenthesis.
+FACTOR_1 = LeftParenthesis (.tab.codeGenerator.pushOperatorStack(t.kind);.)
+          EXPR
+          RightParenthesis  (. tab.codeGenerator.popOperatorStack();.)
+          .
 FACTOR_2 = [SIGNS] FACTOR_VALUES.
-FACTOR_VALUES = Id (. variableName = t.val;
+FACTOR_VALUES = Id (. //Variable que guarda el Id que acaba de encontrar
+                      variableName = t.val;
+
+                      //Variable que dice si entró a una función o no
                       bool enterFunction = false;.)
 
-                [ (. enterFunction = true; .)
+                [ (. //Si se ejecuta esta parte es que se reconoció una función
+                    enterFunction = true; .)
                
                 FUNCTCALL  
-                ]  (.if(!enterFunction){
-                        tab.findVariable(variableName);
+                ]  (. //Si no entró a una función, quiere decir que se encontró una variable
+                      if(!enterFunction){
+                        ProyectoPruebas.Variable varId = tab.findVariable(variableName);
+                        if(varId != null){
+                           tab.codeGenerator.pushSymbolStack(varId);
+                        }
                       }.)
-                | NUMBER.
+                | NUMBER (. string constNumber = t.val;
+                            int constType = t.kind;
+                            
+                            ProyectoPruebas.Variable constVar = new ProyectoPruebas.Variable(constNumber, constType);
+
+                            tab.codeGenerator.pushSymbolStack(constVar);
+                          .)
+                .
 SIGNS = Plus 
         | Minus.
 	

@@ -7,7 +7,7 @@ namespace ProyectoPruebas
         static void Main(string[] args)
         {
 
-            Scanner scanner = new Scanner("Programa.txt");
+            Scanner scanner = new Scanner("ProgramaExpresiones.txt");
             Parser parser = new Parser(scanner);
             parser.Tab = new VarTable(parser);
             parser.Parse();

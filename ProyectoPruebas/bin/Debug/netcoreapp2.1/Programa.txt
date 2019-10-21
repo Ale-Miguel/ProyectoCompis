@@ -5,11 +5,11 @@ Function Int ExampleFunction():
 	Print(x);
 EndFunction
 
-y = ExampleFunction();
+
 
 For (x < 10)	
 	MoveForward;
-	x = x + 1;
+	x = a + 1;
 	Print(x);
 EndFor
 

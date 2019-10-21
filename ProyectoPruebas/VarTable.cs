@@ -11,6 +11,7 @@ namespace ProyectoPruebas {
         private Variable variables;
         private Function functions;
         private Parser parser;
+        public CodeGenerator codeGenerator;
         
 
         public VarTable(Parser parser) {
@@ -18,6 +19,8 @@ namespace ProyectoPruebas {
             this.parser = parser;
             this.variables = new Variable("undefVar", UNDEF_VAR);
             this.functions = new Function("undefFunct", UNDEF_VAR);
+
+            codeGenerator = new CodeGeneratorImpl();
         }
         
         //Función paa agregar variables a la tabla de variables
