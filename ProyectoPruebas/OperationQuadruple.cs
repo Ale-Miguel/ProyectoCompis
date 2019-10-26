@@ -5,13 +5,14 @@ using System.Text;
 namespace ProyectoPruebas {
     class OperationQuadruple : Quadruple {
 
-        private Variable variable1;
-        private Variable variable2;
-        private Variable resultVariable;
+        private Variable variable1;         //Variable de la izquierda
+        private Variable variable2;         //Variable de la derecha
+        private Variable resultVariable;    //Variable donde se almacena el resultado de la operación
 
-        private int operatorNumber;
-        private int lineNumber;
+        private int operatorNumber;         //código de operador
+        private int lineNumber;             //Número de línea que le pertenece al cuádruplo
 
+        //Función que genera el cuádruplo como string
         public string getQuadruple() {
 
             return lineNumber + " " + operatorNumber + ", " + variable1.getName() + ", " + variable2.getName() + ", " + resultVariable.getName() + "\n";
