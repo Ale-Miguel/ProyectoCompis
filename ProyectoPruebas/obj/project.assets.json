@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Ale\\Documents\\Compiladores\\ProyectoCompis-master\\ProyectoCompis-master\\ProyectoPruebas\\ProyectoPruebas.csproj",
+      "projectUniqueName": "C:\\Users\\Ale\\Documents\\Compiladores\\ProyectoCompis\\ProyectoPruebas\\ProyectoPruebas.csproj",
       "projectName": "ProyectoPruebas",
-      "projectPath": "C:\\Users\\Ale\\Documents\\Compiladores\\ProyectoCompis-master\\ProyectoCompis-master\\ProyectoPruebas\\ProyectoPruebas.csproj",
+      "projectPath": "C:\\Users\\Ale\\Documents\\Compiladores\\ProyectoCompis\\ProyectoPruebas\\ProyectoPruebas.csproj",
       "packagesPath": "C:\\Users\\Ale\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Ale\\Documents\\Compiladores\\ProyectoCompis-master\\ProyectoCompis-master\\ProyectoPruebas\\obj\\",
+      "outputPath": "C:\\Users\\Ale\\Documents\\Compiladores\\ProyectoCompis\\ProyectoPruebas\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

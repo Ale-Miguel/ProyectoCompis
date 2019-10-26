@@ -1,12 +1,12 @@
-1 =, 1, __ , x
-2 +, 6, 2, tempVar1
-3 -, z, x, tempVar2
-4 *, tempVar1, tempVar2, tempVar3
-5 /, tempVar3, 5, tempVar4
-6 =, tempVar4, __ , x
-7 /, y, x, tempVar5
-8 =, tempVar5, __ , y
-9 +, x, 1, tempVar6
-10 =, tempVar6, __ , x
-11 <, x, 2, tempVar7
-12 =, 10, __ , x
+1 1, 1, __, x
+2 2, 6, 2, tempVar1
+3 3, z, x, tempVar2
+4 4, tempVar1, tempVar2, tempVar3
+5 5, tempVar3, 5, tempVar4
+6 1, tempVar4, __, x
+7 5, y, x, tempVar5
+8 1, tempVar5, __, y
+9 2, x, 1, tempVar6
+10 1, tempVar6, __, x
+11 7, x, 2, tempVar7
+12 1, 10, __, x

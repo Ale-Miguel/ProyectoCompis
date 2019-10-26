@@ -136,7 +136,9 @@ namespace ProyectoPruebas {
 
         //Función que agrega un nuevo elemento a la pila de operadores
         public void pushOperatorStack(int operatorValue) {
+             
             int semCubeOp = cuboSemantico.getCubePosition(operatorValue);
+
             operatorsStack.Push(semCubeOp);
            
         }
@@ -144,6 +146,7 @@ namespace ProyectoPruebas {
         //Función que agrega un nuevo elemento a la pila de símbolos y su tipo a la pila de tipos
         public void pushSymbolStack(Variable variable) {
             if (!variable.isParsed()) {
+
                 int posSemCube = cuboSemantico.getCubePosition(variable.getType());
                 variable.setType(posSemCube);
                 variable.setParsed();
@@ -164,9 +167,14 @@ namespace ProyectoPruebas {
 
             symbolStack.Push(tempVar);
 
+            OperationQuadruple quadruple = new OperationQuadruple();
 
-            string intermediateCodeString = getOperatorSymbol(op) + ", " + var1.getName() + ", " + var2.getName() + ", " +tempVarName + "\n";
-            writeIntermediateCode(intermediateCodeString);
+            quadruple.setOperator(op);
+            quadruple.setVariables(var1, var2, tempVar);
+            quadruple.setLineNumber(lineCont);
+            
+            writeIntermediateCode(quadruple);
+
             tempCont++;
            
         }
@@ -181,18 +189,25 @@ namespace ProyectoPruebas {
             
                 return false;
             }
-            string intermediateCodeString = getOperatorSymbol(op) + ", " + var1.getName() + ", __ , " + var2.getName() + "\n";
+           
+            OperationQuadruple quadruple = new OperationQuadruple();
 
-            writeIntermediateCode(intermediateCodeString);
+            quadruple.setLineNumber(lineCont);
+            quadruple.setOperator(op);
+            quadruple.setVariables(var1, var2);
+
+            writeIntermediateCode(quadruple);
        
             return true;
 
 
         }
 
-        void writeIntermediateCode(string intermediateCode) {
-            File.AppendAllText(filePath, lineCont + " " + intermediateCode);
+        void writeIntermediateCode(Quadruple intermediateCode) {
+
+            File.AppendAllText(filePath, intermediateCode.getQuadruple());
             lineCont++;
+
         }
         public Variable popSymnbolStack() {
 
