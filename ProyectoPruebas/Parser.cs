@@ -335,14 +335,27 @@ string variableName;
 
 	void FOR() {
 		Expect(44);
+		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() +1); 
 		Expect(14);
 		EXPRESSION();
 		Expect(15);
+		ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
+		
+		if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
+		
+		   SemErr("Type-mismatch: Expected a bool type operation");
+		}
+		else{
+		
+		 tab.codeGenerator.pushGoToF(result);
+		}
+		
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
 		}
 		Expect(45);
+		tab.codeGenerator.solveFor(); 
 	}
 
 	void LOOP() {
@@ -380,8 +393,6 @@ string variableName;
 		
 		  tab.codeGenerator.pushGoToF(result);
 		}
-		
-		
 		
 		STATUTE();
 		while (StartOf(1)) {

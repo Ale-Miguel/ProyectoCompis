@@ -11,7 +11,7 @@ namespace ProyectoPruebas {
         private Variable variables;
         private Function functions;
         private Parser parser;
-        public CodeGenerator codeGenerator;
+        public CodeGeneratorImpl codeGenerator;
         
 
         public VarTable(Parser parser) {

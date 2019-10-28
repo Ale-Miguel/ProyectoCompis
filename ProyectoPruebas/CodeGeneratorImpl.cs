@@ -19,6 +19,10 @@ namespace ProyectoPruebas {
 
         private string filePath = "IntermediateCode.txt";   //Path y nombre del archivo que guarda el código intermedio
 
+        public int getLineCont() {
+            return lineCont;
+        }
+
         //Función que se encarga de resolver las multiplicaciónes y divisiónes
         public bool solveMultAndDiv() {
 
@@ -179,6 +183,7 @@ namespace ProyectoPruebas {
         //Función que agrega un nuevo elemento a la pila de símbolos y su tipo a la pila de tipos
         public void pushSymbolStack(Variable variable) {
 
+
             //Verifica si la variable ya fue parseada (traducida a valores de cubo semántico) para que no tenga
             //que volverse a traducir
             if (!variable.isParsed()) {
@@ -295,8 +300,21 @@ namespace ProyectoPruebas {
 
         //Función que maneja el  pop de la pila de símbolos
         public Variable popSymnbolStack() {
+            /*
+            Variable var;
+
+            if (symbolStack.Count == 0) {
+          
+                var = new Variable("undefined", OperationTypes.TYPE_BOOL);
+            }
+            else {
+                var = (Variable)symbolStack.Pop();
+            }
+
 
             //Regresa el pop de la pila de símbolos con el cast de Variable
+            //return var;
+            */
             return (Variable)symbolStack.Pop();
         }
 
@@ -357,6 +375,24 @@ namespace ProyectoPruebas {
             return "__";
         }
 
+        public void solveFor() {
+
+            popJumpStack();
+            int lineReturn = (int)jumpStack.Pop();
+
+            GoTo goTo = new GoTo(lineReturn, lineCont);
+
+            writeIntermediateCode(goTo);
+
+        }
+
+        public void pushJumpStack(int line) {
+
+            jumpStack.Push(line);
+
+
+
+        }
 
         public void pushGoToF(Variable var) {
 

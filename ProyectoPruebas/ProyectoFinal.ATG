@@ -117,7 +117,23 @@ PRINT = Print LeftParenthesis (CTE_S | Id) RightParenthesis.
 
 CYCLE = FOR 
         | LOOP.
-FOR = For LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE} EndFor.
+FOR = For (. tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() +1); .)
+      LeftParenthesis EXPRESSION 
+      RightParenthesis (. ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
+
+                          if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
+
+                              SemErr("Type-mismatch: Expected a bool type operation");
+                          }
+                          else{
+
+                            tab.codeGenerator.pushGoToF(result);
+                          }
+                      .)
+      STATUTE {STATUTE} 
+      EndFor  (. tab.codeGenerator.solveFor(); .)
+      .
+
 LOOP = Loop (CTE_I | Id) STATUTE {STATUTE} EndLoop.
 
 CONDITION = If LeftParenthesis EXPRESSION 
@@ -130,8 +146,6 @@ CONDITION = If LeftParenthesis EXPRESSION
 
                                     tab.codeGenerator.pushGoToF(result);
                                   }
-
-
                                .)
             STATUTE 
             {STATUTE}  [CONDITION_ELSE] 

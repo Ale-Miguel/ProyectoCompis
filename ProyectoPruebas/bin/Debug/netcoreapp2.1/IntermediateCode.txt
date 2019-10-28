@@ -8,11 +8,14 @@
 8 1, tempVar5, __, y
 9 2, x, 1, tempVar6
 10 1, tempVar6, __, x
-11 7, x, 2, tempVar7
-12 GoToFalse, tempVar7, 16
-13 1, 10, __, x
-14 1, 2.0, __, y
-15 GoTo, 18
-16 1, 0, __, x
-17 1, 1.0, __, y
-18 1, 5, __, x
+11 1, 5, __, x
+12 7, x, 2, tempVar7
+13 GoToFalse, tempVar7, 18
+14 4, 10, z, tempVar8
+15 1, tempVar8, __, x
+16 1, 2.0, __, y
+17 7, x, 10, tempVar9
+18 GoToFalse, tempVar9, 22
+19 2, x, 1, tempVar10
+20 1, tempVar10, __, x
+21 GoTo, 17
