@@ -9,4 +9,5 @@
 9 2, x, 1, tempVar6
 10 1, tempVar6, __, x
 11 7, x, 2, tempVar7
+12 GoToFalse, tempVar7, 13
 12 1, 10, __, x

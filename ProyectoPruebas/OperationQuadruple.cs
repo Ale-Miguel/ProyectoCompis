@@ -49,7 +49,7 @@ namespace ProyectoPruebas {
         public OperationQuadruple() {
 
             //Guiones bajos para simbolizar que no se utiliza
-            //-1 como valor para simbolizar que no se ha asignado
+            //0 como valor para simbolizar que no se ha asignado
 
             this.variable1 = new Variable("__", -1);          
             this.variable2 = new Variable("__", -1);
@@ -62,7 +62,7 @@ namespace ProyectoPruebas {
         public OperationQuadruple(Variable var1, Variable var2, Variable resultVar, int operationValue, int lineNumberVal) {
 
             //Guiones bajos para simbolizar que no se utiliza
-            //-1 como valor para simbolizar que no se ha asignado
+            //0 como valor para simbolizar que no se ha asignado
 
             this.variable1 = var1;
             this.variable2 = var2;
@@ -75,7 +75,7 @@ namespace ProyectoPruebas {
         public OperationQuadruple(Variable var1, Variable resultVar, int operationValue, int lineNumberVal) {
 
             //Guiones bajos para simbolizar que no se utiliza
-            //-1 como valor para simbolizar que no se ha asignado
+            //0 como valor para simbolizar que no se ha asignado
 
             this.variable1 = var1;
             this.variable2 = new Variable("__", 0);

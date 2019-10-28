@@ -120,7 +120,23 @@ CYCLE = FOR
 FOR = For LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE} EndFor.
 LOOP = Loop (CTE_I | Id) STATUTE {STATUTE} EndLoop.
 
-CONDITION = If LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE}  [CONDITION_ELSE] EndIf.
+CONDITION = If LeftParenthesis EXPRESSION 
+            RightParenthesis  (. ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
+                                  if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
+
+                                      SemErr("Type-mismatch: Expected a bool type operation");
+                                  }
+                                  else{
+
+                                    tab.codeGenerator.pushGoToF(result);
+                                  }
+
+
+                               .)
+            STATUTE 
+            {STATUTE}  [CONDITION_ELSE] 
+            EndIf           (. tab.codeGenerator.popJumpStack();.)
+            .
 CONDITION_ELSE = ELSE | ELSEIF.
 ELSE = Else STATUTE {STATUTE}.
 ELSEIF = ElseIf LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE} [CONDITION_ELSE].
@@ -164,7 +180,7 @@ ASSIGNMENT =
                       .)
             (EXPR | CTE_S)
               (.if(!tab.codeGenerator.solveAssignment()){
-                      SemErr("Type  dismatch at assignment");
+                      SemErr("Type-mismatch at assignment");
                 }.)
             .
 
@@ -189,7 +205,7 @@ EXPR = TERM   (. //Console.WriteLine(t.kind + " " + t.line);
               (Plus | Minus)  (.tab.codeGenerator.pushOperatorStack(t.kind);.)
                TERM
                  (. if(!tab.codeGenerator.solveSumAndMinus()){
-                      SemErr("Type dismatch");
+                      SemErr("Type-mismatch");
                      }
 
                   .)
@@ -200,7 +216,7 @@ TERM = FACTOR
       (Asterisk | Slash)  (.tab.codeGenerator.pushOperatorStack(t.kind);.)
        FACTOR
          (. if(!tab.codeGenerator.solveMultAndDiv()){
-                SemErr("Type dismatch");
+                SemErr("Type-mismatch");
             }
 
             .)

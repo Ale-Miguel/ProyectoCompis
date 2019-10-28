@@ -258,7 +258,7 @@ string variableName;
 			tab.codeGenerator.pushOperatorStack(t.kind);
 			TERM();
 			if(!tab.codeGenerator.solveSumAndMinus()){
-			 SemErr("Type dismatch");
+			 SemErr("Type-mismatch");
 			}
 			
 			
@@ -371,6 +371,18 @@ string variableName;
 		Expect(14);
 		EXPRESSION();
 		Expect(15);
+		ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
+		if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
+		
+		    SemErr("Type-mismatch: Expected a bool type operation");
+		}
+		else{
+		
+		  tab.codeGenerator.pushGoToF(result);
+		}
+		
+		
+		
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
@@ -379,6 +391,7 @@ string variableName;
 			CONDITION_ELSE();
 		}
 		Expect(13);
+		tab.codeGenerator.popJumpStack();
 	}
 
 	void CONDITION_ELSE() {
@@ -461,7 +474,7 @@ string variableName;
 			Get();
 		} else SynErr(60);
 		if(!tab.codeGenerator.solveAssignment()){
-		     SemErr("Type  dismatch at assignment");
+		     SemErr("Type-mismatch at assignment");
 		}
 	}
 
@@ -521,7 +534,7 @@ string variableName;
 			tab.codeGenerator.pushOperatorStack(t.kind);
 			FACTOR();
 			if(!tab.codeGenerator.solveMultAndDiv()){
-			   SemErr("Type dismatch");
+			   SemErr("Type-mismatch");
 			}
 			
 			

@@ -7,6 +7,8 @@ namespace ProyectoPruebas {
         void pushSymbolStack(Variable variable);
         void pushOperatorStack(int operatorValue);
 
+        void pushGoToF(Variable var);
+
         void createIntermediateCode(int op, Variable var1, Variable var2);
 
         bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2);
@@ -21,5 +23,7 @@ namespace ProyectoPruebas {
         int popOperatorStack();
 
         int getTopOperatorStack();
+
+        void popJumpStack();
     }
 }

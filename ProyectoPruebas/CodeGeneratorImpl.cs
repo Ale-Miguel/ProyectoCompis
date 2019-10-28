@@ -10,6 +10,8 @@ namespace ProyectoPruebas {
         private Stack symbolStack;      //Stack de símbolos
         private Stack jumpStack;        //Stack de saltos
 
+        private ArrayList quadrupleBuffer;
+
         private int tempCont;   //Contador de variables temporales
         private int lineCont; //Contador de lineas de codigo temporal
 
@@ -21,7 +23,7 @@ namespace ProyectoPruebas {
         public bool solveMultAndDiv() {
 
             //Si lo que está hasta arriba de la pila de operadores es una multiplicación o división
-            if(getTopOperatorStack() == OperationTypes.MULTIPLICATION || getTopOperatorStack() == OperationTypes.DIVISION) {
+            if (getTopOperatorStack() == OperationTypes.MULTIPLICATION || getTopOperatorStack() == OperationTypes.DIVISION) {
 
                 Variable right_operand = popSymnbolStack(); //Se obtiene el operado derecho
                 Variable left_operand = popSymnbolStack();  //Se obtiene el operando izquierdo
@@ -31,7 +33,7 @@ namespace ProyectoPruebas {
                 //Se obtiene el tipo de dato que resulta de aplicar la operación
                 int resultType = cuboSemantico.getOperationResult(left_operand.getType(), right_operand.getType(), operatorValue);
 
-               //Si la operación es válida (que el tipo de dato no sea UNDEFINED)
+                //Si la operación es válida (que el tipo de dato no sea UNDEFINED)
                 if (resultType != OperationTypes.TYPE_UNDEFINED) {
 
                     //Se crea su cuádruplo
@@ -52,14 +54,14 @@ namespace ProyectoPruebas {
 
             // Si lo que está hasta arriba de la pila de operadores no es la asignación
             if (getTopOperatorStack() != OperationTypes.EQUAL) {
-                
+
                 //Se regresa falso en señal de error
                 return false;
             }
 
             Variable right_operand = popSymnbolStack(); //Se obtiene el valor que se va a asignar (valor derecho)
             Variable left_operand = popSymnbolStack();  //Se obtiene la variable a la que se le va a asignar el valor
-    
+
             int op = popOperatorStack();    //Se obtiene el operador
 
             //Si no se pudo crear el código intermedio
@@ -87,9 +89,9 @@ namespace ProyectoPruebas {
                 //Se obtierne el tipo de dato de hacer la operación
                 int resultType = cuboSemantico.getOperationResult(left_operand.getType(), right_operand.getType(), operatorValue);
 
-               //Si la operaci{on entre los tipos de datos es válida (que no sea UNDEFINED)
+                //Si la operaci{on entre los tipos de datos es válida (que no sea UNDEFINED)
                 if (resultType != OperationTypes.TYPE_UNDEFINED) {
-                    
+
                     //Se crea el cuádruplo de la operación
                     createIntermediateCode(operatorValue, left_operand, right_operand);
 
@@ -97,7 +99,7 @@ namespace ProyectoPruebas {
                     return true;
                 }
             }
-           
+
             //Si en algún momento falló algo, se regresa falseo en señal de falla
             return false;
         }
@@ -122,7 +124,7 @@ namespace ProyectoPruebas {
 
             //Si el resultado está definido
             if (resultType != OperationTypes.TYPE_UNDEFINED) {
-                
+
                 //Se crea el cuádruplo de esta operación
                 createIntermediateCode(operatorValue, left_operand, right_operand);
             }
@@ -165,13 +167,13 @@ namespace ProyectoPruebas {
 
         //Función que agrega un nuevo elemento a la pila de operadores
         public void pushOperatorStack(int operatorValue) {
-            
+
             //Se hace la traducción entre lo el valor de la operación que da el Parser con su equivalente en el cubo semántico 
             int semCubeOp = cuboSemantico.getCubePosition(operatorValue);
 
             //Se hace push a la pila de operadores
             operatorsStack.Push(semCubeOp);
-           
+
         }
 
         //Función que agrega un nuevo elemento a la pila de símbolos y su tipo a la pila de tipos
@@ -180,14 +182,14 @@ namespace ProyectoPruebas {
             //Verifica si la variable ya fue parseada (traducida a valores de cubo semántico) para que no tenga
             //que volverse a traducir
             if (!variable.isParsed()) {
-                 
+
                 //Se obtiene la posición del tipo de dato equivalente del cubo semántico que le dió a la variable el Parser
                 int posSemCube = cuboSemantico.getCubePosition(variable.getType());
 
                 variable.setType(posSemCube);   //Se guarda el nuevo valor de su tipo de dato
                 variable.setParsed();           //Se indica que ya fue parseada esta variable
             }
-           
+
             //Se le hace push a la pila de símbolos
             symbolStack.Push(variable);
         }
@@ -211,36 +213,36 @@ namespace ProyectoPruebas {
 
             //Se le hace push a la pila de símbolos
             pushSymbolStack(tempVar);
-               
+
             //Se crea un cádruplo de operación para esta operación
             OperationQuadruple quadruple = new OperationQuadruple();
 
             quadruple.setOperator(op);                      //Se le guarda la operación que va a realizar
             quadruple.setVariables(var1, var2, tempVar);    //Se guardan las variables involucradas
             quadruple.setLineNumber(lineCont);              //Se le guarda el número de línea  que le corresponde
-            
+
             //Se manda a  escribir el cuádruplo al archivo de cuádruplos
             writeIntermediateCode(quadruple);
 
             //Se incrementa en 1 el contador de variables temporales
             tempCont++;
-           
+
         }
 
-       
+
         //Función que prepara un cuádruplo con solo dos variables
         public bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2) {
-          
+
             //Variable que guarda el resultado de hacer una operación entre dos tipos de dato
-            int  resultType = cuboSemantico.semanticCube[var1.getType(), var2.getType(), op];
+            int resultType = cuboSemantico.semanticCube[var1.getType(), var2.getType(), op];
 
             //Si el resultado es UNDEFINED
-            if(resultType == OperationTypes.TYPE_UNDEFINED) {
-                
+            if (resultType == OperationTypes.TYPE_UNDEFINED) {
+
                 //Se regresa false en señal de error
                 return false;
             }
-           
+
             //Objeto de cuádruplo de operación que genera el cuádruplo a escrubur en el archivo de cuádruplos
             OperationQuadruple quadruple = new OperationQuadruple();
 
@@ -250,22 +252,45 @@ namespace ProyectoPruebas {
 
             //Se manda a escribir en el archivo de cuádruplos
             writeIntermediateCode(quadruple);
-        
+
             //Se regresa true como operación exitosa
             return true;
 
 
         }
 
-        //Función que escribe los cuádruplos al archivo de cuádruplos
+
         void writeIntermediateCode(Quadruple intermediateCode) {
 
-            //Se escribe el cuádruplo en el archivo
-            File.AppendAllText(filePath, intermediateCode.getQuadruple());
+            //Se agrega el cuádruplo al buffer si no se le pasa nulo
+            if (intermediateCode != null) {
+                quadrupleBuffer.Add(intermediateCode);
+                lineCont++;
+            }
 
+
+            //Si la pila de saltos está vacía
+            if (jumpStack.Count == 0) {
+
+                //Se escribe en el archivo cada cuádruplo almacenado en el buffer
+                foreach (Quadruple quadruple in quadrupleBuffer) {
+
+                    writeToFile(quadruple.getQuadruple());
+                }
+
+                //Se limpia todo el buffer
+                quadrupleBuffer.RemoveRange(0, quadrupleBuffer.Count);
+            }
             //Se incrementa el contador de líneas de cuádruplos
-            lineCont++;
 
+
+        }
+
+        //Función que escribe los cuádruplos al archivo de cuádruplos
+        void writeToFile(string text) {
+
+            //Se escribe el cuádruplo en el archivo
+            File.AppendAllText(filePath, text);
         }
 
         //Función que maneja el  pop de la pila de símbolos
@@ -277,7 +302,7 @@ namespace ProyectoPruebas {
 
         //Función que maneja la operación de pop de la pila de operadores
         public int popOperatorStack() {
-            
+
             //Regresa el resultado de hacer pop de la pila de operadores con cast de int
             return (int)operatorsStack.Pop();
         }
@@ -333,6 +358,31 @@ namespace ProyectoPruebas {
         }
 
 
+        public void pushGoToF(Variable var) {
+
+            GotoF jumpF = new GotoF(var, lineCont);
+
+            quadrupleBuffer.Add(jumpF);
+
+            jumpStack.Push(quadrupleBuffer.Count - 1);
+        }
+
+        public void popJumpStack() {
+
+            if(jumpStack.Count == 0) {
+                return;
+            }
+
+            int jumpIndex = (int)jumpStack.Pop();
+
+            Jumps jump = (Jumps)quadrupleBuffer[jumpIndex];
+
+            jump.setJump(lineCont);
+
+            writeIntermediateCode(null);
+
+
+        }
         public CodeGeneratorImpl() {
 
             //Se crean las pilas
@@ -340,6 +390,7 @@ namespace ProyectoPruebas {
             this.symbolStack = new Stack();
             this.jumpStack = new Stack();
 
+            this.quadrupleBuffer = new ArrayList();
             //Se inicializan los contadores
             tempCont = 1;
             lineCont = 1;
