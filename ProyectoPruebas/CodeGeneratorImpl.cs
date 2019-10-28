@@ -295,26 +295,13 @@ namespace ProyectoPruebas {
         void writeToFile(string text) {
 
             //Se escribe el cuádruplo en el archivo
-            File.AppendAllText(filePath, text);
+            File.AppendAllText(filePath, text + "\n");
         }
 
         //Función que maneja el  pop de la pila de símbolos
         public Variable popSymnbolStack() {
-            /*
-            Variable var;
-
-            if (symbolStack.Count == 0) {
-          
-                var = new Variable("undefined", OperationTypes.TYPE_BOOL);
-            }
-            else {
-                var = (Variable)symbolStack.Pop();
-            }
-
 
             //Regresa el pop de la pila de símbolos con el cast de Variable
-            //return var;
-            */
             return (Variable)symbolStack.Pop();
         }
 
@@ -375,63 +362,88 @@ namespace ProyectoPruebas {
             return "__";
         }
 
+        //Función que se encarga de hacer las acciones necesarias para procesar el For
         public void solveFor() {
 
+            //Se resuelve la parte de la condición
+            //El for se comporta como el if, por eso se trata como tal
             popJumpStack();
+
+            //El siguiente valor de la pila guarda la línea a donde empiezan las operaciones de la condición
             int lineReturn = (int)jumpStack.Pop();
 
+            //Se crea el goTo para regresarse a los cuádruplos de la condición y que se cree el ciclo
             GoTo goTo = new GoTo(lineReturn, lineCont);
 
+            //Se manda a escribir el cuádruplo
             writeIntermediateCode(goTo);
 
         }
 
+        //Función que hace push a la pila de saltos
         public void pushJumpStack(int line) {
 
             jumpStack.Push(line);
 
-
-
         }
 
+        //Función que hace push a la pila de saltos con GoToF
         public void pushGoToF(Variable var) {
 
+            //Se crea un objeto tipo GoToF con su variable que va a comparar con falso y su línea que le corresponde
             GotoF jumpF = new GotoF(var, lineCont);
 
+            //Se agrega el cuádruplo al buffer de cuádruplos
             quadrupleBuffer.Add(jumpF);
 
+            //Se hace push a la pila de saltos, el valor es relativo al tamaño del buffer para saber a qué salto
+            //se refiere para asignarle la línea a la que va a brincar
             jumpStack.Push(quadrupleBuffer.Count - 1);
 
+            //Se incrementa el contador de líneas
             lineCont++;
         }
 
+        //Función que hace push a la pila de saltos con GoTo
         public void pushGoTo() {
 
+            //Se crea un objeto de tipo GoTo 
             GoTo jump = new GoTo(lineCont);
 
+            //Se agrega el cuádruplo al buffer de cuádruplos
             quadrupleBuffer.Add(jump);
 
+            //Se hace push a la pila de saltos, el valor es relativo al tamaño del buffer para saber a qué salto
+            //se refiere para asignarle la línea a la que va a brincar
             jumpStack.Push(quadrupleBuffer.Count - 1);
 
+            //Se incrementa el contador de líneas
             lineCont++;
         }
 
+        //Función que maneja el pop de la pila de saltos
         public void popJumpStack() {
-
+            
+            //Si la pila está vacía, no se hace nada
             if(jumpStack.Count == 0) {
                 return;
             }
 
+            //Se obtiene el índice del salto
             int jumpIndex = (int)jumpStack.Pop();
 
+            //Se crea una referencia al objeto del salto
             Jumps jump = (Jumps)quadrupleBuffer[jumpIndex];
 
+            //Se le asigna la línea a la que va a saltar
             jump.setJump(lineCont);
 
+            //Se manda a escribir el cuádruplo al archivo
             writeIntermediateCode(null);
 
 
         }
+
         public CodeGeneratorImpl() {
 
             //Se crean las pilas

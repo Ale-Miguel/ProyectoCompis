@@ -10,7 +10,7 @@ namespace ProyectoPruebas {
 
         public string getQuadruple() {
 
-            return lineNumber + " GoTo, " + jumpTo + "\n";
+            return lineNumber + " GoTo, " + jumpTo;
         }
 
         public void setJump(int line) {

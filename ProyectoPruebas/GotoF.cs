@@ -11,7 +11,7 @@ namespace ProyectoPruebas {
 
         public string getQuadruple() {
 
-            return lineNumber + " GoToFalse, "+ variable.getName() + ", " + jumpTo + "\n";
+            return lineNumber + " GoToFalse, "+ variable.getName() + ", " + jumpTo;
         }
 
         public void setJump(int line) {
