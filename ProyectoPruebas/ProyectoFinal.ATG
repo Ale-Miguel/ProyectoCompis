@@ -137,8 +137,12 @@ CONDITION = If LeftParenthesis EXPRESSION
             {STATUTE}  [CONDITION_ELSE] 
             EndIf           (. tab.codeGenerator.popJumpStack();.)
             .
-CONDITION_ELSE = ELSE | ELSEIF.
-ELSE = Else STATUTE {STATUTE}.
+CONDITION_ELSE = ELSE 
+                | ELSEIF.
+ELSE = Else   (. tab.codeGenerator.popJumpStack();
+                         tab.codeGenerator.pushGoTo();
+                      .)
+ STATUTE {STATUTE}.
 ELSEIF = ElseIf LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE} [CONDITION_ELSE].
 
 STATUTE = COMMAND 

@@ -404,6 +404,9 @@ string variableName;
 
 	void ELSE() {
 		Expect(11);
+		tab.codeGenerator.popJumpStack();
+		       tab.codeGenerator.pushGoTo();
+		    
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();

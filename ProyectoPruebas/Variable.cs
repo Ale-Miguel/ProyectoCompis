@@ -10,6 +10,7 @@ namespace ProyectoPruebas
 
         private string name;    //Variable  que almacena el nombre de la variable
         private int type;       //Variable que guarda el tipo de dato de la variable
+        private int address;
         private string value;
         private bool parsed;
         public Variable next;   //Se guarda la referencia a la siguiente variable de la tabla de variables
@@ -48,11 +49,21 @@ namespace ProyectoPruebas
         public string getValue() {
             return value;
         }
+
+        public void setAddress(int address) {
+            this.address = address;
+        }
+
+        public int getAddress() {
+            return this.address;
+        }
+
         public Variable(string name, int type) {
             this.name = name;
             this.type = type;
             this.next = null;
             this.parsed = false;
+            this.address = 0;
         }
     }
 }

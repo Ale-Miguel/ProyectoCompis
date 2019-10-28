@@ -397,6 +397,9 @@ string variableName;
 	void CONDITION_ELSE() {
 		if (la.kind == 11) {
 			ELSE();
+			tab.codeGenerator.popJumpStack();
+			tab.codeGenerator.pushGoTo();
+			
 		} else if (la.kind == 12) {
 			ELSEIF();
 		} else SynErr(58);

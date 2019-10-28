@@ -365,6 +365,19 @@ namespace ProyectoPruebas {
             quadrupleBuffer.Add(jumpF);
 
             jumpStack.Push(quadrupleBuffer.Count - 1);
+
+            lineCont++;
+        }
+
+        public void pushGoTo() {
+
+            GoTo jump = new GoTo(lineCont);
+
+            quadrupleBuffer.Add(jump);
+
+            jumpStack.Push(quadrupleBuffer.Count - 1);
+
+            lineCont++;
         }
 
         public void popJumpStack() {

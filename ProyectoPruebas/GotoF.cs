@@ -8,6 +8,7 @@ namespace ProyectoPruebas {
         private int jumpTo;
         private int lineNumber;
         private Variable variable;
+
         public string getQuadruple() {
 
             return lineNumber + " GoToFalse, "+ variable.getName() + ", " + jumpTo + "\n";
@@ -15,7 +16,7 @@ namespace ProyectoPruebas {
 
         public void setJump(int line) {
 
-            this.jumpTo = line;
+            this.jumpTo = line + 1;
         }
 
         public void setVariable(Variable var) {
@@ -37,7 +38,7 @@ namespace ProyectoPruebas {
         public GotoF(Variable var, int jump, int lineNumberVal) {
             this.variable = var;
             this.lineNumber = lineNumberVal;
-            this.jumpTo = jump;
+            this.jumpTo = jump + 1;
         }
 
         public GotoF(Variable var, int lineNumberVal) {
