@@ -268,10 +268,12 @@ string variableName;
 	void PARAMS_1() {
 		TYPE();
 		Expect(1);
+		Console.WriteLine("FuncParam: " + t.val);
 		while (la.kind == 7) {
 			Get();
 			TYPE();
 			Expect(1);
+			Console.WriteLine("FuncParam: " + t.val);
 		}
 	}
 
@@ -335,7 +337,7 @@ string variableName;
 
 	void FOR() {
 		Expect(44);
-		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont()); 
+		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() +1); 
 		Expect(14);
 		EXPRESSION();
 		Expect(15);

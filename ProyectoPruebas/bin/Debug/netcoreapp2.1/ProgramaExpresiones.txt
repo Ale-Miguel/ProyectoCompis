@@ -2,7 +2,11 @@ Var Int x = 0;
 Var Int z = 0;
 Var Float y = 0.0;
 
+Function Void funcion(Int VariableJeje, Int OtraVariableJeje):
+	x = 0;
+EndFunction
 
+a = 1;
 x = 1;
 
 x = (6 + 2) * (z - x) / 5;

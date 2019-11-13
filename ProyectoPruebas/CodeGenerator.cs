@@ -14,7 +14,7 @@ namespace ProyectoPruebas {
 
         bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2);
 
-         bool solveMultAndDiv();
+        bool solveMultAndDiv();
         bool solveSumAndMinus();
         bool solveAssignment();
         bool solveRelOp();

@@ -316,6 +316,9 @@ namespace ProyectoPruebas {
         public int getTopOperatorStack() {
 
             //Se regresa el Top de la pila de operadores
+            if(operatorsStack.Count == 0) {
+                return OperationTypes.TYPE_UNDEFINED;
+            }
             return (int)operatorsStack.Peek();
         }
 
@@ -429,6 +432,7 @@ namespace ProyectoPruebas {
                 return;
             }
 
+        
             //Se obtiene el índice del salto
             int jumpIndex = (int)jumpStack.Pop();
 

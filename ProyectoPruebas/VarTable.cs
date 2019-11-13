@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +12,11 @@ namespace ProyectoPruebas {
         private Variable variables;
         private Function functions;
         private Parser parser;
+
+        private Stack variableStack;
+
         public CodeGeneratorImpl codeGenerator;
+
         
 
         public VarTable(Parser parser) {
@@ -20,36 +25,77 @@ namespace ProyectoPruebas {
             this.variables = new Variable("undefVar", UNDEF_VAR);
             this.functions = new Function("undefFunct", UNDEF_VAR);
 
+            this.variableStack = new Stack();
+
             codeGenerator = new CodeGeneratorImpl();
         }
         
+        public void addVariableLayer(Variable variable) {
+
+            variableStack.Push(variable);
+        }
+
+        public void removeVariableLayer() {
+
+            variableStack.Pop();
+        }
         //Función paa agregar variables a la tabla de variables
         public void addVariable(Variable variable) {
 
-            Variable lastVariable = variables;
+            //Variable lastVariable = variables;
 
-            //Se busca la ultima variable (variable.next == nulll) o se interrumpe si se ecuentra una variable con el
-            //mismo nombre
-            while(lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
+            if(variableStack.Count == 0) {
+                addVariableLayer(variable);
+                return;
+            }
+          
+            Variable lastVariable = (Variable)variableStack.Peek();
+            while (lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
 
                 lastVariable = lastVariable.getNext();
             }
 
-            //Si se encuentra una variable con el mismo nombre (lastVariable != null), es un error, ya que se 
-            //está declarando dos veces la variable
-            if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()){
+            if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()) {
                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
             }
 
+            //Se busca la ultima variable (variable.next == nulll) o se interrumpe si se ecuentra una variable con el
+            //mismo nombre
+            /* while (lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
+
+                 lastVariable = lastVariable.getNext();
+             }
+
+
+             //Si se encuentra una variable con el mismo nombre (lastVariable != null), es un error, ya que se 
+             //está declarando dos veces la variable
+             if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()){
+                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
+             }
+ */
             //Se guarda la variable a la tabla de variables
             lastVariable.setNext(variable);
 
         }
         
         public Variable findVariable(string name) {
+           
 
-            Variable actualVar = variables;
+            if(variableStack.Count > 0) {
+                foreach(Variable i in variableStack) {
+                    Variable actualVar = i;
+                    while(actualVar != null) {
+                        if (actualVar.getName() == name) {
+                            return actualVar;
+                        }
 
+                        actualVar = actualVar.getNext();
+                    }
+                }
+            }
+            /*Variable actualVar = variables;
+
+           
             //Mientras actualVar tenga un valor
             while(actualVar != null ) {
                 //Si se encuentra la variable que se está buscando por nombre
@@ -60,10 +106,10 @@ namespace ProyectoPruebas {
 
                 actualVar = actualVar.getNext();
             }
-
-            parser.SemErr("Variable " + name + " not declared.");
+            */
+            
             //Si no encontro la variable, actualVar es null
-            return actualVar;
+            return null;
         }
 
         public void addFunction(Function function) {
@@ -80,7 +126,7 @@ namespace ProyectoPruebas {
             //Si se encuentra una función con el mismo nombre (lastFunction != null), es un error, ya que se 
             //está declarando dos veces la función
             if (lastFunction.getNext() != null || lastFunction.getName() == function.getName()) {
-                parser.SemErr("Sevaral declarations of " + lastFunction.getName());
+                parser.SemErr("Sevaral declarations of function " + lastFunction.getName());
             }
 
             //Se guarda la función a la tabla de funciones
@@ -106,6 +152,10 @@ namespace ProyectoPruebas {
             parser.SemErr("Function " + name + " not declared.");
             //Si no encontro la función, actualFunction es null
             return actualFunction;
+        }
+
+        public void addParamTuFunc(Variable param) {
+
         }
     }
 }

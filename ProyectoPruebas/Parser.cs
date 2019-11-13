@@ -268,10 +268,12 @@ string variableName;
 	void PARAMS_1() {
 		TYPE();
 		Expect(1);
+		Console.WriteLine("FuncParam: " + t.val);
 		while (la.kind == 7) {
 			Get();
 			TYPE();
 			Expect(1);
+			Console.WriteLine("FuncParam: " + t.val);
 		}
 	}
 
@@ -601,6 +603,9 @@ string variableName;
 			 ProyectoPruebas.Variable varId = tab.findVariable(variableName);
 			 if(varId != null){
 			    tab.codeGenerator.pushSymbolStack(varId);
+			 }
+			 else{
+			   SemErr("Variable " + variableName + " not declared.");
 			 }
 			}
 		} else if (la.kind == 18 || la.kind == 19) {

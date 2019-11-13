@@ -4,7 +4,8 @@ using System.Text;
 
 namespace ProyectoPruebas {
 
-   
+   enum Operation { OP_UNDEF, EQUAL, PLUS, MINUS, MULTIPLICATION, DIVISION, GREATERR_THAN, LESS_THAN, EQUAL_THAN, 
+        GREATER_THAN, _LESS_THAN_, _EQUAL_THAN_, GREATER_OR_EQUAL, LESS_OR_EQUAL, DIFFERENT_THAN}
     class OperationTypes {
 
         private const int NUMBER_OF_TYPES = 5;         //Constante  que define  la cantidad de tipos de dato
@@ -30,6 +31,10 @@ namespace ProyectoPruebas {
         public const int GREATER_OR_EQUAL = 9; // >=
         public const int LESS_OR_EQUAL = 10;    // <=
         public const int DIFFERENT_THAN = 11;   // <>
+
+        //Códigos para palabras reservadas
+        public const int PRINT = 12;
+        public const int MOVE_FORWARD = 13;
         
 
         public int[,,] semanticCube = new int[NUMBER_OF_TYPES, NUMBER_OF_TYPES, NUMBER_OF_OPERATORS];
@@ -37,6 +42,11 @@ namespace ProyectoPruebas {
         //Función que sirve de traductor entre los números que asigna el parser a los tokens de tipos y operadores
         //Con las posiciones en el cubo semántico
         public int getCubePosition(int operatorValue) {
+
+            Operation op;
+
+            op = (Operation)1;
+
             switch (operatorValue) {
 
                 //Tipos de dato

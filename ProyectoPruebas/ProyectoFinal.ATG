@@ -97,7 +97,9 @@ MODULE = Function       (. string functName; int type;.)
 MODULE_RETURN = Return EXPR.
 
 PARAMS = LeftParenthesis [PARAMS_1] RightParenthesis.
-PARAMS_1 = TYPE Id {Comma TYPE Id}.
+PARAMS_1 = TYPE Id (. Console.WriteLine("FuncParam: " + t.val);.)
+            {Comma TYPE Id  (. Console.WriteLine("FuncParam: " + t.val);.)
+            }.
 TYPE = Float 
       | Int 
       | String 
@@ -263,6 +265,9 @@ FACTOR_VALUES = Id (. //Variable que guarda el Id que acaba de encontrar
                         ProyectoPruebas.Variable varId = tab.findVariable(variableName);
                         if(varId != null){
                            tab.codeGenerator.pushSymbolStack(varId);
+                        }
+                        else{
+                          SemErr("Variable " + variableName + " not declared.");
                         }
                       }.)
                 | NUMBER (. string constNumber = t.val;

@@ -23,6 +23,7 @@ namespace ProyectoPruebas {
 
             this.lineNumber = lineNumberVal;
 
+
         }
 
         public void setOperator(int operatorValue) {
