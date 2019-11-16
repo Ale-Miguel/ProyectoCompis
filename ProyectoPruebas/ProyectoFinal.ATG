@@ -96,8 +96,10 @@ MODULE = Function       (. string functName; int type;.)
         PARAMS Colon STATUTE {STATUTE} [MODULE_RETURN] EndFunction.
 MODULE_RETURN = Return EXPR.
 
-PARAMS = LeftParenthesis [PARAMS_1] RightParenthesis.
-PARAMS_1 = TYPE Id (. Console.WriteLine("FuncParam: " + t.val);.)
+PARAMS 
+ = LeftParenthesis [PARAMS_1] RightParenthesis.
+PARAMS_1 = TYPE (.int paramType = t.kind;.)
+            Id (. Console.WriteLine("FuncParam: " + t.val + " " + paramType);.)
             {Comma TYPE Id  (. Console.WriteLine("FuncParam: " + t.val);.)
             }.
 TYPE = Float 
@@ -274,6 +276,8 @@ FACTOR_VALUES = Id (. //Variable que guarda el Id que acaba de encontrar
                             int constType = t.kind;
                             
                             ProyectoPruebas.Variable constVar = new ProyectoPruebas.Variable(constNumber, constType);
+
+                            constVar.setConstant();
 
                             tab.codeGenerator.pushSymbolStack(constVar);
                           .)

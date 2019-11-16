@@ -7,13 +7,15 @@ namespace ProyectoPruebas
     class Variable
     {
 
+        public const int ADDRESS_NOT_DEFINED = -1;  //Constante que tiene el valor que indica que no se ha asignado una dirección de memoria
 
         private string name;    //Variable  que almacena el nombre de la variable
         private int type;       //Variable que guarda el tipo de dato de la variable
         private int address;
         private string value;
         private bool parsed;
-        public Variable next;   //Se guarda la referencia a la siguiente variable de la tabla de variables
+        private bool constant;
+        private Variable next;   //Se guarda la referencia a la siguiente variable de la tabla de variables
         
 
         public bool isParsed() {
@@ -23,6 +25,16 @@ namespace ProyectoPruebas
         public void setParsed() {
             parsed = true;
         }
+
+        public bool isConstant() {
+            return constant;
+        }
+
+        public void setConstant() {
+            constant = true;
+        }
+
+
         public string getName(){
             return this.name;
         }
@@ -63,7 +75,8 @@ namespace ProyectoPruebas
             this.type = type;
             this.next = null;
             this.parsed = false;
-            this.address = 0;
+            this.address = ADDRESS_NOT_DEFINED;
+            constant = false;
         }
     }
 }

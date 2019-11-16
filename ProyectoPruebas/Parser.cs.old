@@ -604,6 +604,9 @@ string variableName;
 			 if(varId != null){
 			    tab.codeGenerator.pushSymbolStack(varId);
 			 }
+			 else{
+			   SemErr("Variable " + variableName + " not declared.");
+			 }
 			}
 		} else if (la.kind == 18 || la.kind == 19) {
 			NUMBER();

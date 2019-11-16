@@ -5,7 +5,9 @@ using System.Text;
 namespace ProyectoPruebas {
 
    enum Operation { OP_UNDEF, EQUAL, PLUS, MINUS, MULTIPLICATION, DIVISION, GREATERR_THAN, LESS_THAN, EQUAL_THAN, 
-        GREATER_THAN, _LESS_THAN_, _EQUAL_THAN_, GREATER_OR_EQUAL, LESS_OR_EQUAL, DIFFERENT_THAN}
+        GREATER_THAN, _LESS_THAN_, _EQUAL_THAN_, GREATER_OR_EQUAL, LESS_OR_EQUAL, DIFFERENT_THAN, PRINT, MOVE_FORWARD, 
+        INTERACT, SHOOT, WAIT, TURN_RIGHT, TURN_LEFT, GOTO, GOTO_F, END_PROC, ERA, PARAM, GOSUB, RETURN}
+
     class OperationTypes {
 
         private const int NUMBER_OF_TYPES = 5;         //Constante  que define  la cantidad de tipos de dato
@@ -35,7 +37,22 @@ namespace ProyectoPruebas {
         //Códigos para palabras reservadas
         public const int PRINT = 12;
         public const int MOVE_FORWARD = 13;
+        public const int INTERACT = 14;
+        public const int SHOOT = 15;
+        public const int WAIT = 16;
+        public const int TURN_RIGHT = 17;
+        public const int TURN_LEFT = 18;
+
+        //Códigos para instrucciones de cuádruplos
+        public const int GOTO = 19;
+        public const int GOTO_F = 20;
+        public const int END_PROC = 21;
+        public const int ERA = 22;
+        public const int PARAM = 23;
+        public const int GOSUB = 24;
+        public const int RETURN = 25;
         
+
 
         public int[,,] semanticCube = new int[NUMBER_OF_TYPES, NUMBER_OF_TYPES, NUMBER_OF_OPERATORS];
 
