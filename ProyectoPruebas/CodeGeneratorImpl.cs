@@ -265,7 +265,7 @@ namespace ProyectoPruebas {
         }
 
 
-        void writeIntermediateCode(Quadruple intermediateCode) {
+        void writeIntermediateCode(IQuadruple intermediateCode) {
 
             //Se agrega el cuádruplo al buffer si no se le pasa nulo
             if (intermediateCode != null) {
@@ -278,7 +278,7 @@ namespace ProyectoPruebas {
             if (jumpStack.Count == 0) {
 
                 //Se escribe en el archivo cada cuádruplo almacenado en el buffer
-                foreach (Quadruple quadruple in quadrupleBuffer) {
+                foreach (IQuadruple quadruple in quadrupleBuffer) {
 
                     writeToFile(quadruple.getQuadruple());
                 }

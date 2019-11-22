@@ -20,6 +20,8 @@ namespace ProyectoPruebas {
 
         Function actualFunction;
 
+        AddressManager addressManager;
+
       
         public VarTable(Parser parser) {
 
@@ -33,6 +35,8 @@ namespace ProyectoPruebas {
 
             actualFunction = null;
 
+            this.addressManager = new AddressManager();
+
           
         }
 
@@ -42,38 +46,31 @@ namespace ProyectoPruebas {
             switch (var.getType()) {
      
                 case Parser._CTE_I:
-                    tempAddress = intConstAddress;
-                    intConstAddress++;
+                    tempAddress = addressManager.getGlobalIntVarAddress() ;
                     break;
 
                 case Parser._CTE_F:
-                    tempAddress = floatConstAddress;
-                    floatConstAddress++;
+                    tempAddress = addressManager.getGlobalFloatVarAddress();
                     break;
 
                 case Parser._CTE_S:
-                    tempAddress = stringConstAddress;
-                    stringConstAddress++;
+                    tempAddress = addressManager.getGlobalStringVarAddress();
                     break;
 
                 case Parser._Int:
-                    tempAddress = globalIntVarAddress;
-                    globalIntVarAddress++;
+                    tempAddress = addressManager.getGlobalIntVarAddress();
                     break;
 
                 case Parser._Float:
-                    tempAddress = globalFloatVarAddress;
-                    globalFloatVarAddress++;
+                    tempAddress = addressManager.getGlobalFloatVarAddress();
                     break;
 
                 case Parser._Bool:
-                    tempAddress = globalBoolVarAddress;
-                    globalBoolVarAddress++;
+                    tempAddress = addressManager.getGlobalBoolVarAddress();
                     break;
 
                 case Parser._String:
-                    tempAddress = globalStringVarAddress;
-                    globalStringVarAddress++;
+                    tempAddress = addressManager.getGlobalStringVarAddress();
                     break;
 
                 default:
@@ -90,38 +87,31 @@ namespace ProyectoPruebas {
             switch (var.getType()) {
 
                 case Parser._CTE_I:
-                    tempAddress = intConstAddress;
-                    intConstAddress++;
+                    tempAddress = addressManager.getIntAddress();
                     break;
 
                 case Parser._CTE_F:
-                    tempAddress = floatConstAddress;
-                    floatConstAddress++;
+                    tempAddress = addressManager.getFloatAddress();
                     break;
 
                 case Parser._CTE_S:
-                    tempAddress = stringConstAddress;
-                    stringConstAddress++;
+                    tempAddress = addressManager.getStringAddress();
                     break;
 
                 case Parser._Int:
-                    tempAddress = localIntVarAddress;
-                    localIntVarAddress++;
+                    tempAddress = addressManager.getIntAddress();
                     break;
 
                 case Parser._Float:
-                    tempAddress = localFloatVarAddress;
-                    localFloatVarAddress++;
+                    tempAddress = addressManager.getFloatAddress();
                     break;
 
                 case Parser._Bool:
-                    tempAddress = localBoolVarAddress;
-                    localBoolVarAddress++;
+                    tempAddress = addressManager.getBoolAddress();
                     break;
 
                 case Parser._String:
-                    tempAddress = localStringVarAddress;
-                    localStringVarAddress++;
+                    tempAddress = addressManager.getStringAddress();
                     break;
 
                 default:

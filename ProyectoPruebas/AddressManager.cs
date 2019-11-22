@@ -91,41 +91,56 @@ namespace ProyectoPruebas {
 
 
         public int getConstIntAddress(){
+
             constIntAddress++;
+
             return constIntAddress - 1;
         }
 
         public int getConstFloatAddress(){
+
             constFloatAddress++;
+
             return constFloatAddress - 1;
         }
 
         public int getConstStringAddress(){
+
             constStringAddress++;
+
             return constStringAddress - 1;
         }
 
         public int getGlobalIntVarAddress(){
+
             globalIntVarAddress++;
+
             return globalIntVarAddress -1;
         }
 
         public int getGlobalFloatVarAddress(){
+
             globalFloatVarAddress++;
+
             return globalFloatVarAddress -1;
         }
 
         public int getGlobalBoolVarAddress(){
+
             globalBoolVarAddress++;
+
             return globalBoolVarAddress -1;
         }
 
         public int getGlobalStringVarAddress(){
+
             globalStringVarAddress++;
+
             return globalStringVarAddress -1;
         }
        
         public int getIntAddress(){
+
             if(localAddressStack.Count == 0){
                 createNewLocalAddress();
             }
@@ -135,6 +150,7 @@ namespace ProyectoPruebas {
         }
 
         public int getFloatAddress(){
+
             if(localAddressStack.Count == 0){
                 createNewLocalAddress();
             }
@@ -144,6 +160,7 @@ namespace ProyectoPruebas {
         }
 
         public int getBoolAddress(){
+
             if(localAddressStack.Count == 0){
                 createNewLocalAddress();
             }
@@ -153,6 +170,7 @@ namespace ProyectoPruebas {
         }
 
         public int getStringAddress(){
+
             if(localAddressStack.Count == 0){
                 createNewLocalAddress();
             }

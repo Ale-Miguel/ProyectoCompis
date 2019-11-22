@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ProyectoPruebas {
-    class OperationQuadruple : Quadruple {
+    class OperationQuadruple : IQuadruple {
 
         private Variable variable1;         //Variable de la izquierda
         private Variable variable2;         //Variable de la derecha

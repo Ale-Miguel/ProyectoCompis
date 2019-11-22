@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ProyectoPruebas {
-    class GoTo : Quadruple, Jumps{
+    class GoTo : IQuadruple, Jumps{
         private int jumpTo;
         private int lineNumber;
 
