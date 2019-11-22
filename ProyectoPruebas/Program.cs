@@ -6,13 +6,10 @@ namespace ProyectoPruebas
     {
         static void Main(string[] args)
         {
+            IVirtualMachine vr = new VirtualMachineImpl();
+            Compiler compiler = new Compiler(vr);
 
-            Scanner scanner = new Scanner("ProgramaExpresiones.txt");
-            Parser parser = new Parser(scanner);
-            parser.Tab = new VarTable(parser);
-            parser.Parse();
-            Console.WriteLine(parser.errors.count + " errors found");
-            //Console.WriteLine(parser.errors.errMsgFormat);
+            compiler.compile("ProgramaExpresiones.txt");
         }
     }
 }

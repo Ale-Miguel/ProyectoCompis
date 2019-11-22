@@ -47,6 +47,22 @@ namespace ProyectoPruebas {
 
         }
 
+        public int getFirstParameter() {
+            return operatorNumber;
+        }
+
+        public Variable getSecondParameter() {
+            return variable1;
+        }
+
+        public Variable getThirdParameter() {
+            return variable2;
+        }
+
+        public Variable getFourthParameter() {
+            return resultVariable;
+        }
+
         public OperationQuadruple() {
 
             //Guiones bajos para simbolizar que no se utiliza

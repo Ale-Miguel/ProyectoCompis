@@ -23,6 +23,22 @@ namespace ProyectoPruebas {
             this.lineNumber = line -1;
         }
 
+        public int getFirstParameter() {
+            return OperationTypes.GOTO;
+        }
+
+        public Variable getSecondParameter() {
+            return null;
+        }
+
+        public Variable getThirdParameter() {
+            return null;
+        }
+
+        public Variable getFourthParameter() {
+            return new Variable("GoTo", Variable.ADDRESS_NOT_DEFINED, jumpTo.ToString());
+        }
+
         public GoTo() {
             lineNumber = 0;
             jumpTo = 0;
