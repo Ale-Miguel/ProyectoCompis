@@ -21,6 +21,16 @@ namespace ProyectoPruebas {
 
         private string filePath = "IntermediateCode.txt";   //Path y nombre del archivo que guarda el código intermedio
 
+        void parseVariable(Variable variable) {
+            if (variable.isParsed()) {
+                return;
+            }
+            //Se obtiene la posición del tipo de dato equivalente del cubo semántico que le dió a la variable el Parser
+            int posSemCube = cuboSemantico.getCubePosition(variable.getType());
+
+            variable.setType(posSemCube);   //Se guarda el nuevo valor de su tipo de dato
+            variable.setParsed();           //Se indica que ya fue parseada esta variable
+        }
         public int getLineCont() {
             return lineCont;
         }
@@ -190,11 +200,7 @@ namespace ProyectoPruebas {
             //que volverse a traducir
             if (!variable.isParsed()) {
 
-                //Se obtiene la posición del tipo de dato equivalente del cubo semántico que le dió a la variable el Parser
-                int posSemCube = cuboSemantico.getCubePosition(variable.getType());
-
-                variable.setType(posSemCube);   //Se guarda el nuevo valor de su tipo de dato
-                variable.setParsed();           //Se indica que ya fue parseada esta variable
+                parseVariable(variable);
             }
 
             //Se le hace push a la pila de símbolos
@@ -244,6 +250,10 @@ namespace ProyectoPruebas {
         public bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2) {
 
             //Variable que guarda el resultado de hacer una operación entre dos tipos de dato
+
+            parseVariable(var1);
+            parseVariable(var2);
+
             int resultType = cuboSemantico.semanticCube[var1.getType(), var2.getType(), op];
 
             //Si el resultado es UNDEFINED
@@ -373,8 +383,9 @@ namespace ProyectoPruebas {
 
             //Se resuelve la parte de la condición
             //El for se comporta como el if, por eso se trata como tal
+            lineCont++;
             popJumpStack();
-
+            lineCont--;
             //El siguiente valor de la pila guarda la línea a donde empiezan las operaciones de la condición
             int lineReturn = (int)jumpStack.Pop();
 
@@ -443,12 +454,22 @@ namespace ProyectoPruebas {
             Jumps jump = (Jumps)quadrupleBuffer[jumpIndex];
 
             //Se le asigna la línea a la que va a saltar
-            jump.setJump(lineCont);
+            jump.setJump(lineCont -1);
+
 
             //Se manda a escribir el cuádruplo al archivo
             writeIntermediateCode(null);
 
 
+        }
+
+        public void pushGoToMain() {
+            pushGoTo();
+        }
+        public void solveGoToMain() {
+            lineCont++;
+            popJumpStack();
+            lineCont--;
         }
 
         public CodeGeneratorImpl(VarTable varTable) {
@@ -471,4 +492,6 @@ namespace ProyectoPruebas {
             File.WriteAllText(filePath, "");
         }
     }
+
+   
 }

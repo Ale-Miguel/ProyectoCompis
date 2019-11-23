@@ -26,5 +26,8 @@ namespace ProyectoPruebas {
         int getTopOperatorStack();
 
         void popJumpStack();
+
+        void pushGoToMain();
+        void solveGoToMain();
     }
 }

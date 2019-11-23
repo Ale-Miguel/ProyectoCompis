@@ -2,6 +2,7 @@ COMPILER ProyectoFinal
 
   string variableName;
   string functionName;
+  string signSymbol;
 
   private ProyectoPruebas.VarTable tab;
 
@@ -72,7 +73,26 @@ IGNORE '\r' + '\n' + '\t' + '\f'
 
 PRODUCTIONS
 ProyectoFinal = PROGRAM.
-PROGRAM = VARS {MODULE} STATUTE {STATUTE}.
+
+PROGRAM = VARS (.//Se crea el goTo para el main
+                tab.codeGenerator.pushGoToMain();.)
+        { 
+        MODULE
+
+        } 
+                (.//Se resuelve el goTo porque ya estamos en el main
+                    tab.codeGenerator.solveGoToMain();
+                  .)
+
+              (.tab.createContext();.)
+        STATUTE 
+        {STATUTE}
+
+        (.tab.destroyContext();.)
+        .
+
+
+
 VARS = {VAR}.
 
 VAR                   
@@ -80,10 +100,33 @@ VAR
       TYPE  (. type = t.kind;.)
       Id    (. name =  t.val; 
                ProyectoPruebas.Variable var = new ProyectoPruebas.Variable(name, type);
+               tab.addVariable(var);
+               tab.codeGenerator.pushSymbolStack(var);
                .)
-    Equal 
-    (NUMBER | CTE_S) (. var.setValue(t.val);
-                        tab.addVariable(var);.)
+    Equal     (.  tab.codeGenerator.pushOperatorStack(t.kind);.)
+    [SIGNS] 
+    (NUMBER | CTE_S) (.     
+                            string constNumber = "-";
+
+                            if(signSymbol == "-"){
+                                constNumber +=  t.val;
+                                signSymbol = "+";
+                            }
+                            else{
+                              constNumber = t.val;
+                            }
+
+                            int constType = t.kind;
+                            
+                            ProyectoPruebas.Variable constVar = new ProyectoPruebas.Variable(constNumber, constType);
+
+                            constVar.setConstant();
+
+                            constVar = tab.addConstant(constVar);
+
+                            tab.codeGenerator.pushSymbolStack(constVar);
+
+                            tab.codeGenerator.solveAssignment();.)
     Semicolon. 
 NUMBER = CTE_I 
         | CTE_F.
@@ -93,11 +136,16 @@ MODULE = Function       (. string functName; int type;.)
                            ProyectoPruebas.Function fun = new ProyectoPruebas.Function(functName, type);
                            tab.addFunction(fun);
                            .)
-        PARAMS Colon STATUTE {STATUTE} [MODULE_RETURN] EndFunction.
+        PARAMS Colon STATUTE {STATUTE} [MODULE_RETURN] 
+        EndFunction (.tab.destroyContext();.)
+        .
 MODULE_RETURN = Return EXPR.
 
 PARAMS 
- = LeftParenthesis [PARAMS_1] RightParenthesis.
+ = LeftParenthesis (.tab.createContext();.)
+    [PARAMS_1] RightParenthesis.
+
+
 PARAMS_1 = TYPE (.int paramType = t.kind;.)
             Id (. Console.WriteLine("FuncParam: " + t.val + " " + paramType);.)
             {Comma TYPE Id  (. Console.WriteLine("FuncParam: " + t.val);.)
@@ -121,7 +169,7 @@ PRINT = Print LeftParenthesis (CTE_S | Id) RightParenthesis.
 
 CYCLE = FOR 
         | LOOP.
-FOR = For (. tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() +1); .)
+FOR = For (. tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); .)
       LeftParenthesis EXPRESSION 
       RightParenthesis (. ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
 
@@ -197,8 +245,6 @@ ASSIGNMENT =
                         tab.codeGenerator.pushOperatorStack(t.kind);
                         tab.codeGenerator.pushSymbolStack(var);
                       }
-
-                      
                       .)
             (EXPR | CTE_S)
               (.if(!tab.codeGenerator.solveAssignment()){
@@ -240,8 +286,7 @@ TERM = FACTOR
          (. if(!tab.codeGenerator.solveMultAndDiv()){
                 SemErr("Type-mismatch");
             }
-
-            .)
+          .)
         }
        .
 
@@ -272,7 +317,15 @@ FACTOR_VALUES = Id (. //Variable que guarda el Id que acaba de encontrar
                           SemErr("Variable " + variableName + " not declared.");
                         }
                       }.)
-                | NUMBER (. string constNumber = t.val;
+                | NUMBER (. string constNumber = "-";
+                            if(signSymbol == "-"){
+                                constNumber +=  t.val;
+                                signSymbol = "+";
+                            }
+                            else{
+                              constNumber = t.val;
+                            }
+                            
                             int constType = t.kind;
                             
                             ProyectoPruebas.Variable constVar = new ProyectoPruebas.Variable(constNumber, constType);
@@ -284,7 +337,8 @@ FACTOR_VALUES = Id (. //Variable que guarda el Id que acaba de encontrar
                             tab.codeGenerator.pushSymbolStack(constVar);
                           .)
                 .
-SIGNS = Plus 
-        | Minus.
+SIGNS = Plus
+        | Minus (.signSymbol = "-";.)
+        .
 	
 END ProyectoFinal.

@@ -48,7 +48,7 @@ namespace ProyectoPruebas {
         public GoTo( int jump, int lineNumberVal) {
             
             this.lineNumber = lineNumberVal;
-            this.jumpTo = jump -1;
+            this.jumpTo = jump;
         }
 
         public GoTo( int lineNumberVal) {

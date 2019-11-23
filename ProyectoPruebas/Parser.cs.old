@@ -67,6 +67,7 @@ public class Parser {
 
 string variableName;
   string functionName;
+  string signSymbol;
 
   private ProyectoPruebas.VarTable tab;
 
@@ -140,9 +141,12 @@ string variableName;
 
 	void PROGRAM() {
 		VARS();
+		tab.codeGenerator.pushGoToMain();
 		while (la.kind == 32) {
 			MODULE();
 		}
+		tab.codeGenerator.solveGoToMain();
+		
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
@@ -179,6 +183,7 @@ string variableName;
 			MODULE_RETURN();
 		}
 		Expect(35);
+		tab.destroyContext();
 	}
 
 	void STATUTE() {
@@ -201,15 +206,40 @@ string variableName;
 		Expect(1);
 		name =  t.val; 
 		ProyectoPruebas.Variable var = new ProyectoPruebas.Variable(name, type);
+		tab.addVariable(var);
+		tab.codeGenerator.pushSymbolStack(var);
 		
 		Expect(25);
+		tab.codeGenerator.pushOperatorStack(t.kind);
+		if (la.kind == 21 || la.kind == 22) {
+			SIGNS();
+		}
 		if (la.kind == 18 || la.kind == 19) {
 			NUMBER();
 		} else if (la.kind == 20) {
 			Get();
 		} else SynErr(51);
-		var.setValue(t.val);
-		tab.addVariable(var);
+		string constNumber = "-";
+		
+		if(signSymbol == "-"){
+		   constNumber +=  t.val;
+		   signSymbol = "+";
+		}
+		else{
+		 constNumber = t.val;
+		}
+		
+		int constType = t.kind;
+		
+		ProyectoPruebas.Variable constVar = new ProyectoPruebas.Variable(constNumber, constType);
+		
+		constVar.setConstant();
+		
+		constVar = tab.addConstant(constVar);
+		
+		tab.codeGenerator.pushSymbolStack(constVar);
+		
+		tab.codeGenerator.solveAssignment();
 		Expect(9);
 	}
 
@@ -225,16 +255,26 @@ string variableName;
 		} else SynErr(52);
 	}
 
+	void SIGNS() {
+		if (la.kind == 21) {
+			Get();
+		} else if (la.kind == 22) {
+			Get();
+			signSymbol = "-";
+		} else SynErr(53);
+	}
+
 	void NUMBER() {
 		if (la.kind == 18) {
 			Get();
 		} else if (la.kind == 19) {
 			Get();
-		} else SynErr(53);
+		} else SynErr(54);
 	}
 
 	void PARAMS() {
 		Expect(14);
+		tab.createContext();
 		if (StartOf(2)) {
 			PARAMS_1();
 		}
@@ -313,7 +353,7 @@ string variableName;
 			PRINT();
 			break;
 		}
-		default: SynErr(54); break;
+		default: SynErr(55); break;
 		}
 	}
 
@@ -324,7 +364,7 @@ string variableName;
 			Get();
 		} else if (la.kind == 1) {
 			Get();
-		} else SynErr(55);
+		} else SynErr(56);
 		Expect(15);
 	}
 
@@ -333,12 +373,12 @@ string variableName;
 			FOR();
 		} else if (la.kind == 46) {
 			LOOP();
-		} else SynErr(56);
+		} else SynErr(57);
 	}
 
 	void FOR() {
 		Expect(44);
-		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() +1); 
+		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); 
 		Expect(14);
 		EXPRESSION();
 		Expect(15);
@@ -367,7 +407,7 @@ string variableName;
 			Get();
 		} else if (la.kind == 1) {
 			Get();
-		} else SynErr(57);
+		} else SynErr(58);
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
@@ -413,7 +453,7 @@ string variableName;
 			ELSE();
 		} else if (la.kind == 12) {
 			ELSEIF();
-		} else SynErr(58);
+		} else SynErr(59);
 	}
 
 	void ELSE() {
@@ -448,7 +488,7 @@ string variableName;
 			FUNCTCALL();
 		} else if (la.kind == 25) {
 			ASSIGNMENT();
-		} else SynErr(59);
+		} else SynErr(60);
 		Expect(9);
 	}
 
@@ -483,13 +523,11 @@ string variableName;
 		tab.codeGenerator.pushSymbolStack(var);
 		}
 		
-		
-		
 		if (StartOf(5)) {
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
-		} else SynErr(60);
+		} else SynErr(61);
 		if(!tab.codeGenerator.solveAssignment()){
 		     SemErr("Type-mismatch at assignment");
 		}
@@ -536,7 +574,7 @@ string variableName;
 			Get();
 			break;
 		}
-		default: SynErr(61); break;
+		default: SynErr(62); break;
 		}
 	}
 
@@ -554,7 +592,6 @@ string variableName;
 			   SemErr("Type-mismatch");
 			}
 			
-			
 		}
 	}
 
@@ -563,7 +600,7 @@ string variableName;
 			FACTOR_1();
 		} else if (StartOf(6)) {
 			FACTOR_2();
-		} else SynErr(62);
+		} else SynErr(63);
 	}
 
 	void FACTOR_1() {
@@ -579,14 +616,6 @@ string variableName;
 			SIGNS();
 		}
 		FACTOR_VALUES();
-	}
-
-	void SIGNS() {
-		if (la.kind == 21) {
-			Get();
-		} else if (la.kind == 22) {
-			Get();
-		} else SynErr(63);
 	}
 
 	void FACTOR_VALUES() {
@@ -611,10 +640,22 @@ string variableName;
 			}
 		} else if (la.kind == 18 || la.kind == 19) {
 			NUMBER();
-			string constNumber = t.val;
+			string constNumber = "-";
+			if(signSymbol == "-"){
+			   constNumber +=  t.val;
+			   signSymbol = "+";
+			}
+			else{
+			 constNumber = t.val;
+			}
+			
 			int constType = t.kind;
 			
 			ProyectoPruebas.Variable constVar = new ProyectoPruebas.Variable(constNumber, constType);
+			
+			constVar.setConstant();
+			
+			constVar = tab.addConstant(constVar);
 			
 			tab.codeGenerator.pushSymbolStack(constVar);
 			
@@ -706,17 +747,17 @@ public class Errors {
 			case 50: s = "invalid STATUTE"; break;
 			case 51: s = "invalid VAR"; break;
 			case 52: s = "invalid TYPE"; break;
-			case 53: s = "invalid NUMBER"; break;
-			case 54: s = "invalid COMMAND_LIST"; break;
-			case 55: s = "invalid PRINT"; break;
-			case 56: s = "invalid CYCLE"; break;
-			case 57: s = "invalid LOOP"; break;
-			case 58: s = "invalid CONDITION_ELSE"; break;
-			case 59: s = "invalid ASGMT_OR_FUNCT"; break;
-			case 60: s = "invalid ASSIGNMENT"; break;
-			case 61: s = "invalid RELOPS"; break;
-			case 62: s = "invalid FACTOR"; break;
-			case 63: s = "invalid SIGNS"; break;
+			case 53: s = "invalid SIGNS"; break;
+			case 54: s = "invalid NUMBER"; break;
+			case 55: s = "invalid COMMAND_LIST"; break;
+			case 56: s = "invalid PRINT"; break;
+			case 57: s = "invalid CYCLE"; break;
+			case 58: s = "invalid LOOP"; break;
+			case 59: s = "invalid CONDITION_ELSE"; break;
+			case 60: s = "invalid ASGMT_OR_FUNCT"; break;
+			case 61: s = "invalid ASSIGNMENT"; break;
+			case 62: s = "invalid RELOPS"; break;
+			case 63: s = "invalid FACTOR"; break;
 			case 64: s = "invalid FACTOR_VALUES"; break;
 
 			default: s = "error " + n; break;

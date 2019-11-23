@@ -37,6 +37,17 @@ namespace ProyectoPruebas {
             this.addressManager = new AddressManager();
         }
 
+        //Función para crear un contexto nuevo
+        public void createContext() {
+            //Se crea un nuevo set de variables locales
+            addressManager.createNewLocalAddress();
+            addVariableLayer();
+        }
+
+        public void destroyContext() {
+            addressManager.destroyCurrentLocalAddress();
+            removeVariableLayer();
+        }
    
         bool assignGlobalAddress(Variable var) {
 
@@ -271,33 +282,7 @@ namespace ProyectoPruebas {
 
                 lastVariable = lastVariable.getNext();
             }
-            /* //se busca la última variable, igual se va checando que no se encuentre una variable que ya está agregada en el mismo scope
-             while (lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
-
-                 lastVariable = lastVariable.getNext();
-             }
-
-             //En caso de que se encuentre una variable que se llame igual en el mismo scope, no se puede
-             if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()) {
-
-                 //Error, no se pueden declarar 2 o más variables con el mismo nombre
-                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
-             }
-             */
-            //Se busca la ultima variable (variable.next == nulll) o se interrumpe si se ecuentra una variable con el
-            //mismo nombre
-            /* while (lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
-
-                 lastVariable = lastVariable.getNext();
-             }
-
-
-             //Si se encuentra una variable con el mismo nombre (lastVariable != null), es un error, ya que se 
-             //está declarando dos veces la variable
-             if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()){
-                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
-             }
- */
+           
             //Se guarda la variable a la tabla de variables
             lastVariable.setNext(variable);
 
@@ -339,33 +324,7 @@ namespace ProyectoPruebas {
 
                 lastVariable = lastVariable.getNext();
             }
-            /* //se busca la última variable, igual se va checando que no se encuentre una variable que ya está agregada en el mismo scope
-             while (lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
 
-                 lastVariable = lastVariable.getNext();
-             }
-
-             //En caso de que se encuentre una variable que se llame igual en el mismo scope, no se puede
-             if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()) {
-
-                 //Error, no se pueden declarar 2 o más variables con el mismo nombre
-                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
-             }
-             */
-            //Se busca la ultima variable (variable.next == nulll) o se interrumpe si se ecuentra una variable con el
-            //mismo nombre
-            /* while (lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
-
-                 lastVariable = lastVariable.getNext();
-             }
-
-
-             //Si se encuentra una variable con el mismo nombre (lastVariable != null), es un error, ya que se 
-             //está declarando dos veces la variable
-             if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()){
-                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
-             }
- */
             //Se guarda la variable a la tabla de variables
             lastVariable.setNext(variable);
 
@@ -485,6 +444,18 @@ namespace ProyectoPruebas {
             //Si no encontro la función, actualFunction es null
             return actualFunction;
         }
+        
+        public Variable addParamToFunction(Variable param) {
+
+            //Variable auxiliar para iterar sobre los parámetros de la función
+            Variable auxParam = actualFunction.getParams();
+
+            if(auxParam == null) {
+                actualFunction.addParam(param);
+            }
+
+            return param;
+        }
         //Función que agrega constantes a la tabla de constantes
         public Variable addConstant(Variable constante) {
 
@@ -519,6 +490,9 @@ namespace ProyectoPruebas {
 
             //Se le asigna el valor de la constante
             constante.setValue(constante.getName());
+
+            //Genera un cu{adruplo de asignación para que guarde el valor de la constante en memoria
+           codeGenerator.createIntermediateCodeNoTemp(OperationTypes.EQUAL, constante, constante);
 
             //Se regresa la constante ya con sus campos llenos
             return constante;

@@ -81,11 +81,17 @@ namespace ProyectoPruebas {
         }
 
         //Función que crea un nuevo elemento de la pila de direcciones locales
-        void createNewLocalAddress() {
+        public void  createNewLocalAddress() {
 
             LocalAddressManager newLocalAddress = new LocalAddressManager(maxGlobalAddress + 1);
 
             localAddressStack.Push(newLocalAddress);
+        }
+
+        public void destroyCurrentLocalAddress() {
+            if(localAddressStack.Count > 0) {
+                localAddressStack.Pop();
+            }
         }
 
 

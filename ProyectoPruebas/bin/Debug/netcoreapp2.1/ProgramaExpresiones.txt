@@ -1,9 +1,9 @@
-Var Int x = 0;
-Var Int z = 0;
+Var Int x = 1;
+Var Int z = 10;
 Var Float y = 0.0;
 
 Function Void funcion(Int VariableJeje, Int OtraVariableJeje):
-	x = 0;
+	x = z;
 EndFunction
 
 x = -1;
@@ -14,7 +14,7 @@ y = y / x;
 
 x = x + 1;
 
-x = 5;
+x = -1;
 
 If( x < 2)
 	x = 10 * z;
