@@ -2,12 +2,10 @@
 
 namespace ProyectoPruebas
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            IVirtualMachine vr = new VirtualMachineImpl();
-            Compiler compiler = new Compiler(vr);
+    class Program {
+        static void Main(string[] args) {
+            IVirtualMachine vm = new VirtualMachineImpl();
+            Compiler compiler = new Compiler(vm);
 
             compiler.compile("ProgramaExpresiones.txt");
         }

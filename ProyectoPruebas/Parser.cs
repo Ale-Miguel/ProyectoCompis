@@ -616,6 +616,10 @@ string variableName;
 			
 			ProyectoPruebas.Variable constVar = new ProyectoPruebas.Variable(constNumber, constType);
 			
+			constVar.setConstant();
+			
+			constVar = tab.addConstant(constVar);
+			
 			tab.codeGenerator.pushSymbolStack(constVar);
 			
 		} else SynErr(64);

@@ -279,6 +279,8 @@ FACTOR_VALUES = Id (. //Variable que guarda el Id que acaba de encontrar
 
                             constVar.setConstant();
 
+                            constVar = tab.addConstant(constVar);
+
                             tab.codeGenerator.pushSymbolStack(constVar);
                           .)
                 .

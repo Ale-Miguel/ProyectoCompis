@@ -6,7 +6,7 @@ Function Void funcion(Int VariableJeje, Int OtraVariableJeje):
 	x = 0;
 EndFunction
 
-x = 1;
+x = -1;
 
 x = (6 + 2) * (z - x) / 5;
 

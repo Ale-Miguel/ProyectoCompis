@@ -8,7 +8,18 @@ namespace ProyectoPruebas {
         private string name;        //Atributo que almacena el nombre de función
         private int returnType;    //Atributo que almacena el tipo de retorno
         private Function next;      //Atributo que almacena la función siguiente de la lista
-        private Variable functParams;
+        private Variable functParams;   //Lista de argumentos
+        private int startsIn;
+
+        //public int StartsIn { get => startsIn; set => startsIn = value; }
+
+        public void setStartsIn(int valor) {
+            this.startsIn = valor;
+        }
+
+        public int getStartsIn() {
+            return this.startsIn;
+        }
 
         public void setNext(Function next) {
             this.next = next;
@@ -24,6 +35,7 @@ namespace ProyectoPruebas {
         public int getReturnType() {
             return returnType;
         }
+
 
         public void addParam(Variable paramVaraible) {
             

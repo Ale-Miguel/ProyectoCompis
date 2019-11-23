@@ -19,7 +19,7 @@ namespace ProyectoPruebas {
         public const int TYPE_FLOAT = 2;
         public const int TYPE_BOOL = 3;
         public const int TYPE_STRING = 4;
-
+ 
         //Valores de operadores
         public const int OP_UNDEF = 0;         //Operador No reconocido
         public const int EQUAL = 1;            // =
@@ -59,10 +59,6 @@ namespace ProyectoPruebas {
         //Función que sirve de traductor entre los números que asigna el parser a los tokens de tipos y operadores
         //Con las posiciones en el cubo semántico
         public int getCubePosition(int operatorValue) {
-
-            Operation op;
-
-            op = (Operation)1;
 
             switch (operatorValue) {
 

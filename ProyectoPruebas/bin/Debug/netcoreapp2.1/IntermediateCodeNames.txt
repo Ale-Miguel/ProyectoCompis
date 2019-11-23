@@ -1,0 +1,22 @@
+1 1, 0, __, x
+2 1, 1, __, x
+3 2, 6, 2, tempVar1
+4 3, z, x, tempVar2
+5 4, tempVar1, tempVar2, tempVar3
+6 5, tempVar3, 5, tempVar4
+7 1, tempVar4, __, x
+8 5, y, x, tempVar5
+9 1, tempVar5, __, y
+10 2, x, 1, tempVar6
+11 1, tempVar6, __, x
+12 1, 5, __, x
+13 7, x, 2, tempVar7
+14 GoToFalse, tempVar7, 19
+15 4, 10, z, tempVar8
+16 1, tempVar8, __, x
+17 1, 2.0, __, y
+18 7, x, 10, tempVar9
+19 GoToFalse, tempVar9, 23
+20 2, x, 1, tempVar10
+21 1, tempVar10, __, x
+22 GoTo, 18

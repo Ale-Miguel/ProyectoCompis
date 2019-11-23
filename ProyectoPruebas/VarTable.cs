@@ -22,7 +22,6 @@ namespace ProyectoPruebas {
 
         AddressManager addressManager;
 
-      
         public VarTable(Parser parser) {
 
             this.parser = parser;
@@ -31,92 +30,148 @@ namespace ProyectoPruebas {
 
             this.variableStack = new Stack();
 
-            codeGenerator = new CodeGeneratorImpl();
+            codeGenerator = new CodeGeneratorImpl(this);
 
             actualFunction = null;
 
             this.addressManager = new AddressManager();
-
-          
         }
 
    
         bool assignGlobalAddress(Variable var) {
+
             int tempAddress = 0;
-            switch (var.getType()) {
-     
-                case Parser._CTE_I:
-                    tempAddress = addressManager.getGlobalIntVarAddress() ;
-                    break;
 
-                case Parser._CTE_F:
-                    tempAddress = addressManager.getGlobalFloatVarAddress();
-                    break;
+            if (var.isConstant()) {
 
-                case Parser._CTE_S:
-                    tempAddress = addressManager.getGlobalStringVarAddress();
-                    break;
+                switch (var.getType()) {
+                    case Parser._CTE_F:
+                        tempAddress = addressManager.getConstFloatAddress();
+                        break;
 
-                case Parser._Int:
-                    tempAddress = addressManager.getGlobalIntVarAddress();
-                    break;
+                    case Parser._CTE_I:
+                        tempAddress = addressManager.getConstIntAddress();
+                        break;
 
-                case Parser._Float:
-                    tempAddress = addressManager.getGlobalFloatVarAddress();
-                    break;
+                    case Parser._CTE_S:
+                        tempAddress = addressManager.getConstStringAddress();
+                        break;
 
-                case Parser._Bool:
-                    tempAddress = addressManager.getGlobalBoolVarAddress();
-                    break;
-
-                case Parser._String:
-                    tempAddress = addressManager.getGlobalStringVarAddress();
-                    break;
-
-                default:
-                    return false;
+                    default:
+                        var.setAddress(OperationTypes.TYPE_UNDEFINED);
+                        return false;
+                }
             }
+            else {
+
+                switch (var.getType()) {
+
+                    case Parser._CTE_I:
+                        tempAddress = addressManager.getGlobalIntVarAddress();
+                        break;
+
+                    case Parser._CTE_F:
+                        tempAddress = addressManager.getGlobalFloatVarAddress();
+                        break;
+
+                    case Parser._CTE_S:
+                        tempAddress = addressManager.getGlobalStringVarAddress();
+                        break;
+
+                    case Parser._Int:
+                        tempAddress = addressManager.getGlobalIntVarAddress();
+                        break;
+
+                    case Parser._Float:
+                        tempAddress = addressManager.getGlobalFloatVarAddress();
+                        break;
+
+                    case Parser._Bool:
+                        tempAddress = addressManager.getGlobalBoolVarAddress();
+                        break;
+
+                    case Parser._String:
+                        tempAddress = addressManager.getGlobalStringVarAddress();
+                        break;
+
+                    default:
+                        return false;
+                }
+
+            }
+
+
 
             var.setAddress(tempAddress);
             return true;
         }
 
-        bool assignlocalAddress(Variable var) {
+       public  bool assignlocalAddress(Variable var) {
 
             int tempAddress = 0;
-            switch (var.getType()) {
 
-                case Parser._CTE_I:
-                    tempAddress = addressManager.getIntAddress();
-                    break;
+            if (var.isParsed()) {
+                switch (var.getType()) {
+                    case OperationTypes.TYPE_BOOL:
+                        tempAddress = addressManager.getBoolAddress();
+                        break;
 
-                case Parser._CTE_F:
-                    tempAddress = addressManager.getFloatAddress();
-                    break;
+                    case OperationTypes.TYPE_FLOAT:
+                        tempAddress = addressManager.getFloatAddress();
+                        break;
 
-                case Parser._CTE_S:
-                    tempAddress = addressManager.getStringAddress();
-                    break;
+                    case OperationTypes.TYPE_INT:
+                        tempAddress = addressManager.getIntAddress();
+                        break;
 
-                case Parser._Int:
-                    tempAddress = addressManager.getIntAddress();
-                    break;
+                    case OperationTypes.TYPE_STRING:
+                        tempAddress = addressManager.getStringAddress();
+                        break;
 
-                case Parser._Float:
-                    tempAddress = addressManager.getFloatAddress();
-                    break;
+                    default:
 
-                case Parser._Bool:
-                    tempAddress = addressManager.getBoolAddress();
-                    break;
+                        var.setAddress(OperationTypes.TYPE_UNDEFINED);
+                        return false;
+                }
 
-                case Parser._String:
-                    tempAddress = addressManager.getStringAddress();
-                    break;
-
-                default:
-                    return false;
             }
+            else {
+                switch (var.getType()) {
+
+                    case Parser._CTE_I:
+                        tempAddress = addressManager.getConstIntAddress();
+                        break;
+
+                    case Parser._CTE_F:
+                        tempAddress = addressManager.getConstFloatAddress();
+                        break;
+
+                    case Parser._CTE_S:
+                        tempAddress = addressManager.getConstStringAddress();
+                        break;
+
+                    case Parser._Int:
+                        tempAddress = addressManager.getIntAddress();
+                        break;
+
+                    case Parser._Float:
+                        tempAddress = addressManager.getFloatAddress();
+                        break;
+
+                    case Parser._Bool:
+                        tempAddress = addressManager.getBoolAddress();
+                        break;
+
+                    case Parser._String:
+                        tempAddress = addressManager.getStringAddress();
+                        break;
+
+                    default:
+                        var.setAddress(OperationTypes.TYPE_UNDEFINED);
+                        return false;
+                }
+            }
+          
 
             var.setAddress(tempAddress);
 
@@ -169,20 +224,97 @@ namespace ProyectoPruebas {
             variableStack.Push(variable);
         }
 
+        public void addVariableLayer() {
+
+            //Se le hace push al stack
+            variableStack.Push(null);
+        }
         //Función que quita una capa de la tabla de variables (removiendo variables locales)
         public void removeVariableLayer() {
 
             //Se hace pop a la pila
             variableStack.Pop();
         }
-        //Función paa agregar variables a la tabla de variables
-        public void addVariable(Variable variable) {
 
-            //Variable lastVariable = variables;
+        public void addGlobalVariable(Variable variable) {
             //Si la pila de variables está vacía
             if (variableStack.Count == 0) {
                 //Se crea una nueva capa a la tabla de variables
                 addVariableLayer(variable);
+
+                assignGlobalAddress(variable);
+
+                //Se termina la ejecución
+                return;
+            }
+
+            //Variable auxiliar que va a buscar la última variable de la tabla para agregar la nueva variable
+            // Variable lastVariable = (Variable)variableStack.Peek();
+            Variable lastVariable = findVariableInLastScope(variable.getName());
+
+            //Si se encontró una variable con el mismo nombre
+            if (lastVariable != null) {
+                //Error, no se pueden tener variables con el mismo nombre en el mismo scope
+                parser.SemErr("Sevaral declarations of " + lastVariable.getName());
+                return;
+            }
+
+            //Se obtiene la referencia a la primera variable del scope
+           // lastVariable = getTopVariableStack();
+
+            foreach(Variable i in variableStack) {
+                lastVariable = i;
+            }
+
+            //Se busca la última variable
+            while (lastVariable.getNext() != null) {
+
+                lastVariable = lastVariable.getNext();
+            }
+            /* //se busca la última variable, igual se va checando que no se encuentre una variable que ya está agregada en el mismo scope
+             while (lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
+
+                 lastVariable = lastVariable.getNext();
+             }
+
+             //En caso de que se encuentre una variable que se llame igual en el mismo scope, no se puede
+             if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()) {
+
+                 //Error, no se pueden declarar 2 o más variables con el mismo nombre
+                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
+             }
+             */
+            //Se busca la ultima variable (variable.next == nulll) o se interrumpe si se ecuentra una variable con el
+            //mismo nombre
+            /* while (lastVariable.getName() != variable.getName() && lastVariable.getNext() != null) {
+
+                 lastVariable = lastVariable.getNext();
+             }
+
+
+             //Si se encuentra una variable con el mismo nombre (lastVariable != null), es un error, ya que se 
+             //está declarando dos veces la variable
+             if (lastVariable.getNext() != null || lastVariable.getName() == variable.getName()){
+                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
+             }
+ */
+            //Se guarda la variable a la tabla de variables
+            lastVariable.setNext(variable);
+
+            assignGlobalAddress(variable);
+
+
+        }
+        //Función paa agregar variables a la tabla de variables
+        public void addVariable(Variable variable) {
+
+          
+            //Si la pila de variables está vacía
+            if (variableStack.Count == 0) {
+                //Se crea una nueva capa a la tabla de variables
+                addVariableLayer(variable);
+
+                assignGlobalAddress(variable);
 
                 //Se termina la ejecución
                 return;
@@ -236,6 +368,13 @@ namespace ProyectoPruebas {
  */
             //Se guarda la variable a la tabla de variables
             lastVariable.setNext(variable);
+
+            if(variableStack.Count > 1) {
+                assignlocalAddress(variable);
+            }
+            else {
+                assignGlobalAddress(variable);
+            }
 
         }
 
@@ -306,7 +445,6 @@ namespace ProyectoPruebas {
         public void addFunction(Function function) {
 
             Function lastFunction = functions;
-
             //Se busca la ultima función (function.next == null) o se interrumpe si se ecuentra una función con el
             //mismo nombre
             while (lastFunction.getName() != function.getName() && lastFunction.getNext() != null) {
@@ -348,29 +486,41 @@ namespace ProyectoPruebas {
             return actualFunction;
         }
         //Función que agrega constantes a la tabla de constantes
-        public Variable agregarConstante(Variable constante) {
+        public Variable addConstant(Variable constante) {
 
             //Se obtiene la referencia al principio de la tabla de constantes
             Variable actualConstant = constants;
+            if(constants == null) {
+                constants = constante;
+            }
+            else {
+                //Mientras no se encuentre la última constante
+                while (actualConstant.getNext() != null) {
 
-            //Mientras no se encuentre la última constante
-            while (actualConstant.getNext() != null) {
+                    //Si se encuentra la constante dentro de la lista
+                    if (actualConstant.getName() == constante.getName()) {
 
-                //Si se encuentra la constante dentro de la lista
-                if (actualConstant.getName() == constante.getName()) {
+                        //Se termina la ejecución, no se agrega una constante nueva y regresa el objeto de la constante
+                        return actualConstant;
+                    }
 
-                    //Se termina la ejecución, no se agrega una constante nueva y regresa el objeto de la constante
-                    return actualConstant;
+                    actualConstant = actualConstant.getNext();
                 }
 
-                actualConstant = actualConstant.getNext();
+                actualConstant.setNext(constante);
             }
+           
 
             //Se asigna al objeto que es una constante
             constante.setConstant();
 
-            actualConstant.setNext(constante);
+            //Se le asigna una dirección constante
+            assignGlobalAddress(constante);
 
+            //Se le asigna el valor de la constante
+            constante.setValue(constante.getName());
+
+            //Se regresa la constante ya con sus campos llenos
             return constante;
         }
     }

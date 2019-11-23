@@ -12,6 +12,8 @@ namespace ProyectoPruebas {
 
         private ArrayList quadrupleBuffer;
 
+        VarTable varTable;
+
         private int tempCont;   //Contador de variables temporales
         private int lineCont; //Contador de lineas de codigo temporal
 
@@ -216,6 +218,9 @@ namespace ProyectoPruebas {
             //de valores
             tempVar.setParsed();
 
+            //Se le asigna una dirección de memoria a la variable temporal
+            varTable.assignlocalAddress(tempVar);
+
             //Se le hace push a la pila de símbolos
             pushSymbolStack(tempVar);
 
@@ -235,7 +240,7 @@ namespace ProyectoPruebas {
         }
 
 
-        //Función que prepara un cuádruplo con solo dos variables
+        //Función que prepara un cuádruplo con solo dos variables, sin crear una variable temporal
         public bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2) {
 
             //Variable que guarda el resultado de hacer una operación entre dos tipos de dato
@@ -260,8 +265,6 @@ namespace ProyectoPruebas {
 
             //Se regresa true como operación exitosa
             return true;
-
-
         }
 
 
@@ -448,7 +451,7 @@ namespace ProyectoPruebas {
 
         }
 
-        public CodeGeneratorImpl() {
+        public CodeGeneratorImpl(VarTable varTable) {
 
             //Se crean las pilas
             this.operatorsStack = new Stack();
@@ -456,6 +459,7 @@ namespace ProyectoPruebas {
             this.jumpStack = new Stack();
 
             this.quadrupleBuffer = new ArrayList();
+            this.varTable = varTable;
             //Se inicializan los contadores
             tempCont = 1;
             lineCont = 1;

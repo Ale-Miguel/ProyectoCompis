@@ -5,6 +5,7 @@ using System.Text;
 
 namespace ProyectoPruebas {
     class AddressManager {
+
         //Constante con la dirección de inicio de las variables
         public const int START_GLOBAL_ADDRESS = 1000;
 
@@ -46,8 +47,6 @@ namespace ProyectoPruebas {
             addressCont += 1000;
 
             maxConstAddress = addressCont - 1;
-
-
         }
 
         //Función que inicializa las direcciones de las variables globales

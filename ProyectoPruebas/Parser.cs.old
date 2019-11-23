@@ -267,8 +267,9 @@ string variableName;
 
 	void PARAMS_1() {
 		TYPE();
+		int paramType = t.kind;
 		Expect(1);
-		Console.WriteLine("FuncParam: " + t.val);
+		Console.WriteLine("FuncParam: " + t.val + " " + paramType);
 		while (la.kind == 7) {
 			Get();
 			TYPE();
