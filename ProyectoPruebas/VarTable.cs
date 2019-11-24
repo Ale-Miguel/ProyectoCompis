@@ -291,7 +291,7 @@ namespace ProyectoPruebas {
 
         }
         //Función paa agregar variables a la tabla de variables
-        public void addVariable(Variable variable) {
+        public  void addVariable(Variable variable) {
 
           
             //Si la pila de variables está vacía
@@ -302,7 +302,7 @@ namespace ProyectoPruebas {
                 assignGlobalAddress(variable);
 
                 //Se termina la ejecución
-                return;
+                return ;
             }
 
             //Variable auxiliar que va a buscar la última variable de la tabla para agregar la nueva variable
@@ -311,23 +311,37 @@ namespace ProyectoPruebas {
 
             //Si se encontró una variable con el mismo nombre
             if (lastVariable != null) {
+                Console.WriteLine("Agregando " + lastVariable.getName());
                 //Error, no se pueden tener variables con el mismo nombre en el mismo scope
                 parser.SemErr("Sevaral declarations of " + lastVariable.getName());
-                return;
+                return ;
             }
 
             //Se obtiene la referencia a la primera variable del scope
             lastVariable = getTopVariableStack();
 
-            //Se busca la última variable
-            while (lastVariable.getNext() != null) {
+            if(lastVariable != null) {
+                //Se busca la última variable
+                while (lastVariable.getNext() != null) {
+                    
+                    lastVariable = lastVariable.getNext();
+                   
+                }
 
-                lastVariable = lastVariable.getNext();
+                //Se guarda la variable a la tabla de variables
+                lastVariable.setNext(variable);
             }
+            else {
+                //Se quita el nulo de la capa
+                removeVariableLayer();
 
-            //Se guarda la variable a la tabla de variables
-            lastVariable.setNext(variable);
+                //Se le guarda la variable
+                addVariableLayer(variable);
+            }
+           
 
+
+            //Si la pila es de tama{o 1, solo hay variables globales
             if(variableStack.Count > 1) {
                 assignlocalAddress(variable);
             }
@@ -335,6 +349,16 @@ namespace ProyectoPruebas {
                 assignGlobalAddress(variable);
             }
 
+            Console.WriteLine("ELEMENTS IN STACK " + variableStack.Count);
+            /*if(variableStack.Count > 0) {
+                Variable aux = (Variable)variableStack.Peek();
+
+                while(aux != null) {
+                    Console.WriteLine(aux.getName());
+                }
+
+                Console.WriteLine("\n\n");
+            }*/
         }
 
         //Función que busca una variable en la toda la tabla de variables
@@ -391,16 +415,60 @@ namespace ProyectoPruebas {
             while (aux != null) {
 
                 if (aux.getName() == name) {
+                    
                     return aux;
                 }
 
                 aux = aux.getNext();
             }
 
+            Console.WriteLine("NO ENCONTRE " + name);
             //Si no se ejecutó el return del while, aux es nulo
             return aux;
         }
 
+        //Función que agrega constantes a la tabla de constantes
+        public Variable addConstant(Variable constante) {
+
+            //Se obtiene la referencia al principio de la tabla de constantes
+            Variable actualConstant = constants;
+            if (constants == null) {
+                constants = constante;
+            }
+            else {
+                //Mientras no se encuentre la última constante
+                while (actualConstant.getNext() != null) {
+
+                    //Si se encuentra la constante dentro de la lista
+                    if (actualConstant.getName() == constante.getName()) {
+
+                        //Se termina la ejecución, no se agrega una constante nueva y regresa el objeto de la constante
+                        return actualConstant;
+                    }
+
+                    actualConstant = actualConstant.getNext();
+                }
+
+                actualConstant.setNext(constante);
+            }
+
+
+            //Se asigna al objeto que es una constante
+            constante.setConstant();
+
+            //Se le asigna una dirección constante
+            assignGlobalAddress(constante);
+
+            //Se le asigna el valor de la constante
+            constante.setValue(constante.getName());
+
+            //Genera un cu{adruplo de asignación para que guarde el valor de la constante en memoria
+            codeGenerator.createIntermediateCodeNoTemp(OperationTypes.EQUAL, constante, constante);
+
+            //Se regresa la constante ya con sus campos llenos
+            return constante;
+        }
+        
         public void addFunction(Function function) {
 
             Function lastFunction = functions;
@@ -423,6 +491,7 @@ namespace ProyectoPruebas {
             //Se señala que se está analizando esta función
             actualFunction = function;
 
+            function.setStartsIn(codeGenerator.getLineCont());
         }
 
         public Function findFunction(string name) {
@@ -447,55 +516,40 @@ namespace ProyectoPruebas {
         
         public Variable addParamToFunction(Variable param) {
 
-            //Variable auxiliar para iterar sobre los parámetros de la función
-            Variable auxParam = actualFunction.getParams();
-
-            if(auxParam == null) {
-                actualFunction.addParam(param);
+            //Variable auxiliar para saber si se encuentra o no en la tabla de variables local
+            Variable auxParam = findVariableInLastScope(param.getName());
+           
+            //Se tuvo que regresar un null si es que esa variable no existe
+            if(auxParam != null) {
+                
+                parser.SemErr("ERROR: Several declarations of " + param.getName());
+                //Se regresa nulo en señal de error.
+                return null;
             }
 
-            return param;
-        }
-        //Función que agrega constantes a la tabla de constantes
-        public Variable addConstant(Variable constante) {
 
-            //Se obtiene la referencia al principio de la tabla de constantes
-            Variable actualConstant = constants;
-            if(constants == null) {
-                constants = constante;
+            //Se agrega a la tabla de variables
+            /*
+           
+            if(addVariable(param) != null) {
+                //Se agrega a la tabla de parámetros de la función
+                actualFunction.addParam(param);
+                Console.WriteLine("AGRREGADGFASDFASDF");
+
             }
             else {
-                //Mientras no se encuentre la última constante
-                while (actualConstant.getNext() != null) {
-
-                    //Si se encuentra la constante dentro de la lista
-                    if (actualConstant.getName() == constante.getName()) {
-
-                        //Se termina la ejecución, no se agrega una constante nueva y regresa el objeto de la constante
-                        return actualConstant;
-                    }
-
-                    actualConstant = actualConstant.getNext();
-                }
-
-                actualConstant.setNext(constante);
+                return null;
             }
-           
 
-            //Se asigna al objeto que es una constante
-            constante.setConstant();
+          }
 
-            //Se le asigna una dirección constante
-            assignGlobalAddress(constante);
+    */
 
-            //Se le asigna el valor de la constante
-            constante.setValue(constante.getName());
-
-            //Genera un cu{adruplo de asignación para que guarde el valor de la constante en memoria
-           codeGenerator.createIntermediateCodeNoTemp(OperationTypes.EQUAL, constante, constante);
-
-            //Se regresa la constante ya con sus campos llenos
-            return constante;
+            addVariable(param);
+            actualFunction.addParam(param);
+            return param;
         }
+
+       
     }
 }

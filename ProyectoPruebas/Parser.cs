@@ -186,6 +186,7 @@ string variableName;
 		}
 		Expect(35);
 		tab.destroyContext();
+		Console.WriteLine("Fin de funcion");
 	}
 
 	void STATUTE() {
@@ -224,8 +225,8 @@ string variableName;
 		string constNumber = "-";
 		
 		if(signSymbol == "-"){
-		   constNumber +=  t.val;
-		   signSymbol = "+";
+		 constNumber +=  t.val;
+		 signSymbol = "+";
 		}
 		else{
 		 constNumber = t.val;
@@ -312,12 +313,24 @@ string variableName;
 		int paramType = t.kind;
 		Expect(1);
 		Console.WriteLine("FuncParam: " + t.val + " " + paramType);
+		ProyectoPruebas.Variable param = new ProyectoPruebas.Variable(t.val, paramType);
+		tab.addParamToFunction(param);
+		
 		while (la.kind == 7) {
-			Get();
-			TYPE();
-			Expect(1);
-			Console.WriteLine("FuncParam: " + t.val);
+			PARAMS_2();
 		}
+	}
+
+	void PARAMS_2() {
+		Expect(7);
+		TYPE();
+		int paramType = t.kind;
+		Expect(1);
+		Console.WriteLine("FuncParam: " + t.val);
+		ProyectoPruebas.Variable param = new ProyectoPruebas.Variable(t.val, paramType);
+		Console.WriteLine("Creado " + param.getName());
+		tab.addParamToFunction(param);
+		
 	}
 
 	void COMMAND() {

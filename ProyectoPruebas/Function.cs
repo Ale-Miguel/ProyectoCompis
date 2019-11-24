@@ -8,7 +8,7 @@ namespace ProyectoPruebas {
         private string name;        //Atributo que almacena el nombre de función
         private int returnType;    //Atributo que almacena el tipo de retorno
         private Function next;      //Atributo que almacena la función siguiente de la lista
-        private Variable functParams;   //Lista de argumentos
+        private List<Variable> functParams;   //Lista de argumentos
         private int startsIn;
 
         //public int StartsIn { get => startsIn; set => startsIn = value; }
@@ -38,7 +38,7 @@ namespace ProyectoPruebas {
 
 
         public void addParam(Variable paramVaraible) {
-            
+            /*
             if(functParams == null) {
                 functParams = paramVaraible;
                 return;
@@ -50,11 +50,13 @@ namespace ProyectoPruebas {
                 aux = aux.getNext();
             }
 
-            aux.setNext(paramVaraible);
+            aux.setNext(paramVaraible);*/
+
+            functParams.Add(paramVaraible);
         }
 
         public Variable getParams() {
-            return functParams;
+            return functParams[0];
         }
 
         public int getSize() {
@@ -75,7 +77,7 @@ namespace ProyectoPruebas {
             this.name = name;
             this.returnType = returnValue;
             next = null;
-            functParams = null;
+            functParams = new List<Variable>();
         }
     }
 }

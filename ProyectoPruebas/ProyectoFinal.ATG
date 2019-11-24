@@ -109,8 +109,8 @@ VAR
                             string constNumber = "-";
 
                             if(signSymbol == "-"){
-                                constNumber +=  t.val;
-                                signSymbol = "+";
+                              constNumber +=  t.val;
+                              signSymbol = "+";
                             }
                             else{
                               constNumber = t.val;
@@ -137,7 +137,8 @@ MODULE = Function       (. string functName; int type;.)
                            tab.addFunction(fun);
                            .)
         PARAMS Colon STATUTE {STATUTE} [MODULE_RETURN] 
-        EndFunction (.tab.destroyContext();.)
+        EndFunction (.tab.destroyContext();
+          Console.WriteLine("Fin de funcion");.)
         .
 MODULE_RETURN = Return EXPR.
 
@@ -147,9 +148,20 @@ PARAMS
 
 
 PARAMS_1 = TYPE (.int paramType = t.kind;.)
-            Id (. Console.WriteLine("FuncParam: " + t.val + " " + paramType);.)
-            {Comma TYPE Id  (. Console.WriteLine("FuncParam: " + t.val);.)
-            }.
+            Id (. Console.WriteLine("FuncParam: " + t.val + " " + paramType);
+                  ProyectoPruebas.Variable param = new ProyectoPruebas.Variable(t.val, paramType);
+                  tab.addParamToFunction(param);
+                .)
+            {PARAMS_2}.
+
+PARAMS_2 = Comma 
+            TYPE (. int paramType = t.kind;.)
+            Id  (. Console.WriteLine("FuncParam: " + t.val);
+                    ProyectoPruebas.Variable param = new ProyectoPruebas.Variable(t.val, paramType);
+                    Console.WriteLine("Creado " + param.getName());
+                    tab.addParamToFunction(param);
+                  .)
+            .
 TYPE = Float 
       | Int 
       | String 
