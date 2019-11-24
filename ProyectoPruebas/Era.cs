@@ -16,6 +16,7 @@ namespace ProyectoPruebas {
         }
 
         public string getQuadruple() {
+           
             return "ERA, _, _, " + activationRecord.getName();
         }
 

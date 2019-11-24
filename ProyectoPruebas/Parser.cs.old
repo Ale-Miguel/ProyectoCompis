@@ -517,9 +517,7 @@ string variableName;
 		}
 		else{
 		
-		    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable("FUNCT"+fun.getName(), fun.getReturnType());
-		
-		    tab.codeGenerator.pushSymbolStack(functVar);
+		    tab.codeGenerator.functionCall(fun);
 		
 		
 		}
@@ -527,6 +525,7 @@ string variableName;
 			FUNCT_PARAMS();
 		}
 		Expect(15);
+		tab.codeGenerator.solveFunction();
 	}
 
 	void ASSIGNMENT() {
@@ -552,9 +551,17 @@ string variableName;
 
 	void FUNCT_PARAMS() {
 		EXPR();
+		if(!tab.codeGenerator.setFunctParam()){
+		   SemErr("Parameters type mismatch");
+		}
+		
 		while (la.kind == 7) {
 			Get();
 			EXPR();
+			if(!tab.codeGenerator.setFunctParam()){
+			SemErr("Parameters type mismatch");
+			}
+			
 		}
 	}
 

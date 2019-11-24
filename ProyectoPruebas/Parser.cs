@@ -183,7 +183,6 @@ string variableName;
 				STATUTE();
 			} else {
 				MODULE_RETURN();
-				Console.WriteLine(t.val);
 			}
 		}
 		Expect(35);
@@ -295,7 +294,6 @@ string variableName;
 
 	void EXPR() {
 		TERM();
-		
 		while (la.kind == 21 || la.kind == 22) {
 			if (la.kind == 21) {
 				Get();
@@ -517,9 +515,7 @@ string variableName;
 		}
 		else{
 		
-		    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable(fun.getName(), fun.getReturnType());
-		
-		    tab.codeGenerator.pushSymbolStack(functVar);
+		    tab.codeGenerator.functionCall(fun);
 		
 		
 		}
@@ -527,6 +523,7 @@ string variableName;
 			FUNCT_PARAMS();
 		}
 		Expect(15);
+		tab.codeGenerator.solveFunction();
 	}
 
 	void ASSIGNMENT() {
@@ -552,9 +549,17 @@ string variableName;
 
 	void FUNCT_PARAMS() {
 		EXPR();
+		if(!tab.codeGenerator.setFunctParam()){
+		   SemErr("Parameters type mismatch");
+		}
+		
 		while (la.kind == 7) {
 			Get();
 			EXPR();
+			if(!tab.codeGenerator.setFunctParam()){
+			SemErr("Parameters type mismatch");
+			}
+			
 		}
 	}
 

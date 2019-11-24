@@ -144,7 +144,7 @@ MODULE = Function       (. string functName; int type;.)
          
         {(
           STATUTE | 
-          MODULE_RETURN (.Console.WriteLine(t.val);.)
+          MODULE_RETURN 
         )} 
         
         
@@ -253,14 +253,23 @@ FUNCTCALL  =
                                 }
                                 else{
 
-                                    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable(fun.getName(), fun.getReturnType());
-
-                                    tab.codeGenerator.pushSymbolStack(functVar);
+                                    tab.codeGenerator.functionCall(fun);
 
 
                                 }.)
-            [FUNCT_PARAMS] RightParenthesis.
-FUNCT_PARAMS = EXPR {Comma EXPR}.
+            [FUNCT_PARAMS] 
+            RightParenthesis  (.tab.codeGenerator.solveFunction();.)
+            .
+FUNCT_PARAMS = EXPR (. 
+                          if(!tab.codeGenerator.setFunctParam()){
+                              SemErr("Parameters type mismatch");
+                          }
+                          .)
+              {Comma EXPR  (. if(!tab.codeGenerator.setFunctParam()){
+                              SemErr("Parameters type mismatch");
+                              }
+                          .) 
+              }.
 
 ASSIGNMENT = 
             Equal (.   ProyectoPruebas.Variable var = tab.findVariable(variableName);
@@ -293,8 +302,7 @@ RELOPS = EqualThan
 
 
 
-EXPR = TERM   (. //Console.WriteLine(t.kind + " " + t.line);
-                .)
+EXPR = TERM   
               {
               (Plus | Minus)  (.tab.codeGenerator.pushOperatorStack(t.kind);.)
                TERM

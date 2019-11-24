@@ -10,6 +10,7 @@ namespace ProyectoPruebas {
         private Stack operatorsStack;   //Stack de operadores
         private Stack symbolStack;      //Stack de símbolos
         private Stack jumpStack;        //Stack de saltos
+        private Stack functionCallStack; //Stack de invocaciones a funciones
 
         private ArrayList quadrupleBuffer;
 
@@ -17,15 +18,39 @@ namespace ProyectoPruebas {
 
         private int tempCont;   //Contador de variables temporales
         private int lineCont; //Contador de lineas de codigo temporal
-        private Function actualFunction;
+        private int funcArgCount;
+
 
         private List<IQuadruple> quadrupleList;
 
         private OperationTypes cuboSemantico;
 
+
+
         private string filePath = "IntermediateCode.txt";   //Path y nombre del archivo que guarda el código intermedio
 
-        void parseVariable(Variable variable) {
+        Variable getTempVar(int type, bool isParsed) {
+            //Se crea el nombre de la siguente variable temporal
+            string tempVarName = "tempVar" + tempCont;
+
+            
+
+            //Se crea un objeto tipo Variable de la variable temporal
+            Variable tempVar = new Variable(tempVarName, type);
+
+            if (!isParsed) {
+                parseVariable(tempVar);
+            }
+            else {
+                tempVar.setParsed();
+            }
+            //Se le asigna una dirección de memoria a la variable temporal
+            varTable.assignlocalAddress(tempVar);
+
+            tempCont++;
+            return tempVar;
+        }
+        public void parseVariable(Variable variable) {
             if (variable.isParsed()) {
                 return;
             }
@@ -211,25 +236,37 @@ namespace ProyectoPruebas {
             symbolStack.Push(variable);
         }
 
+        void pushFunctionStack(Function funcion) {
+            functionCallStack.Push(funcion);
+        }
+
+        Function popFunctionStack() {
+
+            if(functionCallStack.Count == 0) {
+                return null;
+            }
+
+            return (Function)functionCallStack.Pop();
+        }
+
+        Function getTopFunctionStack() {
+
+            if (functionCallStack.Count == 0) {
+                return null;
+            }
+
+            return (Function)functionCallStack.Peek();
+        }
+
         //Función que genera el cuádruplo con 3 variables (incluye la variable temporal)
         public void createIntermediateCode(int op, Variable var1, Variable var2) {
 
-            //Se crea el nombre de la siguente variable temporal
-            string tempVarName = "tempVar" + tempCont;
 
             //Se obtiene el tipo que guarda la variable temporal. Al ser la variable que va a almacenar el resultado de una
             //operación, su tipo de dato es el que resulte de hacer esa operación
             int resultType = cuboSemantico.semanticCube[var1.getType(), var2.getType(), op];
 
-            //Se crea un objeto tipo Variable de la variable temporal
-            Variable tempVar = new Variable(tempVarName, resultType);
-
-            //Esta variable ya ha sido parseada, por lo que no hay que hacer ninguna operación de traducción
-            //de valores
-            tempVar.setParsed();
-
-            //Se le asigna una dirección de memoria a la variable temporal
-            varTable.assignlocalAddress(tempVar);
+            Variable tempVar = getTempVar(resultType, true);
 
             //Se le hace push a la pila de símbolos
             pushSymbolStack(tempVar);
@@ -244,8 +281,7 @@ namespace ProyectoPruebas {
             //Se manda a  escribir el cuádruplo al archivo de cuádruplos
             writeIntermediateCode(quadruple);
 
-            //Se incrementa en 1 el contador de variables temporales
-            tempCont++;
+
 
         }
 
@@ -319,6 +355,7 @@ namespace ProyectoPruebas {
         public Variable popSymnbolStack() {
 
             //Regresa el pop de la pila de símbolos con el cast de Variable
+            
             return (Variable)symbolStack.Pop();
         }
 
@@ -482,12 +519,65 @@ namespace ProyectoPruebas {
             writeIntermediateCode(endProc);
             varTable.destroyContext();
         }
+        
+        public void functionCall(Function funcion) {
+            pushFunctionStack(funcion);
+
+            Era eraQuad = new Era(funcion);
+
+            funcArgCount = 0;
+
+            writeIntermediateCode(eraQuad);
+        }
 
         public void createReturn() {
             Variable returnVariable = popSymnbolStack();
             Return returnObj = new Return(returnVariable);
 
             writeIntermediateCode(returnObj);
+        }
+
+        public bool setFunctParam() {
+            Variable parametro = popSymnbolStack();
+
+            Function funcion = getTopFunctionStack();
+
+            Variable funcParameter = funcion.getParam(funcArgCount);
+
+            if(funcParameter == null) {
+                return false;
+            }
+
+
+            parseVariable(parametro);
+            parseVariable(funcParameter);
+
+            if(parametro.getType() != funcParameter.getType()) {
+                return false;
+            }
+
+            Param param = new Param(funcArgCount, parametro);
+
+            funcArgCount++;
+
+            return true;
+        }
+
+        public void solveFunction() {
+
+            Function funcion = popFunctionStack();
+            GoSub goSub = new GoSub(funcion);
+
+            Variable returnFunctVariable = funcion.getReturnVariable();
+            //pushSymbolStack(funcion.getReturnVariable());
+
+            writeIntermediateCode(goSub);
+            parseVariable(returnFunctVariable);
+            Variable returnTempVariable = getTempVar(returnFunctVariable.getType(), returnFunctVariable.isParsed());
+
+            createIntermediateCodeNoTemp(OperationTypes.EQUAL, funcion.getReturnVariable(), returnTempVariable);
+
+            pushSymbolStack(returnTempVariable);
         }
 
 
@@ -500,12 +590,14 @@ namespace ProyectoPruebas {
             this.operatorsStack = new Stack();
             this.symbolStack = new Stack();
             this.jumpStack = new Stack();
+            this.functionCallStack = new Stack();
 
             this.quadrupleBuffer = new ArrayList();
             this.varTable = varTable;
             //Se inicializan los contadores
             tempCont = 1;
             lineCont = 1;
+            funcArgCount = 0;
 
             quadrupleList = new List<IQuadruple>();
             //Se crea un cubo semántico

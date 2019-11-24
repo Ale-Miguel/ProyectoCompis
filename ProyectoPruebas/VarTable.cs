@@ -517,6 +517,8 @@ namespace ProyectoPruebas {
             //Se agrega a la tabla de variables
             addVariable(param);
 
+            codeGenerator.parseVariable(param);
+
             //Se agrega a la lista de parámetros de la función
             actualFunction.addParam(param);
 
