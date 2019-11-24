@@ -207,7 +207,7 @@ namespace ProyectoPruebas {
 
             //Si no hay parámetros, se agrega la variable a la tabla de variables la variable local
             //agregando una nueva capa a la pila
-            if (actualFunction.getParams() == null) {
+            if (actualFunction.getParam(1) == null) {
                 addVariableLayer(variableParam);
             }
             else {
@@ -428,6 +428,7 @@ namespace ProyectoPruebas {
             return constante;
         }
         
+        //Función que agrega una función a la tabla de funciones
         public void addFunction(Function function) {
 
             Function lastFunction = functions;
@@ -447,7 +448,10 @@ namespace ProyectoPruebas {
 
             Variable returnVariable = findVariable(function.getName());
 
+            //Si encontró alguna variable que se llama igual que la función
             if(returnVariable != null) {
+
+                //Error, los nombres no pueden ser iguales entre funciones y variables
                 parser.SemErr("A function can't have the same name as a variable.");
                 return;
             }
@@ -459,14 +463,18 @@ namespace ProyectoPruebas {
             //Se señala que se está analizando esta función
             actualFunction = function;
 
+            //Se guarda el número de línea de cuádruplos donde empieza la función
             function.setStartsIn(codeGenerator.getLineCont());
 
             if(function.getReturnType() != Parser._Void) {
 
+                //Se crea la variable de retorno
                 returnVariable = new Variable(function.getName(), function.getReturnType());
 
+                //Se establece como global para que se pueda acceder el valor de retorno en cualquier parte del programa
                 addGlobalVariable(returnVariable);
 
+                //Se guarda la variable en la función de retorno
                 function.setReturnVariable(returnVariable);
             }
            

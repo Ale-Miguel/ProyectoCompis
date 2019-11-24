@@ -8,7 +8,7 @@ namespace ProyectoPruebas {
         Variable funcionVar;
         Variable dirDeInicio;
 
-        Function funcion;
+       // Function funcion;
         public int getFirstParameter() {
             return OperationTypes.GOSUB;
         }
@@ -32,12 +32,12 @@ namespace ProyectoPruebas {
         public GoSub(int direccion, Variable funcion) {
             this.funcionVar = funcion;
             this.dirDeInicio = new Variable("DireccionGoSub", OperationTypes.TYPE_INT, direccion.ToString());
-            this.funcion = null;
+            //this.funcion = null;
         }
 
         public GoSub(Function funcion) {
 
-            this.funcion = funcion;
+            //this.funcion = funcion;
 
             dirDeInicio = new Variable(funcion.getStartsIn().ToString(), funcion.getReturnType(), funcion.getStartsIn().ToString());
             funcionVar = funcion.getReturnVariable();

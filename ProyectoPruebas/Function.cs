@@ -16,6 +16,14 @@ namespace ProyectoPruebas {
         //public int StartsIn { get => startsIn; set => startsIn = value; }
 
         public Variable getParam(int param) {
+
+            //Si aún no se le asigna parámetros o no tiene parámetros o se trata de acceder a un número de parámetro que no existe
+            if(functParams.Count == 0 || functParams.Count < param) {
+
+                //Se regresa nulo
+                return null;
+            }
+
             return functParams[param - 1];
         }
         public void setReturnVariable(Variable variable) {

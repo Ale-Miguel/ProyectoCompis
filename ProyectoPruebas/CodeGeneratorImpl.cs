@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -16,6 +17,9 @@ namespace ProyectoPruebas {
 
         private int tempCont;   //Contador de variables temporales
         private int lineCont; //Contador de lineas de codigo temporal
+        private Function actualFunction;
+
+        private List<IQuadruple> quadrupleList;
 
         private OperationTypes cuboSemantico;
 
@@ -293,6 +297,7 @@ namespace ProyectoPruebas {
                 //Se escribe en el archivo cada cuádruplo almacenado en el buffer
                 foreach (IQuadruple quadruple in quadrupleBuffer) {
 
+                    quadrupleList.Add(quadruple);
                     writeToFile(quadruple.getQuadruple());
                 }
 
@@ -472,6 +477,9 @@ namespace ProyectoPruebas {
             lineCont--;
         }
 
+        public List<IQuadruple> getQuadrupleList() {
+            return quadrupleList;
+        }
         public CodeGeneratorImpl(VarTable varTable) {
 
             //Se crean las pilas
@@ -485,6 +493,7 @@ namespace ProyectoPruebas {
             tempCont = 1;
             lineCont = 1;
 
+            quadrupleList = new List<IQuadruple>();
             //Se crea un cubo semántico
             cuboSemantico = new OperationTypes();
 

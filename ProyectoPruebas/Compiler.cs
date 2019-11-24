@@ -13,6 +13,7 @@ namespace ProyectoPruebas {
             parser.Tab = new VarTable(parser);
             parser.Parse();
             Console.WriteLine(parser.errors.count + " errors found");
+            virtualMachine.setQuadruples(parser.Tab.codeGenerator.getQuadrupleList());
             //Console.WriteLine(parser.errors.errMsgFormat);
         }
         public Compiler(IVirtualMachine virtualMachine) {
