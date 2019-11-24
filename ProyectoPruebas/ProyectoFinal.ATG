@@ -128,8 +128,10 @@ VAR
 
                             tab.codeGenerator.solveAssignment();.)
     Semicolon. 
+
 NUMBER = CTE_I 
         | CTE_F.
+
 MODULE = Function       (. string functName; int type;.)
         (TYPE | Void)   (. type = t.kind;.)
         Id              (. functName = t.val; 
@@ -146,10 +148,13 @@ MODULE = Function       (. string functName; int type;.)
         )} 
         
         
-        EndFunction (.tab.destroyContext();
+        EndFunction (.
+
+                      tab.codeGenerator.endFunction();
           .)
         .
-MODULE_RETURN = Return EXPR Semicolon.
+MODULE_RETURN = Return EXPR (.tab.codeGenerator.createReturn();.)
+              Semicolon.
 
 PARAMS 
  = LeftParenthesis (.tab.createContext();.)
@@ -248,7 +253,7 @@ FUNCTCALL  =
                                 }
                                 else{
 
-                                    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable("FUNCT"+fun.getName(), fun.getReturnType());
+                                    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable(fun.getName(), fun.getReturnType());
 
                                     tab.codeGenerator.pushSymbolStack(functVar);
 

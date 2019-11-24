@@ -249,7 +249,6 @@ namespace ProyectoPruebas {
 
         }
 
-
         //Función que prepara un cuádruplo con solo dos variables, sin crear una variable temporal
         public bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2) {
 
@@ -281,7 +280,7 @@ namespace ProyectoPruebas {
             return true;
         }
 
-
+        //Función que manda a escribir el código intermedio (cuádruplos)
         void writeIntermediateCode(IQuadruple intermediateCode) {
 
             //Se agrega el cuádruplo al buffer si no se le pasa nulo
@@ -476,6 +475,21 @@ namespace ProyectoPruebas {
             popJumpStack();
             lineCont--;
         }
+
+        public void endFunction() {
+            EndProc endProc = new EndProc();
+
+            writeIntermediateCode(endProc);
+            varTable.destroyContext();
+        }
+
+        public void createReturn() {
+            Variable returnVariable = popSymnbolStack();
+            Return returnObj = new Return(returnVariable);
+
+            writeIntermediateCode(returnObj);
+        }
+
 
         public List<IQuadruple> getQuadrupleList() {
             return quadrupleList;

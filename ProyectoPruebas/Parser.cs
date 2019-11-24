@@ -187,7 +187,7 @@ string variableName;
 			}
 		}
 		Expect(35);
-		tab.destroyContext();
+		tab.codeGenerator.endFunction();
 		
 	}
 
@@ -289,6 +289,7 @@ string variableName;
 	void MODULE_RETURN() {
 		Expect(34);
 		EXPR();
+		tab.codeGenerator.createReturn();
 		Expect(9);
 	}
 
@@ -516,7 +517,7 @@ string variableName;
 		}
 		else{
 		
-		    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable("FUNCT"+fun.getName(), fun.getReturnType());
+		    ProyectoPruebas.Variable functVar = new ProyectoPruebas.Variable(fun.getName(), fun.getReturnType());
 		
 		    tab.codeGenerator.pushSymbolStack(functVar);
 		

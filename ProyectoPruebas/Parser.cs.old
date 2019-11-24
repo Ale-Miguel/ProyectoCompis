@@ -187,7 +187,7 @@ string variableName;
 			}
 		}
 		Expect(35);
-		tab.destroyContext();
+		tab.codeGenerator.endFunction();
 		
 	}
 
@@ -289,6 +289,8 @@ string variableName;
 	void MODULE_RETURN() {
 		Expect(34);
 		EXPR();
+		tab.codeGenerator.createReturn();
+		Expect(9);
 	}
 
 	void EXPR() {

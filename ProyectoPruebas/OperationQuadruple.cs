@@ -15,7 +15,7 @@ namespace ProyectoPruebas {
         //Función que genera el cuádruplo como string
         public string getQuadruple() {
 
-            return lineNumber + " " + operatorNumber + ", " + variable1.getAddress() + ", " + variable2.getAddress() + ", " + resultVariable.getAddress();
+            return lineNumber + " " + operatorNumber + ", " + variable1.getName() + ", " + variable2.getName() + ", " + resultVariable.getName();
 
         }
 
