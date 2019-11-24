@@ -2,8 +2,14 @@ Var Int x = 1;
 Var Int z = 10;
 Var Float y = 0.0;
 
-Function Void funcion(Int VariableJeje, Int hola):
+Function Void funcion(Int VariableJeje, Int OtraVariable):
 	VariableJeje = z;
+EndFunction
+
+Function Int otraFuncion(Int hola, Int jaja):
+	hola = 1;
+	Return otraFuncion() + otraFuncion();
+
 EndFunction
 
 x = -1;

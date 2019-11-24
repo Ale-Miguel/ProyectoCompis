@@ -11,10 +11,19 @@ namespace ProyectoPruebas {
         private List<Variable> functParams;   //Lista de argumentos
         private int startsIn;
 
+        private Variable returnVariable;
+
         //public int StartsIn { get => startsIn; set => startsIn = value; }
 
-        public void setStartsIn(int valor) {
-            this.startsIn = valor;
+        public void setReturnVariable(Variable variable) {
+            returnVariable = variable;
+        }
+
+        public Variable getReturnVariable() {
+            return returnVariable;
+        }
+        public void setStartsIn(int line) {
+            this.startsIn = line;
         }
 
         public int getStartsIn() {
@@ -38,20 +47,7 @@ namespace ProyectoPruebas {
 
 
         public void addParam(Variable paramVaraible) {
-            /*
-            if(functParams == null) {
-                functParams = paramVaraible;
-                return;
-            }
-            
-            Variable aux = functParams;
-
-           while(aux.getNext() != null) {
-                aux = aux.getNext();
-            }
-
-            aux.setNext(paramVaraible);*/
-
+          
             functParams.Add(paramVaraible);
         }
 
@@ -60,16 +56,7 @@ namespace ProyectoPruebas {
         }
 
         public int getSize() {
-            Variable varAux = getParams();
-
-            int tam = 0;
-
-            while (varAux != null) {
-                varAux = varAux.getNext();
-                tam++;
-            }
-
-            return tam;
+            return functParams.Count;
         }
 
 
@@ -78,6 +65,8 @@ namespace ProyectoPruebas {
             this.returnType = returnValue;
             next = null;
             functParams = new List<Variable>();
+            this.startsIn = -1;
+            this.returnVariable = null;
         }
     }
 }

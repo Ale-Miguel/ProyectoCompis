@@ -380,6 +380,7 @@ namespace ProyectoPruebas {
             }
 
             try {
+
                 Variable resultado;
                 //Si existe la llave en el diccionario
                 if( aux.TryGetValue(name, out resultado)) {
@@ -450,6 +451,17 @@ namespace ProyectoPruebas {
             actualFunction = function;
 
             function.setStartsIn(codeGenerator.getLineCont());
+
+            if(function.getReturnType() != Parser._Void) {
+                Variable returnVariable = new Variable(function.getName(), function.getReturnType());
+                addGlobalVariable(returnVariable);
+
+                function.setReturnVariable(returnVariable);
+            }
+
+           
+
+           
         }
 
         public Function findFunction(string name) {

@@ -178,19 +178,21 @@ string variableName;
 		PARAMS();
 		Expect(8);
 		STATUTE();
-		while (StartOf(1)) {
-			STATUTE();
-		}
-		if (la.kind == 34) {
-			MODULE_RETURN();
+		while (StartOf(3)) {
+			if (StartOf(1)) {
+				STATUTE();
+			} else {
+				MODULE_RETURN();
+				Console.WriteLine(t.val);
+			}
 		}
 		Expect(35);
 		tab.destroyContext();
-		Console.WriteLine("Fin de funcion");
+		
 	}
 
 	void STATUTE() {
-		if (StartOf(3)) {
+		if (StartOf(4)) {
 			COMMAND();
 		} else if (la.kind == 10) {
 			CONDITION();
@@ -287,6 +289,7 @@ string variableName;
 	void MODULE_RETURN() {
 		Expect(34);
 		EXPR();
+		Expect(9);
 	}
 
 	void EXPR() {
@@ -312,7 +315,6 @@ string variableName;
 		TYPE();
 		int paramType = t.kind;
 		Expect(1);
-		Console.WriteLine("FuncParam: " + t.val + " " + paramType);
 		ProyectoPruebas.Variable param = new ProyectoPruebas.Variable(t.val, paramType);
 		tab.addParamToFunction(param);
 		
@@ -326,7 +328,6 @@ string variableName;
 		TYPE();
 		int paramType = t.kind;
 		Expect(1);
-		Console.WriteLine("FuncParam: " + t.val);
 		ProyectoPruebas.Variable param = new ProyectoPruebas.Variable(t.val, paramType);
 		
 		tab.addParamToFunction(param);
@@ -432,7 +433,7 @@ string variableName;
 
 	void EXPRESSION() {
 		EXPR();
-		if (StartOf(4)) {
+		if (StartOf(5)) {
 			EXPRESSION_1();
 		}
 	}
@@ -521,7 +522,7 @@ string variableName;
 		
 		
 		}
-		if (StartOf(5)) {
+		if (StartOf(6)) {
 			FUNCT_PARAMS();
 		}
 		Expect(15);
@@ -538,7 +539,7 @@ string variableName;
 		tab.codeGenerator.pushSymbolStack(var);
 		}
 		
-		if (StartOf(5)) {
+		if (StartOf(6)) {
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
@@ -613,7 +614,7 @@ string variableName;
 	void FACTOR() {
 		if (la.kind == 14) {
 			FACTOR_1();
-		} else if (StartOf(6)) {
+		} else if (StartOf(7)) {
 			FACTOR_2();
 		} else SynErr(63);
 	}
@@ -692,6 +693,7 @@ string variableName;
 		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
 		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
+		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
 		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x},
 		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
