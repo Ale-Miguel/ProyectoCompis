@@ -158,7 +158,7 @@ PARAMS_2 = Comma
             TYPE (. int paramType = t.kind;.)
             Id  (. Console.WriteLine("FuncParam: " + t.val);
                     ProyectoPruebas.Variable param = new ProyectoPruebas.Variable(t.val, paramType);
-                    Console.WriteLine("Creado " + param.getName());
+              
                     tab.addParamToFunction(param);
                   .)
             .

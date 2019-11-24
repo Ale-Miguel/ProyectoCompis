@@ -16,6 +16,9 @@ namespace ProyectoPruebas {
 
         private Stack variableStack;
 
+        private Dictionary<string, Variable> variableDiccionary;
+        private Dictionary<string, Variable> constantsDiccionary;
+
         public CodeGeneratorImpl codeGenerator;
 
         Function actualFunction;
@@ -35,6 +38,9 @@ namespace ProyectoPruebas {
             actualFunction = null;
 
             this.addressManager = new AddressManager();
+
+            variableDiccionary = new Dictionary<string, Variable>();
+            constantsDiccionary = new Dictionary<string, Variable>();
         }
 
         //Función para crear un contexto nuevo
@@ -215,7 +221,7 @@ namespace ProyectoPruebas {
         }
 
         //Función que regresa la última capa de la lista de variables (top de la pila)
-        Variable getTopVariableStack() {
+        Dictionary<string, Variable> getTopVariableStack() {
 
             //Si no se han agregado variables
             if (variableStack.Count == 0) {
@@ -225,18 +231,22 @@ namespace ProyectoPruebas {
             }
 
             //Se regresa el top de la pila
-            return (Variable)variableStack.Peek();
+            return (Dictionary<string, Variable>)variableStack.Peek();
         }
 
         //Función que agrega una nueva capa a la tabla de variables
         public void addVariableLayer(Variable variable) {
 
+            Dictionary<string, Variable> aux = new Dictionary<string, Variable>();
+
+            aux.Add(variable.getName(), variable);
+
             //Se le hace push al stack
-            variableStack.Push(variable);
+            variableStack.Push(aux);
         }
 
         public void addVariableLayer() {
-
+            //Dictionary<string, Variable> aux = new Dictionary<string, Variable>();
             //Se le hace push al stack
             variableStack.Push(null);
         }
@@ -259,41 +269,36 @@ namespace ProyectoPruebas {
                 return;
             }
 
-            //Variable auxiliar que va a buscar la última variable de la tabla para agregar la nueva variable
-            // Variable lastVariable = (Variable)variableStack.Peek();
-            Variable lastVariable = findVariableInLastScope(variable.getName());
+            Dictionary<string, Variable> lastVariable = getTopVariableStack(); ;
 
-            //Si se encontró una variable con el mismo nombre
-            if (lastVariable != null) {
-                //Error, no se pueden tener variables con el mismo nombre en el mismo scope
-                parser.SemErr("Sevaral declarations of " + lastVariable.getName());
-                return;
-            }
-
-            //Se obtiene la referencia a la primera variable del scope
-           // lastVariable = getTopVariableStack();
-
-            foreach(Variable i in variableStack) {
+            foreach (Dictionary<string, Variable>  i in variableStack) {
                 lastVariable = i;
             }
 
             //Se busca la última variable
-            while (lastVariable.getNext() != null) {
+            /*while (lastVariable.getNext() != null) {
 
                 lastVariable = lastVariable.getNext();
             }
            
             //Se guarda la variable a la tabla de variables
             lastVariable.setNext(variable);
+            */
+            try {
+                lastVariable.Add(variable.getName(), variable);
+                assignGlobalAddress(variable);
+            }
+            catch (ArgumentException) {
+                parser.SemErr("Several declarations of " + variable.getName());
+            }
 
-            assignGlobalAddress(variable);
-
+        
 
         }
+
         //Función paa agregar variables a la tabla de variables
         public  void addVariable(Variable variable) {
 
-          
             //Si la pila de variables está vacía
             if (variableStack.Count == 0) {
                 //Se crea una nueva capa a la tabla de variables
@@ -302,34 +307,33 @@ namespace ProyectoPruebas {
                 assignGlobalAddress(variable);
 
                 //Se termina la ejecución
-                return ;
+                return;
             }
 
             //Variable auxiliar que va a buscar la última variable de la tabla para agregar la nueva variable
             // Variable lastVariable = (Variable)variableStack.Peek();
-            Variable lastVariable = findVariableInLastScope(variable.getName());
+           // Variable lastVariable = findVariableInLastScope(variable.getName());
 
             //Si se encontró una variable con el mismo nombre
-            if (lastVariable != null) {
-                Console.WriteLine("Agregando " + lastVariable.getName());
+            if (findVariableInLastScope(variable.getName()) != null) {
+    
                 //Error, no se pueden tener variables con el mismo nombre en el mismo scope
-                parser.SemErr("Sevaral declarations of " + lastVariable.getName());
-                return ;
+                parser.SemErr("Sevaral declarations of " + variable.getName());
+                return;
             }
 
+
             //Se obtiene la referencia a la primera variable del scope
-            lastVariable = getTopVariableStack();
+            Dictionary<string, Variable> lastVariable = getTopVariableStack();
 
             if(lastVariable != null) {
-                //Se busca la última variable
-                while (lastVariable.getNext() != null) {
-                    
-                    lastVariable = lastVariable.getNext();
-                   
+                try {
+                    lastVariable.Add(variable.getName(), variable);
                 }
-
-                //Se guarda la variable a la tabla de variables
-                lastVariable.setNext(variable);
+                catch(ArgumentException) {
+                    parser.SemErr("Sevaral declarations of " + variable.getName());
+                    return;
+                }
             }
             else {
                 //Se quita el nulo de la capa
@@ -349,7 +353,7 @@ namespace ProyectoPruebas {
                 assignGlobalAddress(variable);
             }
 
-            Console.WriteLine("ELEMENTS IN STACK " + variableStack.Count);
+           
             /*if(variableStack.Count > 0) {
                 Variable aux = (Variable)variableStack.Peek();
 
@@ -363,7 +367,7 @@ namespace ProyectoPruebas {
 
         //Función que busca una variable en la toda la tabla de variables
         public Variable findVariable(string name) {
-
+            /*
             //Nos aseguramos que la pila no esté vacía
             if (variableStack.Count > 0) {
                 //Debido a que la tabla de variables es una pila, se va iterando en cada capa de la pila
@@ -401,7 +405,19 @@ namespace ProyectoPruebas {
                 actualVar = actualVar.getNext();
             }
             */
+         
 
+            foreach(Dictionary<string, Variable> i in variableStack) {
+                try {
+                    Variable resultado;
+                    if (i != null && i.TryGetValue(name, out resultado)) {
+                        return resultado;
+                    }
+                }
+                catch (ArgumentException) {
+
+                }
+            }
             //Si no encontro la variable, actualVar es null
             return null;
         }
@@ -410,8 +426,8 @@ namespace ProyectoPruebas {
         public Variable findVariableInLastScope(string name) {
 
             //Se obtiene la variable del top de la pila
-            Variable aux = getTopVariableStack();
-
+            Dictionary<string, Variable> aux = getTopVariableStack();
+            /*
             while (aux != null) {
 
                 if (aux.getName() == name) {
@@ -421,50 +437,52 @@ namespace ProyectoPruebas {
 
                 aux = aux.getNext();
             }
+            */
+            if(aux == null) {
+                return null;
+            }
 
-            Console.WriteLine("NO ENCONTRE " + name);
+            try {
+                Variable resultado;
+                if( aux.TryGetValue(name, out resultado)) {
+                    return resultado;
+                }
+                else {
+                    return null;
+                }
+                
+            }
+            catch (ArgumentException) {
+                return null;
+            }
             //Si no se ejecutó el return del while, aux es nulo
-            return aux;
+            return null;
         }
 
         //Función que agrega constantes a la tabla de constantes
         public Variable addConstant(Variable constante) {
 
-            //Se obtiene la referencia al principio de la tabla de constantes
-            Variable actualConstant = constants;
-            if (constants == null) {
-                constants = constante;
+            try {
+                //Se agrega la constante al diccionario de constantes
+                constantsDiccionary.Add(constante.getName(), constante);
+
+                //Se asigna al objeto que es una constante
+                constante.setConstant();
+
+                //Se le asigna una dirección constante
+                assignGlobalAddress(constante);
+
+                //Se le asigna el valor de la constante
+                constante.setValue(constante.getName());
+
+                //Genera un cu{adruplo de asignación para que guarde el valor de la constante en memoria
+                codeGenerator.createIntermediateCodeNoTemp(OperationTypes.EQUAL, constante, constante);
+
             }
-            else {
-                //Mientras no se encuentre la última constante
-                while (actualConstant.getNext() != null) {
-
-                    //Si se encuentra la constante dentro de la lista
-                    if (actualConstant.getName() == constante.getName()) {
-
-                        //Se termina la ejecución, no se agrega una constante nueva y regresa el objeto de la constante
-                        return actualConstant;
-                    }
-
-                    actualConstant = actualConstant.getNext();
-                }
-
-                actualConstant.setNext(constante);
+            catch (ArgumentException) {
+                //Si hubo un error (la constante ya estaba ahí) se regresa el objeto de constante
+                return constantsDiccionary[constante.getName()];
             }
-
-
-            //Se asigna al objeto que es una constante
-            constante.setConstant();
-
-            //Se le asigna una dirección constante
-            assignGlobalAddress(constante);
-
-            //Se le asigna el valor de la constante
-            constante.setValue(constante.getName());
-
-            //Genera un cu{adruplo de asignación para que guarde el valor de la constante en memoria
-            codeGenerator.createIntermediateCodeNoTemp(OperationTypes.EQUAL, constante, constante);
-
             //Se regresa la constante ya con sus campos llenos
             return constante;
         }
@@ -529,24 +547,12 @@ namespace ProyectoPruebas {
 
 
             //Se agrega a la tabla de variables
-            /*
-           
-            if(addVariable(param) != null) {
-                //Se agrega a la tabla de parámetros de la función
-                actualFunction.addParam(param);
-                Console.WriteLine("AGRREGADGFASDFASDF");
-
-            }
-            else {
-                return null;
-            }
-
-          }
-
-    */
-
             addVariable(param);
+
+            //Se agrega a la lista de parámetros de la función
             actualFunction.addParam(param);
+
+            //Se regresa la variable
             return param;
         }
 

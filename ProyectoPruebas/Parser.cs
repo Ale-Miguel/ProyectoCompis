@@ -328,7 +328,7 @@ string variableName;
 		Expect(1);
 		Console.WriteLine("FuncParam: " + t.val);
 		ProyectoPruebas.Variable param = new ProyectoPruebas.Variable(t.val, paramType);
-		Console.WriteLine("Creado " + param.getName());
+		
 		tab.addParamToFunction(param);
 		
 	}
