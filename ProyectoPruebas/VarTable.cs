@@ -274,21 +274,14 @@ namespace ProyectoPruebas {
             foreach (Dictionary<string, Variable>  i in variableStack) {
                 lastVariable = i;
             }
-
-            //Se busca la última variable
-            /*while (lastVariable.getNext() != null) {
-
-                lastVariable = lastVariable.getNext();
-            }
-           
-            //Se guarda la variable a la tabla de variables
-            lastVariable.setNext(variable);
-            */
+            
+            //Se intenta agregar la variable en el diccionario
             try {
                 lastVariable.Add(variable.getName(), variable);
                 assignGlobalAddress(variable);
             }
             catch (ArgumentException) {
+                //En caso de que no se pueda, quiere decir que esa variable ya está declarada, por lo que se manda el error.
                 parser.SemErr("Several declarations of " + variable.getName());
             }
 
@@ -310,10 +303,6 @@ namespace ProyectoPruebas {
                 return;
             }
 
-            //Variable auxiliar que va a buscar la última variable de la tabla para agregar la nueva variable
-            // Variable lastVariable = (Variable)variableStack.Peek();
-           // Variable lastVariable = findVariableInLastScope(variable.getName());
-
             //Si se encontró una variable con el mismo nombre
             if (findVariableInLastScope(variable.getName()) != null) {
     
@@ -326,11 +315,14 @@ namespace ProyectoPruebas {
             //Se obtiene la referencia a la primera variable del scope
             Dictionary<string, Variable> lastVariable = getTopVariableStack();
 
+            //Si el top de la pila no es nulo, se agrega la variable al diccionario
             if(lastVariable != null) {
                 try {
                     lastVariable.Add(variable.getName(), variable);
                 }
                 catch(ArgumentException) {
+
+                    //Si no se puede agregar es que ya existe una variable con ese nombre
                     parser.SemErr("Sevaral declarations of " + variable.getName());
                     return;
                 }
@@ -345,72 +337,25 @@ namespace ProyectoPruebas {
            
 
 
-            //Si la pila es de tama{o 1, solo hay variables globales
+            //Si la pila es de tamaño 1, solo hay variables globales
             if(variableStack.Count > 1) {
                 assignlocalAddress(variable);
             }
             else {
                 assignGlobalAddress(variable);
             }
-
-           
-            /*if(variableStack.Count > 0) {
-                Variable aux = (Variable)variableStack.Peek();
-
-                while(aux != null) {
-                    Console.WriteLine(aux.getName());
-                }
-
-                Console.WriteLine("\n\n");
-            }*/
         }
 
         //Función que busca una variable en la toda la tabla de variables
         public Variable findVariable(string name) {
-            /*
-            //Nos aseguramos que la pila no esté vacía
-            if (variableStack.Count > 0) {
-                //Debido a que la tabla de variables es una pila, se va iterando en cada capa de la pila
-                foreach (Variable i in variableStack) {
 
-                    //Variable auxiliar para iterar sobre la lista de variables
-                    Variable actualVar = i;
-
-                    //Mientras existan variables
-                    while (actualVar != null) {
-
-                        //Si se encuentra una variable con el mismo nombre del que se está buscando
-                        if (actualVar.getName() == name) {
-                            //se regresa la variable(el objeto)
-                            return actualVar;
-                        }
-
-                        actualVar = actualVar.getNext();
-                    }
-
-                    //Como no hubo un return, se sigue iterando sobre cada capa
-                }
-            }
-            /*Variable actualVar = variables;
-
-           
-            //Mientras actualVar tenga un valor
-            while(actualVar != null ) {
-                //Si se encuentra la variable que se está buscando por nombre
-                //(los nombres de variables deben de ser únicas)
-                if(actualVar.getName() == name) {
-                    return actualVar;
-                }
-
-                actualVar = actualVar.getNext();
-            }
-            */
-         
-
+            //En cada diccionario de la pila de variables
             foreach(Dictionary<string, Variable> i in variableStack) {
                 try {
                     Variable resultado;
+                    //Intenta obtener la variable del diccionario
                     if (i != null && i.TryGetValue(name, out resultado)) {
+                        //Si la llave existe, se regresa el valor (la variable)
                         return resultado;
                     }
                 }
@@ -418,7 +363,8 @@ namespace ProyectoPruebas {
 
                 }
             }
-            //Si no encontro la variable, actualVar es null
+
+            //Si no encontro la variable, se regresa nulo
             return null;
         }
 
@@ -427,27 +373,21 @@ namespace ProyectoPruebas {
 
             //Se obtiene la variable del top de la pila
             Dictionary<string, Variable> aux = getTopVariableStack();
-            /*
-            while (aux != null) {
-
-                if (aux.getName() == name) {
-                    
-                    return aux;
-                }
-
-                aux = aux.getNext();
-            }
-            */
+            
+            //Si el top es nulo, no hay variables, asi que se regresa nulo
             if(aux == null) {
                 return null;
             }
 
             try {
                 Variable resultado;
+                //Si existe la llave en el diccionario
                 if( aux.TryGetValue(name, out resultado)) {
+                    //Se regresa la variable
                     return resultado;
                 }
                 else {
+                    //Si no existe, se regresa nulo
                     return null;
                 }
                 
