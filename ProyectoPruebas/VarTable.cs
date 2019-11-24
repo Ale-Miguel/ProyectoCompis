@@ -442,7 +442,16 @@ namespace ProyectoPruebas {
             //está declarando dos veces la función
             if (lastFunction.getNext() != null || lastFunction.getName() == function.getName()) {
                 parser.SemErr("Sevaral declarations of function " + lastFunction.getName());
+                return;
             }
+
+            Variable returnVariable = findVariable(function.getName());
+
+            if(returnVariable != null) {
+                parser.SemErr("A function can't have the same name as a variable.");
+                return;
+            }
+
 
             //Se guarda la función a la tabla de funciones
             lastFunction.setNext(function);
@@ -453,14 +462,13 @@ namespace ProyectoPruebas {
             function.setStartsIn(codeGenerator.getLineCont());
 
             if(function.getReturnType() != Parser._Void) {
-                Variable returnVariable = new Variable(function.getName(), function.getReturnType());
+
+                returnVariable = new Variable(function.getName(), function.getReturnType());
+
                 addGlobalVariable(returnVariable);
 
                 function.setReturnVariable(returnVariable);
             }
-
-           
-
            
         }
 

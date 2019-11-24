@@ -15,6 +15,9 @@ namespace ProyectoPruebas {
 
         //public int StartsIn { get => startsIn; set => startsIn = value; }
 
+        public Variable getParam(int param) {
+            return functParams[param - 1];
+        }
         public void setReturnVariable(Variable variable) {
             returnVariable = variable;
         }
@@ -45,14 +48,9 @@ namespace ProyectoPruebas {
             return returnType;
         }
 
-
         public void addParam(Variable paramVaraible) {
           
             functParams.Add(paramVaraible);
-        }
-
-        public Variable getParams() {
-            return functParams[0];
         }
 
         public int getSize() {
