@@ -187,17 +187,33 @@ string variableName;
 	}
 
 	void STATUTE() {
-		if (StartOf(3)) {
+		switch (la.kind) {
+		case 6: case 38: case 39: case 40: case 41: case 42: case 43: {
 			COMMAND();
-		} else if (la.kind == 10) {
+			break;
+		}
+		case 10: {
 			CONDITION();
-		} else if (la.kind == 44 || la.kind == 46) {
+			break;
+		}
+		case 44: case 46: {
 			CYCLE();
-		} else if (la.kind == 1) {
+			break;
+		}
+		case 1: {
 			ASGMT_OR_FUNCT();
-		} else if (la.kind == 34) {
+			break;
+		}
+		case 34: {
 			MODULE_RETURN();
-		} else SynErr(50);
+			break;
+		}
+		case 3: {
+			VAR();
+			break;
+		}
+		default: SynErr(50); break;
+		}
 	}
 
 	void VAR() {
@@ -285,7 +301,7 @@ string variableName;
 
 	void MODULE_RETURN() {
 		Expect(34);
-		if (StartOf(4)) {
+		if (StartOf(3)) {
 			EXPR();
 		}
 		if(!tab.codeGenerator.createReturn(t.kind)){
@@ -458,7 +474,7 @@ string variableName;
 
 	void EXPRESSION() {
 		EXPR();
-		if (StartOf(5)) {
+		if (StartOf(4)) {
 			EXPRESSION_1();
 		}
 	}
@@ -562,7 +578,7 @@ string variableName;
 		
 		
 		}
-		if (StartOf(4)) {
+		if (StartOf(3)) {
 			FUNCT_PARAMS();
 		}
 		Expect(15);
@@ -585,7 +601,7 @@ string variableName;
 		tab.codeGenerator.pushSymbolStack(var);
 		}
 		
-		if (StartOf(4)) {
+		if (StartOf(3)) {
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
@@ -668,7 +684,7 @@ string variableName;
 	void FACTOR() {
 		if (la.kind == 14) {
 			FACTOR_1();
-		} else if (StartOf(6)) {
+		} else if (StartOf(5)) {
 			FACTOR_2();
 		} else SynErr(63);
 	}
@@ -745,9 +761,8 @@ string variableName;
 	
 	static readonly bool[,] set = {
 		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
-		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
+		{_x,_T,_x,_T, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
 		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
-		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x}

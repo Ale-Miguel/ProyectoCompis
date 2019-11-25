@@ -552,7 +552,7 @@ namespace ProyectoPruebas {
             Variable returnValue = popSymnbolStack();
 
             Return returnObj;
-            if(token == Parser._Void) {
+            if(token == Parser._Return) {
                 returnObj = new Return(null);
             }
             else if (getTopFunctionStack() == null) {
@@ -561,9 +561,16 @@ namespace ProyectoPruebas {
             }
             else {
 
-               
+                Function funcion = getTopFunctionStack();
+                Variable returnVariable = funcion.getReturnVariable();
 
-                returnObj = new Return(getTopFunctionStack(), returnValue);
+                parseVariable(returnVariable);
+                parseVariable(returnValue);
+                if (returnVariable.getType() != returnValue.getType()) {
+                    return false;
+                } 
+
+                returnObj = new Return(funcion, returnValue);
             }
             //Se genera el RETURN
           
