@@ -540,16 +540,29 @@ namespace ProyectoPruebas {
         }
 
         //Función para crear el cuádruplo de RETURN
-        public void createReturn() {
+        public bool createReturn(int token) {
+
+            //No puede regresar un valor en una función de tipo de retorno  void
+            if (getTopFunctionStack() != null && getTopFunctionStack().getReturnVariable() == null && token != Parser._Return) {
+                
+                return false;
+            }
 
             //Se va a regresar lo último que está en el stack de símbolos
             Variable returnValue = popSymnbolStack();
 
             Return returnObj;
-            if (getTopFunctionStack() == null) {
+            if(token == Parser._Void) {
+                returnObj = new Return(null);
+            }
+            else if (getTopFunctionStack() == null) {
+               
                 returnObj = new Return(returnValue);
             }
             else {
+
+               
+
                 returnObj = new Return(getTopFunctionStack(), returnValue);
             }
             //Se genera el RETURN
@@ -557,7 +570,7 @@ namespace ProyectoPruebas {
 
             //Se escribe el cuádruplo
             writeIntermediateCode(returnObj);
-
+            return true;
             
         }
 

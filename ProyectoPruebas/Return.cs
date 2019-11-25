@@ -16,10 +16,15 @@ namespace ProyectoPruebas {
         }
 
         public string getQuadruple() {
-            if(returnVariable == null) {
+            if(returnVariable == null && returnValue != null) {
                 return "RETURN, " + returnValue.getName() + ", _, " + " UNDEF";
             }
-            return "RETURN, " + returnValue.getName() + ", _, " + returnVariable.getName();
+            else if(returnValue != null) {
+                return "RETURN, " + returnValue.getName() + ", _, " + returnVariable.getName();
+            }
+
+            return "RETURN, " + "UNDEF" + ", _, " + "UNDEF";
+
         }
 
         public Variable getSecondParameter() {

@@ -6,7 +6,7 @@ namespace ProyectoPruebas {
 
    enum Operation { OP_UNDEF, EQUAL, PLUS, MINUS, MULTIPLICATION, DIVISION, GREATER_THAN, LESS_THAN, EQUAL_THAN, 
           GREATER_OR_EQUAL, LESS_OR_EQUAL, DIFFERENT_THAN, PRINT, MOVE_FORWARD, 
-        INTERACT, SHOOT, WAIT, TURN_RIGHT, TURN_LEFT, GOTO, GOTO_F, END_PROC, ERA, PARAM, GOSUB, RETURN, END_PROGRAM}
+        INTERACT, SHOOT, WAIT, TURN_RIGHT, TURN_LEFT, PICK, DROP, GOTO, GOTO_F, END_PROC, ERA, PARAM, GOSUB, RETURN, END_PROGRAM}
 
     class OperationTypes {
 
@@ -42,16 +42,18 @@ namespace ProyectoPruebas {
         public const int WAIT = 16;
         public const int TURN_RIGHT = 17;
         public const int TURN_LEFT = 18;
+        public const int PICK = 19;
+        public const int DROP = 20;
 
         //Códigos para instrucciones de cuádruplos
-        public const int GOTO = 19;
-        public const int GOTO_F = 20;
-        public const int END_PROC = 21;
-        public const int ERA = 22;
-        public const int PARAM = 23;
-        public const int GOSUB = 24;
-        public const int RETURN = 25;
-        public const int END_PROGRAM = 26;
+        public const int GOTO = 21;
+        public const int GOTO_F = 22;
+        public const int END_PROC = 23;
+        public const int ERA = 24;
+        public const int PARAM = 25;
+        public const int GOSUB = 26;
+        public const int RETURN = 27;
+        public const int END_PROGRAM = 28;
 
 
         public int[,,] semanticCube = new int[NUMBER_OF_TYPES, NUMBER_OF_TYPES, NUMBER_OF_OPERATORS];

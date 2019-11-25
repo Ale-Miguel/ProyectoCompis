@@ -31,7 +31,7 @@ EndFunction
 
 Function Void funcionPrueba():
 	x = 1;
-	Return 0;
+	Return ;
 EndFunction
 
 
@@ -66,7 +66,7 @@ For( x < 10 )
 
 EndFor
 
-Return 0;
+Return ;
 
 Loop x
 	x = x + 1;

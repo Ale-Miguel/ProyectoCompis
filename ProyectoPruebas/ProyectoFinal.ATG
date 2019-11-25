@@ -151,7 +151,9 @@ MODULE = Function       (.
                       tab.codeGenerator.endFunction();
           .)
         .
-MODULE_RETURN = Return EXPR (.tab.codeGenerator.createReturn();.)
+MODULE_RETURN = Return [EXPR] (.if(!tab.codeGenerator.createReturn(t.kind)){
+                                  SemErr("Void function can't return a value");
+                                }.)
               Semicolon.
 
 PARAMS 

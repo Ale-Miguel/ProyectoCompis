@@ -285,8 +285,12 @@ string variableName;
 
 	void MODULE_RETURN() {
 		Expect(34);
-		EXPR();
-		tab.codeGenerator.createReturn();
+		if (StartOf(4)) {
+			EXPR();
+		}
+		if(!tab.codeGenerator.createReturn(t.kind)){
+		 SemErr("Void function can't return a value");
+		}
 		Expect(9);
 	}
 
@@ -454,7 +458,7 @@ string variableName;
 
 	void EXPRESSION() {
 		EXPR();
-		if (StartOf(4)) {
+		if (StartOf(5)) {
 			EXPRESSION_1();
 		}
 	}
@@ -558,7 +562,7 @@ string variableName;
 		
 		
 		}
-		if (StartOf(5)) {
+		if (StartOf(4)) {
 			FUNCT_PARAMS();
 		}
 		Expect(15);
@@ -581,7 +585,7 @@ string variableName;
 		tab.codeGenerator.pushSymbolStack(var);
 		}
 		
-		if (StartOf(5)) {
+		if (StartOf(4)) {
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
@@ -744,8 +748,8 @@ string variableName;
 		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
 		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x},
-		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
+		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x}
 
 	};
