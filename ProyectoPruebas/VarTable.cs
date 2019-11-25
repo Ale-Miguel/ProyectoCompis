@@ -466,7 +466,7 @@ namespace ProyectoPruebas {
             //Se guarda el número de línea de cuádruplos donde empieza la función
             function.setStartsIn(codeGenerator.getLineCont());
 
-            if(function.getReturnType() != Parser._Void) {
+          
 
                 //Se crea la variable de retorno
                 returnVariable = new Variable(function.getName(), function.getReturnType());
@@ -475,9 +475,11 @@ namespace ProyectoPruebas {
                 addGlobalVariable(returnVariable);
 
                 //Se guarda la variable en la función de retorno
-                function.setReturnVariable(returnVariable);
-            }
-           
+                
+            
+
+            function.setReturnVariable(returnVariable);
+
         }
 
         public Function findFunction(string name) {

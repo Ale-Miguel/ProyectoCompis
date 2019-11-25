@@ -516,6 +516,7 @@ namespace ProyectoPruebas {
         public void endFunction() {
             EndProc endProc = new EndProc();
 
+
             writeIntermediateCode(endProc);
             varTable.destroyContext();
         }
@@ -525,7 +526,7 @@ namespace ProyectoPruebas {
 
             Era eraQuad = new Era(funcion);
 
-            funcArgCount = 0;
+            funcArgCount = 1;
 
             writeIntermediateCode(eraQuad);
         }
@@ -537,50 +538,86 @@ namespace ProyectoPruebas {
             writeIntermediateCode(returnObj);
         }
 
+        //Función  que agrega un parámetro a la función de la que se está trabajando
         public bool setFunctParam() {
+
+            //Se obtiene lo que resulte de resolver del parámetro
             Variable parametro = popSymnbolStack();
 
+            //Se obtiene la funciónen la que se está trabajando
             Function funcion = getTopFunctionStack();
 
+            //Se obtiene la variable de parámetro de acuerdo con el parámetro que se esté trabajando
             Variable funcParameter = funcion.getParam(funcArgCount);
 
+            //Si regresa nulo es que hay un error, ya que no existe tal argumento
             if(funcParameter == null) {
                 return false;
             }
 
-
+            //para asegurarnos, se parsean las variables para asegurar que se está hablando en los mismos códigos
             parseVariable(parametro);
             parseVariable(funcParameter);
 
+            //Si los tipos de dato de las variables son diferentes igual hay un error
             if(parametro.getType() != funcParameter.getType()) {
                 return false;
             }
 
+            //Se gemera el cuádruplo param
             Param param = new Param(funcArgCount, parametro);
 
+            //Se manda a escribir el cuádruplo
+            writeIntermediateCode(param);
+
+            //Se aumenta el contador de argumentos de función
             funcArgCount++;
 
             return true;
         }
 
+        //Función que se ejecuta al final de mandar llamar la función
         public void solveFunction() {
 
+            //Se elimina la función de la pila de funciones
             Function funcion = popFunctionStack();
+
+            //Si no existe ningúna función, no se hace nada
+            if(funcion == null) {
+                return;
+            }
+
+            //Se genera el cuádruplo goSub
             GoSub goSub = new GoSub(funcion);
 
+            //Se obtiene la variable donde se guarda el retorno
             Variable returnFunctVariable = funcion.getReturnVariable();
             //pushSymbolStack(funcion.getReturnVariable());
-
+            
+            //Se escribe el cuadruplo del goSub
             writeIntermediateCode(goSub);
+
+            //Se parsea la variable de retorno
             parseVariable(returnFunctVariable);
-            Variable returnTempVariable = getTempVar(returnFunctVariable.getType(), returnFunctVariable.isParsed());
 
-            createIntermediateCodeNoTemp(OperationTypes.EQUAL, funcion.getReturnVariable(), returnTempVariable);
+            //Si el tipo de retorno de la función está definido
+            if(returnFunctVariable.getType() != OperationTypes.TYPE_UNDEFINED) {
 
-            pushSymbolStack(returnTempVariable);
+                //Se genera una variable temporal para que guarde el valor del retorno 
+                Variable returnTempVariable = getTempVar(returnFunctVariable.getType(), returnFunctVariable.isParsed());
+
+                //Se crea la asignación para guardar el resultado de la ejecución de la pila
+                createIntermediateCodeNoTemp(OperationTypes.EQUAL, funcion.getReturnVariable(), returnTempVariable);
+
+                //Se hace push a la pila porque se está mandando llamar 
+                pushSymbolStack(returnTempVariable);
+            }
+           
+            //Como ya se mandó llamar, se resetea el contador de los argumentos
+            funcArgCount = 1;
         }
 
-
+        //Función que regresa la lista de cuádruplos
         public List<IQuadruple> getQuadrupleList() {
             return quadrupleList;
         }

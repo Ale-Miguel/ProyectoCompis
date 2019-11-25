@@ -32,14 +32,18 @@ END_PROC, _, _, _
 32 2, x, 1, tempVar9
 33 1, tempVar9, __, x
 34 1, -1, __, x
-35 7, x, 2, tempVar10
-36 GoToFalse, tempVar10, _, 41
-37 4, 10, z, tempVar11
-38 1, tempVar11, __, x
-39 1, 2.0, __, 2.0
-40 1, 2.0, __, y
-41 7, x, 10, tempVar12
-42 GoToFalse, tempVar12, _, 46
-43 2, x, 1, tempVar13
-44 1, tempVar13, __, x
-45 GoTo, _, _, 41
+ERA, _, _, otraFuncion
+GOSUB, otraFuncion, _, 10
+37 1, otraFuncion, __, tempVar10
+38 1, tempVar10, __, z
+39 7, x, 2, tempVar11
+40 GoToFalse, tempVar11, _, 45
+41 4, 10, z, tempVar12
+42 1, tempVar12, __, x
+43 1, 2.0, __, 2.0
+44 1, 2.0, __, y
+45 7, x, 10, tempVar13
+46 GoToFalse, tempVar13, _, 50
+47 2, x, 1, tempVar14
+48 1, tempVar14, __, x
+49 GoTo, _, _, 45

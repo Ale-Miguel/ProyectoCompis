@@ -22,6 +22,8 @@ x = x + 1;
 
 x = -1;
 
+z = otraFuncion();
+
 If( x < 2)
 	x = 10 * z;
 	y = 2.0;
