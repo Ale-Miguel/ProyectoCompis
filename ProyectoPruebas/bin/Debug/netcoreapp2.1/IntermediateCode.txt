@@ -4,54 +4,76 @@
 4 1, 10, __, z
 5 1, 0.0, __, 0.0
 6 1, 0.0, __, y
-7 GoTo, _, _, 27
-8 1, z, __, VariableJeje
+7 1, 0, __, 0
+8 1, 0, __, resultado
+9 1, 0, __, resultadoFibonacci
+10 1, 0, __, resultadoFactorial
+11 GoTo, _, _, 44
+12 10, numero, 1, tempVar1
+13 GoToFalse, tempVar1, _, 15
+14 1, 1, __, resultado
+15 GoTo, _, _, 28
+ERA, _, _, fibonacci
+17 3, numero, 1, tempVar2
+PARAM, Parameter1, _, tempVar2
+GOSUB, fibonacci, _, 12
+20 1, fibonacci, __, tempVar3
+ERA, _, _, fibonacci
+22 1, 2, __, 2
+23 3, numero, 2, tempVar4
+PARAM, Parameter1, _, tempVar4
+GOSUB, fibonacci, _, 12
+26 1, fibonacci, __, tempVar5
+27 2, tempVar3, tempVar5, tempVar6
+28 1, tempVar6, __, resultado
+RETURN, _, _, resultado
 END_PROC, _, _, _
-10 1, 1, __, hola
-ERA, _, _, otraFuncion
-PARAM, Parameter1, _, 1
-13 1, 2, __, 2
-PARAM, Parameter2, _, 2
-GOSUB, otraFuncion, _, 10
-16 1, otraFuncion, __, tempVar1
-ERA, _, _, otraFuncion
-18 1, 3, __, 3
+31 10, numero, 1, tempVar7
+32 GoToFalse, tempVar7, _, 34
+33 1, 1, __, resultado
+34 GoTo, _, _, 41
+ERA, _, _, factorial
+36 3, numero, 1, tempVar8
+PARAM, Parameter1, _, tempVar8
+GOSUB, factorial, _, 31
+39 1, factorial, __, tempVar9
+40 4, numero, tempVar9, tempVar10
+41 1, tempVar10, __, resultado
+RETURN, _, _, resultado
+END_PROC, _, _, _
+ERA, _, _, factorial
+45 1, 3, __, 3
 PARAM, Parameter1, _, 3
-20 1, 4, __, 4
-PARAM, Parameter2, _, 4
-GOSUB, otraFuncion, _, 10
-23 1, otraFuncion, __, tempVar2
-24 2, tempVar1, tempVar2, tempVar3
-RETURN, _, _, tempVar3
-END_PROC, _, _, _
-27 1, -1, __, -1
-28 1, -1, __, x
-29 1, 6, __, 6
-30 2, 6, 2, tempVar4
-31 3, z, x, tempVar5
-32 4, tempVar4, tempVar5, tempVar6
-33 1, 5, __, 5
-34 5, tempVar6, 5, tempVar7
-35 1, tempVar7, __, x
-36 5, y, x, tempVar8
-37 1, tempVar8, __, y
-38 2, x, 1, tempVar9
-39 1, tempVar9, __, x
-40 1, -1, __, x
-ERA, _, _, otraFuncion
-PARAM, Parameter1, _, 1
-PARAM, Parameter2, _, 2
-GOSUB, otraFuncion, _, 10
-45 1, otraFuncion, __, tempVar10
-46 1, tempVar10, __, z
-47 7, x, 2, tempVar11
-48 GoToFalse, tempVar11, _, 53
-49 4, 10, z, tempVar12
-50 1, tempVar12, __, x
-51 1, 2.0, __, 2.0
-52 1, 2.0, __, y
-53 7, x, 10, tempVar13
-54 GoToFalse, tempVar13, _, 58
-55 2, x, 1, tempVar14
-56 1, tempVar14, __, x
-57 GoTo, _, _, 53
+GOSUB, factorial, _, 31
+48 1, factorial, __, tempVar11
+49 1, tempVar11, __, resultadoFactorial
+ERA, _, _, fibonacci
+51 1, 5, __, 5
+PARAM, Parameter1, _, 5
+GOSUB, fibonacci, _, 12
+54 1, fibonacci, __, tempVar12
+55 1, tempVar12, __, resultadoFibonacci
+56 1, -1, __, -1
+57 1, -1, __, x
+58 1, 6, __, 6
+59 2, 6, 2, tempVar13
+60 3, z, x, tempVar14
+61 4, tempVar13, tempVar14, tempVar15
+62 5, tempVar15, 5, tempVar16
+63 1, tempVar16, __, x
+64 5, y, x, tempVar17
+65 1, tempVar17, __, y
+66 2, x, 1, tempVar18
+67 1, tempVar18, __, x
+68 1, -1, __, x
+69 7, x, 2, tempVar19
+70 GoToFalse, tempVar19, _, 75
+71 4, 10, z, tempVar20
+72 1, tempVar20, __, x
+73 1, 2.0, __, 2.0
+74 1, 2.0, __, y
+75 7, x, 10, tempVar21
+76 GoToFalse, tempVar21, _, 80
+77 2, x, 1, tempVar22
+78 1, tempVar22, __, x
+79 GoTo, _, _, 75

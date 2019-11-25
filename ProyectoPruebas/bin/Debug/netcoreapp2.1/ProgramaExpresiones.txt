@@ -1,16 +1,38 @@
 Var Int x = 1;
 Var Int z = 10;
 Var Float y = 0.0;
+Var Int resultado = 0;
+Var Int resultadoFibonacci = 0;
+Var Int resultadoFactorial = 0;
 
-Function Void funcion(Int VariableJeje, Int OtraVariable):
-	VariableJeje = z;
+Function Int fibonacci(Int numero):
+	
+	If(numero <= 1)
+		resultado = 1;
+
+		Else
+			resultado = fibonacci(numero - 1) + fibonacci(numero - 2);
+	EndIf
+
+	Return resultado;
+
 EndFunction
 
-Function Int otraFuncion(Int hola, Int jaja):
-	hola = 1;
-	Return otraFuncion(1,2) + otraFuncion(3,4);
+Function Int factorial(Int numero):
+	If(numero <= 1)
+		resultado = 1;
+	Else
+		resultado = numero * factorial( numero -1);
 
+	EndIf
+
+	Return resultado;
 EndFunction
+
+
+resultadoFactorial = factorial(3);
+resultadoFibonacci = fibonacci(5);
+
 
 x = -1;
 
@@ -22,7 +44,6 @@ x = x + 1;
 
 x = -1;
 
-z = otraFuncion(1,2);
 
 If( x < 2)
 	x = 10 * z;
