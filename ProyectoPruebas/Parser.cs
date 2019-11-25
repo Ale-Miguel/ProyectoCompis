@@ -72,11 +72,14 @@ string variableName;
   string signSymbol;
 
   private ProyectoPruebas.VarTable tab;
+ private ProyectoPruebas.ErrorHandler errorHandler;
 
   int constCont = 0;
 
   internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
   internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
+  internal ProyectoPruebas.ErrorHandler ErrorHandler { get => errorHandler; set => errorHandler = value; }
+
 
 
 
@@ -291,7 +294,7 @@ string variableName;
 			EXPR();
 		}
 		if(!tab.codeGenerator.createReturn(t.kind)){
-		 SemErr("Void function can't return a value");
+		 errorHandler.SemErr("Void function can't return a value");
 		}
 		Expect(9);
 	}
@@ -307,7 +310,7 @@ string variableName;
 			tab.codeGenerator.pushOperatorStack(t.kind);
 			TERM();
 			if(!tab.codeGenerator.solveSumAndMinus()){
-			 SemErr("Type-mismatch");
+			 errorHandler.SemErr("Type-mismatch");
 			}
 			
 			
@@ -404,7 +407,7 @@ string variableName;
 		}
 		
 		if(printVar == null){
-		   SemErr("Variable " + t.val + " not declared");
+		   errorHandler.SemErr("Variable " + t.val + " not declared");
 		}
 		else{
 		 tab.codeGenerator.solvePrint(printVar);
@@ -432,7 +435,7 @@ string variableName;
 		
 		if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
 		
-		   SemErr("Type-mismatch: Expected a bool type operation");
+		   errorHandler.SemErr("Type-mismatch: Expected a bool type operation");
 		}
 		else{
 		
@@ -481,7 +484,7 @@ string variableName;
 		ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
 		if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
 		
-		    SemErr("Type-mismatch: Expected a bool type operation");
+		    errorHandler.SemErr("Type-mismatch: Expected a bool type operation");
 		}
 		else{
 		
@@ -530,7 +533,7 @@ string variableName;
 		ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
 		if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
 		
-		    SemErr("Type-mismatch: Expected a bool type operation");
+		    errorHandler.SemErr("Type-mismatch: Expected a bool type operation");
 		}
 		else{
 		
@@ -564,7 +567,7 @@ string variableName;
 		Expect(14);
 		ProyectoPruebas.Function fun = tab.findFunction(variableName);
 		if(fun == null){
-		    SemErr("Function " + variableName + " not declared");
+		    errorHandler.SemErr("Function " + variableName + " not declared");
 		}
 		else{
 		
@@ -578,7 +581,7 @@ string variableName;
 		Expect(15);
 		if(!tab.codeGenerator.solveFunction()){
 		
-		 SemErr("Invalid number of arguments");
+		 errorHandler.SemErr("Invalid number of arguments");
 		}
 		
 		
@@ -588,7 +591,7 @@ string variableName;
 		Expect(25);
 		ProyectoPruebas.Variable var = tab.findVariable(variableName);
 		if(var == null){
-		SemErr("Variable " + variableName +  " not declared");
+		errorHandler.SemErr("Variable " + variableName +  " not declared");
 		}
 		else{
 		tab.codeGenerator.pushOperatorStack(t.kind);
@@ -601,21 +604,21 @@ string variableName;
 			Get();
 		} else SynErr(63);
 		if(!tab.codeGenerator.solveAssignment()){
-		     SemErr("Type-mismatch at assignment");
+		     errorHandler.SemErr("Type-mismatch at assignment");
 		}
 	}
 
 	void FUNCT_PARAMS() {
 		EXPR();
 		if(!tab.codeGenerator.setFunctParam()){
-		   SemErr("Parameters type mismatch");
+		   errorHandler.SemErr("Parameters type mismatch");
 		}
 		
 		while (la.kind == 7) {
 			Get();
 			EXPR();
 			if(!tab.codeGenerator.setFunctParam()){
-			SemErr("Parameters type mismatch");
+			errorHandler.SemErr("Parameters type mismatch");
 			}
 			
 		}
@@ -669,7 +672,7 @@ string variableName;
 			tab.codeGenerator.pushOperatorStack(t.kind);
 			FACTOR();
 			if(!tab.codeGenerator.solveMultAndDiv()){
-			   SemErr("Type-mismatch");
+			   errorHandler.SemErr("Type-mismatch");
 			}
 			
 		}
@@ -715,7 +718,7 @@ string variableName;
 			    tab.codeGenerator.pushSymbolStack(varId);
 			 }
 			 else{
-			   SemErr("Variable " + variableName + " not declared.");
+			   errorHandler.SemErr("Variable " + variableName + " not declared.");
 			 }
 			}
 		} else if (la.kind == 18 || la.kind == 19) {

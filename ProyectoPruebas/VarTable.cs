@@ -230,7 +230,7 @@ namespace ProyectoPruebas {
 
             //Si ya existe una variable que se llama igual, no puede ser
             if (findVariable(variableParam.getName()) != null) {
-                parser.SemErr("Several declarations of " + variableParam.getName());
+                parser.ErrorHandler.SemErr("Several declarations of " + variableParam.getName());
                 //return;
             }
 
@@ -317,10 +317,8 @@ namespace ProyectoPruebas {
             }
             catch (ArgumentException) {
                 //En caso de que no se pueda, quiere decir que esa variable ya está declarada, por lo que se manda el error.
-                parser.SemErr("Several declarations of " + variable.getName());
+                parser.ErrorHandler.SemErr("Several declarations of " + variable.getName());
             }
-
-        
 
         }
 
@@ -342,7 +340,7 @@ namespace ProyectoPruebas {
             if (findVariableInLastScope(variable.getName()) != null) {
     
                 //Error, no se pueden tener variables con el mismo nombre en el mismo scope
-                parser.SemErr("Sevaral declarations of " + variable.getName());
+                parser.ErrorHandler.SemErr("Sevaral declarations of " + variable.getName());
                 return;
             }
 
@@ -358,7 +356,7 @@ namespace ProyectoPruebas {
                 catch(ArgumentException) {
 
                     //Si no se puede agregar es que ya existe una variable con ese nombre
-                    parser.SemErr("Sevaral declarations of " + variable.getName());
+                    parser.ErrorHandler.SemErr("Sevaral declarations of " + variable.getName());
                     return;
                 }
             }
@@ -477,7 +475,7 @@ namespace ProyectoPruebas {
             //Si se encuentra una función con el mismo nombre (lastFunction != null), es un error, ya que se 
             //está declarando dos veces la función
             if (lastFunction.getNext() != null || lastFunction.getName() == function.getName()) {
-                parser.SemErr("Sevaral declarations of function " + lastFunction.getName());
+                parser.ErrorHandler.SemErr("Sevaral declarations of function " + lastFunction.getName());
                 return;
             }
 
@@ -487,7 +485,7 @@ namespace ProyectoPruebas {
             if(returnVariable != null) {
 
                 //Error, los nombres no pueden ser iguales entre funciones y variables
-                parser.SemErr("A function can't have the same name as a variable.");
+                parser.ErrorHandler.SemErr("A function can't have the same name as a variable.");
                 return;
             }
 
@@ -535,7 +533,7 @@ namespace ProyectoPruebas {
                 actualFunction = actualFunction.getNext();
             }
 
-            parser.SemErr("Function " + name + " not declared.");
+            parser.ErrorHandler.SemErr("Function " + name + " not declared.");
             //Si no encontro la función, actualFunction es null
             return actualFunction;
         }
@@ -548,7 +546,7 @@ namespace ProyectoPruebas {
             //Se tuvo que regresar un null si es que esa variable no existe
             if(auxParam != null) {
                 
-                parser.SemErr("ERROR: Several declarations of " + param.getName());
+                parser.ErrorHandler.SemErr("ERROR: Several declarations of " + param.getName());
                 //Se regresa nulo en señal de error.
                 return null;
             }

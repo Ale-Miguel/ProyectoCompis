@@ -5,11 +5,14 @@ COMPILER ProyectoFinal
   string signSymbol;
 
   private ProyectoPruebas.VarTable tab;
+ private ProyectoPruebas.ErrorHandler errorHandler;
 
   int constCont = 0;
 
   internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
   internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
+  internal ProyectoPruebas.ErrorHandler ErrorHandler { get => errorHandler; set => errorHandler = value; }
+
 
 CHARACTERS
   Letter = 'A'..'Z' + 'a'..'z'. 
@@ -154,7 +157,7 @@ MODULE = Function       (.
           .)
         .
 MODULE_RETURN = Return [EXPR] (.if(!tab.codeGenerator.createReturn(t.kind)){
-                                  SemErr("Void function can't return a value");
+                                  errorHandler.SemErr("Void function can't return a value");
                                 }.)
               Semicolon.
 
@@ -208,7 +211,7 @@ PRINT = Print LeftParenthesis
                                 }
 
                                 if(printVar == null){
-                                    SemErr("Variable " + t.val + " not declared");
+                                    errorHandler.SemErr("Variable " + t.val + " not declared");
                                 }
                                 else{
                                   tab.codeGenerator.solvePrint(printVar);
@@ -226,7 +229,7 @@ FOR = For (. tab.addVariableLayer();
 
                           if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
 
-                              SemErr("Type-mismatch: Expected a bool type operation");
+                              errorHandler.SemErr("Type-mismatch: Expected a bool type operation");
                           }
                           else{
 
@@ -249,7 +252,7 @@ CONDITION = If LeftParenthesis EXPRESSION
             RightParenthesis  (. ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
                                   if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
 
-                                      SemErr("Type-mismatch: Expected a bool type operation");
+                                      errorHandler.SemErr("Type-mismatch: Expected a bool type operation");
                                   }
                                   else{
 
@@ -273,7 +276,7 @@ ELSEIF = ElseIf   (.tab.codeGenerator.popJumpStack();
         LeftParenthesis EXPRESSION RightParenthesis (. ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
                                                         if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
 
-                                                            SemErr("Type-mismatch: Expected a bool type operation");
+                                                            errorHandler.SemErr("Type-mismatch: Expected a bool type operation");
                                                         }
                                                         else{
 
@@ -298,7 +301,7 @@ ASGMT_OR_FUNCT =
 FUNCTCALL  = 
             LeftParenthesis (. ProyectoPruebas.Function fun = tab.findFunction(variableName);
                                 if(fun == null){
-                                    SemErr("Function " + variableName + " not declared");
+                                    errorHandler.SemErr("Function " + variableName + " not declared");
                                 }
                                 else{
 
@@ -310,18 +313,18 @@ FUNCTCALL  =
             RightParenthesis  (.
                                   if(!tab.codeGenerator.solveFunction()){
 
-                                    SemErr("Invalid number of arguments");
+                                    errorHandler.SemErr("Invalid number of arguments");
                                   }
 
                               .)
             .
 FUNCT_PARAMS = EXPR (. 
                           if(!tab.codeGenerator.setFunctParam()){
-                              SemErr("Parameters type mismatch");
+                              errorHandler.SemErr("Parameters type mismatch");
                           }
                           .)
               {Comma EXPR  (. if(!tab.codeGenerator.setFunctParam()){
-                              SemErr("Parameters type mismatch");
+                              errorHandler.SemErr("Parameters type mismatch");
                               }
                           .) 
               }.
@@ -329,7 +332,7 @@ FUNCT_PARAMS = EXPR (.
 ASSIGNMENT = 
             Equal (.   ProyectoPruebas.Variable var = tab.findVariable(variableName);
                       if(var == null){
-                        SemErr("Variable " + variableName +  " not declared");
+                        errorHandler.SemErr("Variable " + variableName +  " not declared");
                       }
                       else{
                         tab.codeGenerator.pushOperatorStack(t.kind);
@@ -338,7 +341,7 @@ ASSIGNMENT =
                       .)
             (EXPR | CTE_S)
               (.if(!tab.codeGenerator.solveAssignment()){
-                      SemErr("Type-mismatch at assignment");
+                      errorHandler.SemErr("Type-mismatch at assignment");
                 }.)
             .
 
@@ -362,7 +365,7 @@ EXPR = TERM
               (Plus | Minus)  (.tab.codeGenerator.pushOperatorStack(t.kind);.)
                TERM
                  (. if(!tab.codeGenerator.solveSumAndMinus()){
-                      SemErr("Type-mismatch");
+                      errorHandler.SemErr("Type-mismatch");
                      }
 
                   .)
@@ -373,7 +376,7 @@ TERM = FACTOR
       (Asterisk | Slash)  (.tab.codeGenerator.pushOperatorStack(t.kind);.)
        FACTOR
          (. if(!tab.codeGenerator.solveMultAndDiv()){
-                SemErr("Type-mismatch");
+                errorHandler.SemErr("Type-mismatch");
             }
           .)
         }
@@ -403,7 +406,7 @@ FACTOR_VALUES = Id (. //Variable que guarda el Id que acaba de encontrar
                            tab.codeGenerator.pushSymbolStack(varId);
                         }
                         else{
-                          SemErr("Variable " + variableName + " not declared.");
+                          errorHandler.SemErr("Variable " + variableName + " not declared.");
                         }
                       }.)
                 | NUMBER (. string constNumber = "-";

@@ -4,6 +4,8 @@ Var Float y = 0.0;
 Var Int resultado = 0;
 Var Int resultadoFibonacci = 0;
 Var Int resultadoFactorial = 0;
+Var String prueba = "Hola";
+Var String prueba2 = "Mundo";
 
 Function Int fibonacci(Int numero):
 	
@@ -29,14 +31,11 @@ Function Int factorial(Int numero):
 	Return resultado;
 EndFunction
 
-
-
-
 Function Void funcionPrueba():
 	
 	x = 1;
 	
-	Return ;
+	Return 0;
 EndFunction
 
 
@@ -45,6 +44,7 @@ resultadoFibonacci = fibonacci(5);
 
 Print("Hola");
 Print(x);
+Print (prueba2);
 
 x = -1;
 
@@ -55,6 +55,8 @@ y = y / x;
 x = x + 1;
 
 x = -1;
+
+
 
 If( x < 2)
 	x = 10 * z;
