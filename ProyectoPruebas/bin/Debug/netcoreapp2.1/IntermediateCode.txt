@@ -85,4 +85,17 @@ SHOOT, _, _, _
 85 1, tempVar22, __, x
 86 GoTo, _, _, 82
 RETURN, 0, _,  UNDEF
+88 6, x, 0, tempVar23
+89 GoToFalse, tempVar23, _, 93
+90 2, x, 1, tempVar24
+91 1, tempVar24, __, x
+92 GoTo, _, _, 88
+93 1, 5, __, 1LOOP_AUX_VARIABLE
+94 6, 1LOOP_AUX_VARIABLE, 0, tempVar25
+95 GoToFalse, tempVar25, _, 101
+96 3, x, 1, tempVar26
+97 1, tempVar26, __, x
+98 3, 1, 1LOOP_AUX_VARIABLE, tempVar27
+99 1, tempVar27, __, 1LOOP_AUX_VARIABLE
+100 GoTo, _, _, 94
 END_PROC, _, _, _

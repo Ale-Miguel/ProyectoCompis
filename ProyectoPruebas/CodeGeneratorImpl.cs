@@ -25,6 +25,7 @@ namespace ProyectoPruebas {
 
         private OperationTypes cuboSemantico;
 
+        bool loopIsConstant = false;
 
 
         private string filePath = "IntermediateCode.txt";   //Path y nombre del archivo que guarda el código intermedio
@@ -733,25 +734,61 @@ namespace ProyectoPruebas {
             Variable varToCompare;
 
             if (varReff.isConstant()) {
-                Variable tempVarConstant = getTempVar(OperationTypes.TYPE_INT, true);
+                Variable tempVarConstant = new Variable("1LOOP_AUX_VARIABLE", Parser._Int);
+
+                varTable.addVariable(tempVarConstant);
+
+                parseVariable(tempVarConstant);
 
                 createIntermediateCodeNoTemp(OperationTypes.EQUAL, varReff, tempVarConstant);
 
                 varToCompare = tempVarConstant;
+                loopIsConstant = true;
 
             }
             else {
                 varToCompare = varReff;
             }
 
+
+            Variable constantCero = varTable.addConstant(new Variable("0", Parser._CTE_I, "0"));
+
             pushJumpStack(lineCont);
 
-            //Se crea la comparación con 0
-            Variable tempVar = getTempVar(OperationTypes.TYPE_BOOL, true);
+            createIntermediateCode(OperationTypes.GREATER_THAN, varToCompare, constantCero);
 
-
+            pushGoToF(popSymnbolStack());
 
             return true;
+        }
+
+        public void solveLoop() {
+
+            if (loopIsConstant) {
+                Variable constantVariable = varTable.findVariable("1LOOP_AUX_VARIABLE");
+
+                Variable constant1 = varTable.addConstant( new Variable("1", OperationTypes.TYPE_INT, "1"));
+
+
+                createIntermediateCode(OperationTypes.MINUS, constant1, constantVariable);
+
+                createIntermediateCodeNoTemp(OperationTypes.EQUAL, popSymnbolStack(), constantVariable);
+            }
+
+            lineCont++;
+            popJumpStack();
+            lineCont--;
+            //El siguiente valor de la pila guarda la línea a donde empiezan las operaciones de la condición
+            int lineReturn = (int)jumpStack.Pop();
+
+            //Se crea el goTo para regresarse a los cuádruplos de la condición y que se cree el ciclo
+            GoTo goTo = new GoTo(lineReturn, lineCont);
+
+            //Se manda a escribir el cuádruplo
+            writeIntermediateCode(goTo);
+            loopIsConstant = false;
+
+          
         }
         //Función que regresa la lista de cuádruplos
         public List<IQuadruple> getQuadrupleList() {

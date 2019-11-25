@@ -229,7 +229,11 @@ FOR = For (. tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); 
       EndFor  (. tab.codeGenerator.solveFor(); .)
       .
 
-LOOP = Loop (CTE_I | Id) STATUTE {STATUTE} EndLoop.
+LOOP = Loop     
+      (CTE_I | Id)  (.tab.codeGenerator.createLoopCondition(new ProyectoPruebas.Variable(t.val, t.kind));.) 
+      STATUTE {STATUTE} 
+      EndLoop   (.tab.codeGenerator.solveLoop();.) 
+      .
 
 CONDITION = If LeftParenthesis EXPRESSION 
             RightParenthesis  (. ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();

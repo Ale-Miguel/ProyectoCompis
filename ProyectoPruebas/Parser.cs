@@ -439,11 +439,13 @@ string variableName;
 		} else if (la.kind == 1) {
 			Get();
 		} else SynErr(58);
+		tab.codeGenerator.createLoopCondition(new ProyectoPruebas.Variable(t.val, t.kind));
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
 		}
 		Expect(47);
+		tab.codeGenerator.solveLoop();
 	}
 
 	void EXPRESSION() {

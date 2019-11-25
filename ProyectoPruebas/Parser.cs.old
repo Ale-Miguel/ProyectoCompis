@@ -152,7 +152,7 @@ string variableName;
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		tab.destroyContext();
+		tab.codeGenerator.endFunction();
 	}
 
 	void VARS() {
@@ -434,16 +434,19 @@ string variableName;
 
 	void LOOP() {
 		Expect(46);
+		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() );
 		if (la.kind == 18) {
 			Get();
 		} else if (la.kind == 1) {
 			Get();
 		} else SynErr(58);
+		tab.codeGenerator.createLoopCondition(new ProyectoPruebas.Variable(t.val, t.kind));
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
 		}
 		Expect(47);
+		tab.codeGenerator.solveLoop();
 	}
 
 	void EXPRESSION() {
