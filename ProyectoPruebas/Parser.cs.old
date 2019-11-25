@@ -335,6 +335,7 @@ string variableName;
 
 	void COMMAND() {
 		COMMAND_LIST();
+		tab.codeGenerator.createCommand(t.kind);
 		Expect(9);
 	}
 
@@ -380,6 +381,13 @@ string variableName;
 		} else if (la.kind == 1) {
 			Get();
 		} else SynErr(56);
+		if(t.kind == _CTE_S){
+		   Console.WriteLine("Constante String: " + t.val);
+		 }
+		 else{
+		    Console.WriteLine(t.kind);
+		 }
+		
 		Expect(15);
 	}
 

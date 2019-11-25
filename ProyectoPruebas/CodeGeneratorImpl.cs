@@ -695,6 +695,13 @@ namespace ProyectoPruebas {
 
         }
 
+        public void solvePrint(Variable variable) {
+            parseVariable(variable);
+
+            PrintQuad printQuad = new PrintQuad(variable);
+
+            writeIntermediateCode(printQuad);
+        }
         //Función que regresa la lista de cuádruplos
         public List<IQuadruple> getQuadrupleList() {
             return quadrupleList;

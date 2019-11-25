@@ -33,6 +33,8 @@ EndFunction
 resultadoFactorial = factorial(3);
 resultadoFibonacci = fibonacci(5);
 
+Print("Hola");
+Print(x);
 
 x = -1;
 

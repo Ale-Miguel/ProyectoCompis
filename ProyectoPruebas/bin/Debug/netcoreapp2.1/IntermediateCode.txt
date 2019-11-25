@@ -53,28 +53,5 @@ PARAM, Parameter1, _, 5
 GOSUB, fibonacci, _, 12
 54 1, fibonacci, __, tempVar12
 55 1, tempVar12, __, resultadoFibonacci
-56 1, -1, __, -1
-57 1, -1, __, x
-58 1, 6, __, 6
-59 2, 6, 2, tempVar13
-60 3, z, x, tempVar14
-61 4, tempVar13, tempVar14, tempVar15
-62 5, tempVar15, 5, tempVar16
-63 1, tempVar16, __, x
-64 5, y, x, tempVar17
-65 1, tempVar17, __, y
-66 2, x, 1, tempVar18
-67 1, tempVar18, __, x
-68 1, -1, __, x
-69 7, x, 2, tempVar19
-70 GoToFalse, tempVar19, _, 76
-71 4, 10, z, tempVar20
-72 1, tempVar20, __, x
-73 1, 2.0, __, 2.0
-74 1, 2.0, __, y
-SHOOT, _, _, _
-76 7, x, 10, tempVar21
-77 GoToFalse, tempVar21, _, 81
-78 2, x, 1, tempVar22
-79 1, tempVar22, __, x
-80 GoTo, _, _, 76
+PRINT, _, _, "Hola"
+PRINT, _, _, x

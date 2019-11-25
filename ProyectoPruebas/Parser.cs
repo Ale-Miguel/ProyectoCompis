@@ -381,6 +381,22 @@ string variableName;
 		} else if (la.kind == 1) {
 			Get();
 		} else SynErr(56);
+		ProyectoPruebas.Variable printVar;
+		if(t.kind == _CTE_S){
+		   printVar = new ProyectoPruebas.Variable(t.val, t.kind, t.val);
+		   printVar.setConstant();
+		}
+		else{
+		  printVar = tab.findVariable(t.val);
+		}
+		
+		if(printVar == null){
+		   SemErr("Variable " + t.val + " not declared");
+		}
+		else{
+		 tab.codeGenerator.solvePrint(printVar);
+		}
+		
 		Expect(15);
 	}
 
