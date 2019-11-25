@@ -29,8 +29,13 @@ Function Int factorial(Int numero):
 	Return resultado;
 EndFunction
 
+
+
+
 Function Void funcionPrueba():
+	
 	x = 1;
+	
 	Return ;
 EndFunction
 
@@ -63,7 +68,7 @@ EndIf
 
 For( x < 10 )
 	x = x + 1;
-
+	Pick;
 EndFor
 
 Return ;
@@ -74,4 +79,5 @@ EndLoop
 
 Loop 5
 	x = x - 1;
+	Drop;
 EndLoop

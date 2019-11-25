@@ -64,6 +64,8 @@ TOKENS
   Wait = "Wait".
   MoveForward = "MoveForward".
   Interact = "Interact".
+  Pick = "Pick".
+  Drop = "Drop".
   For = "For".
   EndFor = "EndFor".
   Loop = "Loop".
@@ -189,7 +191,9 @@ COMMAND_LIST = TurnLeft
               | Shoot 
               | Wait  
               | MoveForward 
-              | Interact 
+              | Interact
+              | Pick
+              | Drop 
               | PRINT.
 
 PRINT = Print LeftParenthesis 

@@ -48,11 +48,13 @@ public class Parser {
 	public const int _Wait = 41;
 	public const int _MoveForward = 42;
 	public const int _Interact = 43;
-	public const int _For = 44;
-	public const int _EndFor = 45;
-	public const int _Loop = 46;
-	public const int _EndLoop = 47;
-	public const int maxT = 48;
+	public const int _Pick = 44;
+	public const int _Drop = 45;
+	public const int _For = 46;
+	public const int _EndFor = 47;
+	public const int _Loop = 48;
+	public const int _EndLoop = 49;
+	public const int maxT = 50;
 
 	const bool _T = true;
 	const bool _x = false;
@@ -168,7 +170,7 @@ string variableName;
 			TYPE();
 		} else if (la.kind == 33) {
 			Get();
-		} else SynErr(49);
+		} else SynErr(51);
 		type = t.kind;
 		Expect(1);
 		functName = t.val; 
@@ -191,13 +193,13 @@ string variableName;
 			COMMAND();
 		} else if (la.kind == 10) {
 			CONDITION();
-		} else if (la.kind == 44 || la.kind == 46) {
+		} else if (la.kind == 46 || la.kind == 48) {
 			CYCLE();
 		} else if (la.kind == 1) {
 			ASGMT_OR_FUNCT();
 		} else if (la.kind == 34) {
 			MODULE_RETURN();
-		} else SynErr(50);
+		} else SynErr(52);
 	}
 
 	void VAR() {
@@ -220,7 +222,7 @@ string variableName;
 			NUMBER();
 		} else if (la.kind == 20) {
 			Get();
-		} else SynErr(51);
+		} else SynErr(53);
 		string constNumber = "-";
 		
 		if(signSymbol == "-"){
@@ -254,7 +256,7 @@ string variableName;
 			Get();
 		} else if (la.kind == 36) {
 			Get();
-		} else SynErr(52);
+		} else SynErr(54);
 	}
 
 	void SIGNS() {
@@ -263,7 +265,7 @@ string variableName;
 		} else if (la.kind == 22) {
 			Get();
 			signSymbol = "-";
-		} else SynErr(53);
+		} else SynErr(55);
 	}
 
 	void NUMBER() {
@@ -271,7 +273,7 @@ string variableName;
 			Get();
 		} else if (la.kind == 19) {
 			Get();
-		} else SynErr(54);
+		} else SynErr(56);
 	}
 
 	void PARAMS() {
@@ -367,11 +369,19 @@ string variableName;
 			Get();
 			break;
 		}
+		case 44: {
+			Get();
+			break;
+		}
+		case 45: {
+			Get();
+			break;
+		}
 		case 6: {
 			PRINT();
 			break;
 		}
-		default: SynErr(55); break;
+		default: SynErr(57); break;
 		}
 	}
 
@@ -382,7 +392,7 @@ string variableName;
 			Get();
 		} else if (la.kind == 1) {
 			Get();
-		} else SynErr(56);
+		} else SynErr(58);
 		ProyectoPruebas.Variable printVar;
 		if(t.kind == _CTE_S){
 		   printVar = new ProyectoPruebas.Variable(t.val, t.kind, t.val);
@@ -404,15 +414,15 @@ string variableName;
 	}
 
 	void CYCLE() {
-		if (la.kind == 44) {
+		if (la.kind == 46) {
 			FOR();
-		} else if (la.kind == 46) {
+		} else if (la.kind == 48) {
 			LOOP();
-		} else SynErr(57);
+		} else SynErr(59);
 	}
 
 	void FOR() {
-		Expect(44);
+		Expect(46);
 		tab.addVariableLayer();
 		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); 
 		Expect(14);
@@ -433,25 +443,25 @@ string variableName;
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		Expect(45);
+		Expect(47);
 		tab.codeGenerator.solveFor();
 		tab.removeVariableLayer(); 
 	}
 
 	void LOOP() {
-		Expect(46);
+		Expect(48);
 		tab.addVariableLayer();
 		if (la.kind == 18) {
 			Get();
 		} else if (la.kind == 1) {
 			Get();
-		} else SynErr(58);
+		} else SynErr(60);
 		tab.codeGenerator.createLoopCondition(new ProyectoPruebas.Variable(t.val, t.kind));
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		Expect(47);
+		Expect(49);
 		tab.codeGenerator.solveLoop();
 		tab.removeVariableLayer();
 	}
@@ -496,7 +506,7 @@ string variableName;
 			ELSE();
 		} else if (la.kind == 12) {
 			ELSEIF();
-		} else SynErr(59);
+		} else SynErr(61);
 	}
 
 	void ELSE() {
@@ -546,7 +556,7 @@ string variableName;
 			FUNCTCALL();
 		} else if (la.kind == 25) {
 			ASSIGNMENT();
-		} else SynErr(60);
+		} else SynErr(62);
 		Expect(9);
 	}
 
@@ -589,7 +599,7 @@ string variableName;
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
-		} else SynErr(61);
+		} else SynErr(63);
 		if(!tab.codeGenerator.solveAssignment()){
 		     SemErr("Type-mismatch at assignment");
 		}
@@ -644,7 +654,7 @@ string variableName;
 			Get();
 			break;
 		}
-		default: SynErr(62); break;
+		default: SynErr(64); break;
 		}
 	}
 
@@ -670,7 +680,7 @@ string variableName;
 			FACTOR_1();
 		} else if (StartOf(6)) {
 			FACTOR_2();
-		} else SynErr(63);
+		} else SynErr(65);
 	}
 
 	void FACTOR_1() {
@@ -729,7 +739,7 @@ string variableName;
 			
 			tab.codeGenerator.pushSymbolStack(constVar);
 			
-		} else SynErr(64);
+		} else SynErr(66);
 	}
 
 
@@ -744,13 +754,13 @@ string variableName;
 	}
 	
 	static readonly bool[,] set = {
-		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
-		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
-		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
-		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x},
-		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
-		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
-		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x}
+		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x},
+		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_T,_T,_x, _T,_x,_x,_x},
+		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x},
+		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_T,_x,_x, _x,_x,_x,_x},
+		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x},
+		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x},
+		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x}
 
 	};
 } // end Parser
@@ -808,27 +818,29 @@ public class Errors {
 			case 41: s = "Wait expected"; break;
 			case 42: s = "MoveForward expected"; break;
 			case 43: s = "Interact expected"; break;
-			case 44: s = "For expected"; break;
-			case 45: s = "EndFor expected"; break;
-			case 46: s = "Loop expected"; break;
-			case 47: s = "EndLoop expected"; break;
-			case 48: s = "??? expected"; break;
-			case 49: s = "invalid MODULE"; break;
-			case 50: s = "invalid STATUTE"; break;
-			case 51: s = "invalid VAR"; break;
-			case 52: s = "invalid TYPE"; break;
-			case 53: s = "invalid SIGNS"; break;
-			case 54: s = "invalid NUMBER"; break;
-			case 55: s = "invalid COMMAND_LIST"; break;
-			case 56: s = "invalid PRINT"; break;
-			case 57: s = "invalid CYCLE"; break;
-			case 58: s = "invalid LOOP"; break;
-			case 59: s = "invalid CONDITION_ELSE"; break;
-			case 60: s = "invalid ASGMT_OR_FUNCT"; break;
-			case 61: s = "invalid ASSIGNMENT"; break;
-			case 62: s = "invalid RELOPS"; break;
-			case 63: s = "invalid FACTOR"; break;
-			case 64: s = "invalid FACTOR_VALUES"; break;
+			case 44: s = "Pick expected"; break;
+			case 45: s = "Drop expected"; break;
+			case 46: s = "For expected"; break;
+			case 47: s = "EndFor expected"; break;
+			case 48: s = "Loop expected"; break;
+			case 49: s = "EndLoop expected"; break;
+			case 50: s = "??? expected"; break;
+			case 51: s = "invalid MODULE"; break;
+			case 52: s = "invalid STATUTE"; break;
+			case 53: s = "invalid VAR"; break;
+			case 54: s = "invalid TYPE"; break;
+			case 55: s = "invalid SIGNS"; break;
+			case 56: s = "invalid NUMBER"; break;
+			case 57: s = "invalid COMMAND_LIST"; break;
+			case 58: s = "invalid PRINT"; break;
+			case 59: s = "invalid CYCLE"; break;
+			case 60: s = "invalid LOOP"; break;
+			case 61: s = "invalid CONDITION_ELSE"; break;
+			case 62: s = "invalid ASGMT_OR_FUNCT"; break;
+			case 63: s = "invalid ASSIGNMENT"; break;
+			case 64: s = "invalid RELOPS"; break;
+			case 65: s = "invalid FACTOR"; break;
+			case 66: s = "invalid FACTOR_VALUES"; break;
 
 			default: s = "error " + n; break;
 		}

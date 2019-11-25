@@ -699,6 +699,13 @@ namespace ProyectoPruebas {
                     commandObj = new Interact();
                     break;
 
+                case Parser._Pick:                  //Interact
+                    commandObj = new Pick();
+                    break;
+
+                case Parser._Drop:                  //Interact
+                    commandObj = new Drop();
+                    break;
                 default:
                     //Si no se encontró el comando, no se hace nada (tal vez fue un print pero eso se encarga otra función)
                     return;

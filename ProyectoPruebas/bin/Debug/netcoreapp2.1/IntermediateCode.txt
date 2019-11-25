@@ -86,22 +86,24 @@ MOVE_FORWARD, _, _, _
 86 GoTo, _, _, 88
 TURN_RIGHT, _, _, _
 88 7, x, 10, tempVar12
-89 GoToFalse, tempVar12, _, 93
+89 GoToFalse, tempVar12, _, 94
 90 2, x, 1, tempVar13
 91 1, tempVar13, __, x
-92 GoTo, _, _, 88
+PICK, _, _, _
+93 GoTo, _, _, 88
 RETURN, UNDEF, _, UNDEF
-94 11, x, 0, tempVar14
-95 GoToFalse, tempVar14, _, 99
-96 2, x, 1, tempVar15
-97 1, tempVar15, __, x
-98 GoTo, _, _, 94
-99 1, 5, __, 1LOOP_AUX_VARIABLE
-100 11, 1LOOP_AUX_VARIABLE, 0, tempVar16
-101 GoToFalse, tempVar16, _, 107
-102 3, x, 1, tempVar17
-103 1, tempVar17, __, x
-104 3, 1, 1LOOP_AUX_VARIABLE, tempVar18
-105 1, tempVar18, __, 1LOOP_AUX_VARIABLE
-106 GoTo, _, _, 100
+95 11, x, 0, tempVar14
+96 GoToFalse, tempVar14, _, 100
+97 2, x, 1, tempVar15
+98 1, tempVar15, __, x
+99 GoTo, _, _, 95
+100 1, 5, __, 1LOOP_AUX_VARIABLE
+101 11, 1LOOP_AUX_VARIABLE, 0, tempVar16
+102 GoToFalse, tempVar16, _, 109
+103 3, x, 1, tempVar17
+104 1, tempVar17, __, x
+DROP, _, _, _
+106 3, 1, 1LOOP_AUX_VARIABLE, tempVar18
+107 1, tempVar18, __, 1LOOP_AUX_VARIABLE
+108 GoTo, _, _, 101
 END_PROC, _, _, _
