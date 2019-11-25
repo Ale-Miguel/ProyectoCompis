@@ -384,7 +384,8 @@ string variableName;
 		ProyectoPruebas.Variable printVar;
 		if(t.kind == _CTE_S){
 		   printVar = new ProyectoPruebas.Variable(t.val, t.kind, t.val);
-		   printVar.setConstant();
+		   printVar = tab.addConstant(printVar);
+		   
 		}
 		else{
 		  printVar = tab.findVariable(t.val);

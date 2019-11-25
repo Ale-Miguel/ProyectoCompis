@@ -381,12 +381,22 @@ string variableName;
 		} else if (la.kind == 1) {
 			Get();
 		} else SynErr(56);
+		ProyectoPruebas.Variable printVar;
 		if(t.kind == _CTE_S){
-		   Console.WriteLine("Constante String: " + t.val);
-		 }
-		 else{
-		    Console.WriteLine(t.kind);
-		 }
+		   printVar = new ProyectoPruebas.Variable(t.val, t.kind, t.val);
+		   printVar = tab.addConstant(printVar);
+		   
+		}
+		else{
+		  printVar = tab.findVariable(t.val);
+		}
+		
+		if(printVar == null){
+		   SemErr("Variable " + t.val + " not declared");
+		}
+		else{
+		 tab.codeGenerator.solvePrint(printVar);
+		}
 		
 		Expect(15);
 	}

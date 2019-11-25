@@ -196,7 +196,8 @@ PRINT = Print LeftParenthesis
           (CTE_S | Id)      (.  ProyectoPruebas.Variable printVar;
                                 if(t.kind == _CTE_S){
                                     printVar = new ProyectoPruebas.Variable(t.val, t.kind, t.val);
-                                    printVar.setConstant();
+                                    printVar = tab.addConstant(printVar);
+                                    
                                 }
                                 else{
                                    printVar = tab.findVariable(t.val);
@@ -213,6 +214,7 @@ PRINT = Print LeftParenthesis
 
 CYCLE = FOR 
         | LOOP.
+
 FOR = For (. tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); .)
       LeftParenthesis EXPRESSION 
       RightParenthesis (. ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
@@ -258,7 +260,8 @@ ELSEIF = ElseIf LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE} [C
 STATUTE = COMMAND 
           | CONDITION 
           | CYCLE 
-          | ASGMT_OR_FUNCT.
+          | ASGMT_OR_FUNCT
+          | MODULE_RETURN.
           
 ASGMT_OR_FUNCT = 
                 Id (. variableName = t.val; .)
