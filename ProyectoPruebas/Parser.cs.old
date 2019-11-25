@@ -434,7 +434,6 @@ string variableName;
 
 	void LOOP() {
 		Expect(46);
-		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() );
 		if (la.kind == 18) {
 			Get();
 		} else if (la.kind == 1) {
@@ -503,13 +502,28 @@ string variableName;
 
 	void ELSEIF() {
 		Expect(12);
+		tab.codeGenerator.popJumpStack();
+		tab.codeGenerator.pushGoTo();
 		Expect(14);
 		EXPRESSION();
 		Expect(15);
+		ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
+		if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
+		
+		    SemErr("Type-mismatch: Expected a bool type operation");
+		}
+		else{
+		
+		  tab.codeGenerator.pushGoToF(result);
+		
+		}
+		
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
 		}
+		tab.codeGenerator.popJumpStack();
+		tab.codeGenerator.pushGoTo();
 		if (la.kind == 11 || la.kind == 12) {
 			CONDITION_ELSE();
 		}

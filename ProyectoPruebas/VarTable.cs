@@ -15,6 +15,7 @@ namespace ProyectoPruebas {
         private Parser parser;
 
         private Stack variableStack;
+        private Stack tempContStack;
 
         private Dictionary<string, Variable> variableDiccionary;
         private Dictionary<string, Variable> constantsDiccionary;
@@ -25,6 +26,8 @@ namespace ProyectoPruebas {
 
         AddressManager addressManager;
 
+        private int tempCont;
+
         public VarTable(Parser parser) {
 
             this.parser = parser;
@@ -32,6 +35,7 @@ namespace ProyectoPruebas {
             this.functions = new Function("undefFunct", UNDEF_VAR);
 
             this.variableStack = new Stack();
+            this.tempContStack = new Stack();
 
             codeGenerator = new CodeGeneratorImpl(this);
 
@@ -41,8 +45,30 @@ namespace ProyectoPruebas {
 
             variableDiccionary = new Dictionary<string, Variable>();
             constantsDiccionary = new Dictionary<string, Variable>();
+            tempCont = 1;
         }
 
+        public Variable getTempVar(int type, bool isParsed) {
+            //Se crea el nombre de la siguente variable temporal
+            string tempVarName = "tempVar" + tempCont;
+
+
+
+            //Se crea un objeto tipo Variable de la variable temporal
+            Variable tempVar = new Variable(tempVarName, type);
+
+            if (!isParsed) {
+                codeGenerator.parseVariable(tempVar);
+            }
+            else {
+                tempVar.setParsed();
+            }
+            //Se le asigna una dirección de memoria a la variable temporal
+            assignlocalAddress(tempVar);
+
+            tempCont++;
+            return tempVar;
+        }
         //Función para crear un contexto nuevo
         public void createContext() {
             //Se crea un nuevo set de variables locales
@@ -243,12 +269,16 @@ namespace ProyectoPruebas {
 
             //Se le hace push al stack
             variableStack.Push(aux);
+            tempContStack.Push(tempCont);
+            tempCont = 1;
         }
 
         public void addVariableLayer() {
             //Dictionary<string, Variable> aux = new Dictionary<string, Variable>();
             //Se le hace push al stack
             variableStack.Push(null);
+            tempContStack.Push(tempCont);
+            tempCont = 1;
         }
         //Función que quita una capa de la tabla de variables (removiendo variables locales)
         public void removeVariableLayer() {
@@ -258,6 +288,7 @@ namespace ProyectoPruebas {
             }
             //Se hace pop a la pila
             variableStack.Pop();
+            tempCont = (int)tempContStack.Pop();
         }
 
         public void addGlobalVariable(Variable variable) {

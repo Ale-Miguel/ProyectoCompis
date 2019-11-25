@@ -502,13 +502,28 @@ string variableName;
 
 	void ELSEIF() {
 		Expect(12);
+		tab.codeGenerator.popJumpStack();
+		tab.codeGenerator.pushGoTo();
 		Expect(14);
 		EXPRESSION();
 		Expect(15);
+		ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
+		if(result.getType() != ProyectoPruebas.OperationTypes.TYPE_BOOL){
+		
+		    SemErr("Type-mismatch: Expected a bool type operation");
+		}
+		else{
+		
+		  tab.codeGenerator.pushGoToF(result);
+		
+		}
+		
 		STATUTE();
 		while (StartOf(1)) {
 			STATUTE();
 		}
+		tab.codeGenerator.popJumpStack();
+		
 		if (la.kind == 11 || la.kind == 12) {
 			CONDITION_ELSE();
 		}

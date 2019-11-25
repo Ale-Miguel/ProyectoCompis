@@ -55,6 +55,10 @@ If( x < 2)
 	x = 10 * z;
 	y = 2.0;
 	Shoot;
+	ElseIf(x == 3)
+		MoveForward;
+		Else
+		TurnRight;
 EndIf
 
 For( x < 10 )

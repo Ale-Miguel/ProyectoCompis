@@ -31,25 +31,7 @@ namespace ProyectoPruebas {
         private string filePath = "IntermediateCode.txt";   //Path y nombre del archivo que guarda el código intermedio
 
         Variable getTempVar(int type, bool isParsed) {
-            //Se crea el nombre de la siguente variable temporal
-            string tempVarName = "tempVar" + tempCont;
-
-            
-
-            //Se crea un objeto tipo Variable de la variable temporal
-            Variable tempVar = new Variable(tempVarName, type);
-
-            if (!isParsed) {
-                parseVariable(tempVar);
-            }
-            else {
-                tempVar.setParsed();
-            }
-            //Se le asigna una dirección de memoria a la variable temporal
-            varTable.assignlocalAddress(tempVar);
-
-            tempCont++;
-            return tempVar;
+            return varTable.getTempVar(type, isParsed);
         }
         public void parseVariable(Variable variable) {
             if (variable == null || variable.isParsed()) {
@@ -440,9 +422,9 @@ namespace ProyectoPruebas {
 
             //Se resuelve la parte de la condición
             //El for se comporta como el if, por eso se trata como tal
-            lineCont++;
+           
             popJumpStack();
-            lineCont--;
+           
             //El siguiente valor de la pila guarda la línea a donde empiezan las operaciones de la condición
             int lineReturn = (int)jumpStack.Pop();
 
@@ -511,7 +493,7 @@ namespace ProyectoPruebas {
             Jumps jump = (Jumps)quadrupleBuffer[jumpIndex];
 
             //Se le asigna la línea a la que va a saltar
-            jump.setJump(lineCont -1);
+            jump.setJump(lineCont );
 
 
             //Se manda a escribir el cuádruplo al archivo
@@ -524,9 +506,9 @@ namespace ProyectoPruebas {
             pushGoTo();
         }
         public void solveGoToMain() {
-            lineCont++;
+        
             popJumpStack();
-            lineCont--;
+          
         }
 
 
@@ -775,9 +757,9 @@ namespace ProyectoPruebas {
                 createIntermediateCodeNoTemp(OperationTypes.EQUAL, popSymnbolStack(), constantVariable);
             }
 
-            lineCont++;
+           
             popJumpStack();
-            lineCont--;
+            
             //El siguiente valor de la pila guarda la línea a donde empiezan las operaciones de la condición
             int lineReturn = (int)jumpStack.Pop();
 
