@@ -26,7 +26,7 @@ GOSUB, fibonacci, _, 12
 26 1, fibonacci, __, tempVar5
 27 2, tempVar3, tempVar5, tempVar6
 28 1, tempVar6, __, resultado
-RETURN, _, _, resultado
+RETURN, resultado, _,  UNDEF
 END_PROC, _, _, _
 31 10, numero, 1, tempVar7
 32 GoToFalse, tempVar7, _, 34
@@ -39,7 +39,7 @@ GOSUB, factorial, _, 31
 39 1, factorial, __, tempVar9
 40 4, numero, tempVar9, tempVar10
 41 1, tempVar10, __, resultado
-RETURN, _, _, resultado
+RETURN, resultado, _,  UNDEF
 END_PROC, _, _, _
 ERA, _, _, factorial
 45 1, 3, __, 3
@@ -55,3 +55,28 @@ GOSUB, fibonacci, _, 12
 55 1, tempVar12, __, resultadoFibonacci
 PRINT, _, _, "Hola"
 PRINT, _, _, x
+58 1, -1, __, -1
+59 1, -1, __, x
+60 1, 6, __, 6
+61 2, 6, 2, tempVar13
+62 3, z, x, tempVar14
+63 4, tempVar13, tempVar14, tempVar15
+64 5, tempVar15, 5, tempVar16
+65 1, tempVar16, __, x
+66 5, y, x, tempVar17
+67 1, tempVar17, __, y
+68 2, x, 1, tempVar18
+69 1, tempVar18, __, x
+70 1, -1, __, x
+71 7, x, 2, tempVar19
+72 GoToFalse, tempVar19, _, 78
+73 4, 10, z, tempVar20
+74 1, tempVar20, __, x
+75 1, 2.0, __, 2.0
+76 1, 2.0, __, y
+SHOOT, _, _, _
+78 7, x, 10, tempVar21
+79 GoToFalse, tempVar21, _, 83
+80 2, x, 1, tempVar22
+81 1, tempVar22, __, x
+82 GoTo, _, _, 78

@@ -6,6 +6,7 @@ namespace ProyectoPruebas {
     class Return : IQuadruple {
 
         Variable returnVariable;
+        Variable returnValue;
         public int getFirstParameter() {
             return OperationTypes.RETURN;
         }
@@ -15,25 +16,31 @@ namespace ProyectoPruebas {
         }
 
         public string getQuadruple() {
-            return "RETURN, _, _, " + returnVariable.getName();
+            if(returnVariable == null) {
+                return "RETURN, " + returnValue.getName() + ", _, " + " UNDEF";
+            }
+            return "RETURN, " + returnValue.getName() + ", _, " + returnVariable.getName();
         }
 
         public Variable getSecondParameter() {
-            return null;
+            return returnValue;
         }
 
         public Variable getThirdParameter() {
             return null;
         }
 
-        public Return(Variable variable) {
-            if(variable != null) {
-                returnVariable = variable;
-            }
-            else {
-                returnVariable = new Variable("UNDEF_VARIABLE", OperationTypes.TYPE_UNDEFINED);
-            }
+        public Return(Variable returnVariable, Variable returnValue) {
+
+            this.returnValue = returnValue;
+
+            this.returnVariable = returnVariable;
             
+        }
+
+        public Return(Variable returnValue) {
+            this.returnVariable = null;
+            this.returnValue = returnValue;
         }
     }
 }

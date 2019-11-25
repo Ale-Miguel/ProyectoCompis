@@ -557,10 +557,17 @@ namespace ProyectoPruebas {
         public void createReturn() {
 
             //Se va a regresar lo último que está en el stack de símbolos
-            Variable returnVariable = popSymnbolStack();
+            Variable returnValue = popSymnbolStack();
 
+            Return returnObj;
+           if (getTopFunctionStack() == null) {
+                returnObj = new Return(returnValue);
+            }
+            else {
+                returnObj = new Return(getTopFunctionStack().getReturnVariable(), returnValue);
+            }
             //Se genera el RETURN
-            Return returnObj = new Return(returnVariable);
+          
 
             //Se escribe el cuádruplo
             writeIntermediateCode(returnObj);
@@ -701,6 +708,47 @@ namespace ProyectoPruebas {
             PrintQuad printQuad = new PrintQuad(variable);
 
             writeIntermediateCode(printQuad);
+        }
+
+        public bool createLoopCondition(Variable variable) {
+
+            Variable varReff;
+
+            //Si lo que se recibió es una constante entera
+            if(variable.getType() == Parser._CTE_I) {
+                varReff = varTable.addConstant(variable);
+            }
+            else {
+                varReff = varTable.findVariable(variable.getName());
+            }
+
+            if(varReff == null) {
+                return false;
+            }
+
+
+            Variable varToCompare;
+
+            if (varReff.isConstant()) {
+                Variable tempVarConstant = getTempVar(OperationTypes.TYPE_INT, true);
+
+                createIntermediateCodeNoTemp(OperationTypes.EQUAL, varReff, tempVarConstant);
+
+                varToCompare = tempVarConstant;
+
+            }
+            else {
+                varToCompare = varReff;
+            }
+
+            pushJumpStack(lineCont);
+
+            //Se crea la comparación con 0
+            Variable tempVar = getTempVar(OperationTypes.TYPE_BOOL, true);
+
+
+
+            return true;
         }
         //Función que regresa la lista de cuádruplos
         public List<IQuadruple> getQuadrupleList() {

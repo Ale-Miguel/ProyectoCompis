@@ -6,7 +6,7 @@ namespace ProyectoPruebas {
 
    enum Operation { OP_UNDEF, EQUAL, PLUS, MINUS, MULTIPLICATION, DIVISION, GREATER_THAN, LESS_THAN, EQUAL_THAN, 
           GREATER_OR_EQUAL, LESS_OR_EQUAL, DIFFERENT_THAN, PRINT, MOVE_FORWARD, 
-        INTERACT, SHOOT, WAIT, TURN_RIGHT, TURN_LEFT, GOTO, GOTO_F, END_PROC, ERA, PARAM, GOSUB, RETURN}
+        INTERACT, SHOOT, WAIT, TURN_RIGHT, TURN_LEFT, GOTO, GOTO_F, END_PROC, ERA, PARAM, GOSUB, RETURN, END_PROGRAM}
 
     class OperationTypes {
 
@@ -51,7 +51,7 @@ namespace ProyectoPruebas {
         public const int PARAM = 23;
         public const int GOSUB = 24;
         public const int RETURN = 25;
-        
+        public const int END_PROGRAM = 26;
 
 
         public int[,,] semanticCube = new int[NUMBER_OF_TYPES, NUMBER_OF_TYPES, NUMBER_OF_OPERATORS];

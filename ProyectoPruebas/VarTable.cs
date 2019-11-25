@@ -427,7 +427,7 @@ namespace ProyectoPruebas {
             //Se regresa la constante ya con sus campos llenos
             return constante;
         }
-        
+         
         //Función que agrega una función a la tabla de funciones
         public void addFunction(Function function) {
 
