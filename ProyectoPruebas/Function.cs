@@ -18,7 +18,7 @@ namespace ProyectoPruebas {
         public Variable getParam(int param) {
 
             //Si aún no se le asigna parámetros o no tiene parámetros o se trata de acceder a un número de parámetro que no existe
-            if(functParams.Count == 0 || functParams.Count < param) {
+            if(functParams.Count <= 0 || functParams.Count < param) {
 
                 //Se regresa nulo
                 return null;

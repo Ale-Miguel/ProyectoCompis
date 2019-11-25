@@ -27,7 +27,13 @@ namespace ProyectoPruebas {
         }
 
         public Return(Variable variable) {
-            returnVariable = variable;
+            if(variable != null) {
+                returnVariable = variable;
+            }
+            else {
+                returnVariable = new Variable("UNDEF_VARIABLE", OperationTypes.TYPE_UNDEFINED);
+            }
+            
         }
     }
 }

@@ -8,7 +8,7 @@ EndFunction
 
 Function Int otraFuncion(Int hola, Int jaja):
 	hola = 1;
-	Return otraFuncion() + otraFuncion();
+	Return otraFuncion(1,2) + otraFuncion(3,4);
 
 EndFunction
 
@@ -22,7 +22,7 @@ x = x + 1;
 
 x = -1;
 
-z = otraFuncion();
+z = otraFuncion(1,2);
 
 If( x < 2)
 	x = 10 * z;

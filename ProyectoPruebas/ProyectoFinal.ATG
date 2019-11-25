@@ -258,7 +258,13 @@ FUNCTCALL  =
 
                                 }.)
             [FUNCT_PARAMS] 
-            RightParenthesis  (.tab.codeGenerator.solveFunction();.)
+            RightParenthesis  (.
+                                  if(!tab.codeGenerator.solveFunction()){
+
+                                    SemErr("Invalid number of arguments");
+                                  }
+
+                              .)
             .
 FUNCT_PARAMS = EXPR (. 
                           if(!tab.codeGenerator.setFunctParam()){

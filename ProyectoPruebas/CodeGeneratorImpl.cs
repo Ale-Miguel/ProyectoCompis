@@ -51,7 +51,7 @@ namespace ProyectoPruebas {
             return tempVar;
         }
         public void parseVariable(Variable variable) {
-            if (variable.isParsed()) {
+            if (variable == null || variable.isParsed()) {
                 return;
             }
             //Se obtiene la posición del tipo de dato equivalente del cubo semántico que le dió a la variable el Parser
@@ -128,6 +128,10 @@ namespace ProyectoPruebas {
 
                 Variable right_operand = popSymnbolStack(); //Se obtiene el operando derecho
                 Variable left_operand = popSymnbolStack();  //Se obtiene el operando izquierdo
+
+                if(right_operand == null || left_operand == null) {
+                    return false;
+                }
 
                 int operatorValue = popOperatorStack();     //Se obtiene el operador
 
@@ -288,6 +292,10 @@ namespace ProyectoPruebas {
         //Función que prepara un cuádruplo con solo dos variables, sin crear una variable temporal
         public bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2) {
 
+            if(var1 == null || var2 == null) {
+                return false;
+            }
+
             //Variable que guarda el resultado de hacer una operación entre dos tipos de dato
 
             parseVariable(var1);
@@ -354,6 +362,10 @@ namespace ProyectoPruebas {
         //Función que maneja el  pop de la pila de símbolos
         public Variable popSymnbolStack() {
 
+            if(symbolStack.Count == 0) {
+                return null;
+            }
+
             //Regresa el pop de la pila de símbolos con el cast de Variable
             
             return (Variable)symbolStack.Pop();
@@ -362,6 +374,9 @@ namespace ProyectoPruebas {
         //Función que maneja la operación de pop de la pila de operadores
         public int popOperatorStack() {
 
+            if(operatorsStack.Count == 0) {
+                return OperationTypes.OP_UNDEF;
+            }
             //Regresa el resultado de hacer pop de la pila de operadores con cast de int
             return (int)operatorsStack.Pop();
         }
@@ -577,14 +592,19 @@ namespace ProyectoPruebas {
         }
 
         //Función que se ejecuta al final de mandar llamar la función
-        public void solveFunction() {
+        public bool solveFunction() {
 
             //Se elimina la función de la pila de funciones
             Function funcion = popFunctionStack();
 
             //Si no existe ningúna función, no se hace nada
             if(funcion == null) {
-                return;
+                return false;
+            }
+
+            //Si la cantidad de parámetros que se escribieron es diferente a la cantidad de parámetros de la función
+            if (funcion.getSize() != funcArgCount -1) {
+                return false;
             }
 
             //Se genera el cuádruplo goSub
@@ -615,6 +635,8 @@ namespace ProyectoPruebas {
            
             //Como ya se mandó llamar, se resetea el contador de los argumentos
             funcArgCount = 1;
+
+            return true;
         }
 
         //Función que regresa la lista de cuádruplos
@@ -634,7 +656,7 @@ namespace ProyectoPruebas {
             //Se inicializan los contadores
             tempCont = 1;
             lineCont = 1;
-            funcArgCount = 0;
+            funcArgCount = 1;
 
             quadrupleList = new List<IQuadruple>();
             //Se crea un cubo semántico
@@ -644,6 +666,4 @@ namespace ProyectoPruebas {
             File.WriteAllText(filePath, "");
         }
     }
-
-   
 }
