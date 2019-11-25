@@ -142,10 +142,7 @@ MODULE = Function       (. string functName; int type;.)
         STATUTE  
           
          
-        {(
-          STATUTE | 
-          MODULE_RETURN 
-        )} 
+        {STATUTE} 
         
         
         EndFunction (.

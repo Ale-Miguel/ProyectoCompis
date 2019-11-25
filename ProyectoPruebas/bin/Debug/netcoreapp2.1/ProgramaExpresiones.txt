@@ -20,13 +20,18 @@ EndFunction
 
 Function Int factorial(Int numero):
 	If(numero <= 1)
-		resultado = 1;
+		Return 1;
 	Else
 		resultado = numero * factorial( numero -1);
 
 	EndIf
 
 	Return resultado;
+EndFunction
+
+Function Void funcionPrueba():
+	x = 1;
+	Return 0;
 EndFunction
 
 
@@ -57,3 +62,5 @@ For( x < 10 )
 	x = x + 1;
 
 EndFor
+
+Return 0;

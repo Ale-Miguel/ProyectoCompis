@@ -31,6 +31,10 @@ namespace ProyectoPruebas {
         }
 
         public Variable getReturnVariable() {
+
+            if(functParams.Count == 0) {
+                return null;
+            }
             return returnVariable;
         }
         public void setStartsIn(int line) {

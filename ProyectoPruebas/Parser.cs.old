@@ -178,12 +178,8 @@ string variableName;
 		PARAMS();
 		Expect(8);
 		STATUTE();
-		while (StartOf(3)) {
-			if (StartOf(1)) {
-				STATUTE();
-			} else {
-				MODULE_RETURN();
-			}
+		while (StartOf(1)) {
+			STATUTE();
 		}
 		Expect(35);
 		tab.codeGenerator.endFunction();
@@ -191,7 +187,7 @@ string variableName;
 	}
 
 	void STATUTE() {
-		if (StartOf(4)) {
+		if (StartOf(3)) {
 			COMMAND();
 		} else if (la.kind == 10) {
 			CONDITION();
@@ -199,6 +195,8 @@ string variableName;
 			CYCLE();
 		} else if (la.kind == 1) {
 			ASGMT_OR_FUNCT();
+		} else if (la.kind == 34) {
+			MODULE_RETURN();
 		} else SynErr(50);
 	}
 
@@ -450,7 +448,7 @@ string variableName;
 
 	void EXPRESSION() {
 		EXPR();
-		if (StartOf(5)) {
+		if (StartOf(4)) {
 			EXPRESSION_1();
 		}
 	}
@@ -537,7 +535,7 @@ string variableName;
 		
 		
 		}
-		if (StartOf(6)) {
+		if (StartOf(5)) {
 			FUNCT_PARAMS();
 		}
 		Expect(15);
@@ -560,7 +558,7 @@ string variableName;
 		tab.codeGenerator.pushSymbolStack(var);
 		}
 		
-		if (StartOf(6)) {
+		if (StartOf(5)) {
 			EXPR();
 		} else if (la.kind == 20) {
 			Get();
@@ -643,7 +641,7 @@ string variableName;
 	void FACTOR() {
 		if (la.kind == 14) {
 			FACTOR_1();
-		} else if (StartOf(7)) {
+		} else if (StartOf(6)) {
 			FACTOR_2();
 		} else SynErr(63);
 	}
@@ -720,9 +718,8 @@ string variableName;
 	
 	static readonly bool[,] set = {
 		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
-		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
-		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_T,_x,_x, _x,_x,_T,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_x,_T,_x, _x,_x},
+		{_x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x},
 		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},
 		{_x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_x, _x,_x,_T,_T, _x,_T,_T,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x},

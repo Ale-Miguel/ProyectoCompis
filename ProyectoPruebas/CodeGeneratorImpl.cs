@@ -240,11 +240,11 @@ namespace ProyectoPruebas {
             symbolStack.Push(variable);
         }
 
-        void pushFunctionStack(Function funcion) {
+        public void pushFunctionStack(Function funcion) {
             functionCallStack.Push(funcion);
         }
 
-        Function popFunctionStack() {
+        public Function popFunctionStack() {
 
             if(functionCallStack.Count == 0) {
                 return null;
@@ -516,7 +516,7 @@ namespace ProyectoPruebas {
             //Se manda a escribir el cuádruplo al archivo
             writeIntermediateCode(null);
 
-
+           
         }
 
         public void pushGoToMain() {
@@ -528,13 +528,14 @@ namespace ProyectoPruebas {
             lineCont--;
         }
 
+
         //Función para indicar fin de función
         public void endFunction() {
             EndProc endProc = new EndProc();
 
-
             writeIntermediateCode(endProc);
             varTable.destroyContext();
+            popFunctionStack();
         }
         
         //Función para manejar cuando se ha invocado una función
@@ -560,17 +561,19 @@ namespace ProyectoPruebas {
             Variable returnValue = popSymnbolStack();
 
             Return returnObj;
-           if (getTopFunctionStack() == null) {
+            if (getTopFunctionStack() == null) {
                 returnObj = new Return(returnValue);
             }
             else {
-                returnObj = new Return(getTopFunctionStack().getReturnVariable(), returnValue);
+                returnObj = new Return(getTopFunctionStack(), returnValue);
             }
             //Se genera el RETURN
           
 
             //Se escribe el cuádruplo
             writeIntermediateCode(returnObj);
+
+            
         }
 
         //Función  que agrega un parámetro a la función de la que se está trabajando

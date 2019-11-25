@@ -42,5 +42,10 @@ namespace ProyectoPruebas {
             this.returnVariable = null;
             this.returnValue = returnValue;
         }
+
+        public Return(Function funcion, Variable returnValue) {
+            this.returnVariable = funcion.getReturnVariable();
+            this.returnValue = returnValue;
+        }
     }
 }

@@ -480,6 +480,9 @@ namespace ProyectoPruebas {
 
             function.setReturnVariable(returnVariable);
 
+            //Decirle al generador de código que se está trabajando en esta función
+            codeGenerator.pushFunctionStack(function);
+
         }
 
         public Function findFunction(string name) {

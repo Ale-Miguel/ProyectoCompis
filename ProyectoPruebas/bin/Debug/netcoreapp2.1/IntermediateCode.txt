@@ -8,7 +8,7 @@
 8 1, 0, __, resultado
 9 1, 0, __, resultadoFibonacci
 10 1, 0, __, resultadoFactorial
-11 GoTo, _, _, 44
+11 GoTo, _, _, 47
 12 10, numero, 1, tempVar1
 13 GoToFalse, tempVar1, _, 15
 14 1, 1, __, resultado
@@ -26,11 +26,11 @@ GOSUB, fibonacci, _, 12
 26 1, fibonacci, __, tempVar5
 27 2, tempVar3, tempVar5, tempVar6
 28 1, tempVar6, __, resultado
-RETURN, resultado, _,  UNDEF
+RETURN, resultado, _, fibonacci
 END_PROC, _, _, _
 31 10, numero, 1, tempVar7
 32 GoToFalse, tempVar7, _, 34
-33 1, 1, __, resultado
+RETURN, 1, _, factorial
 34 GoTo, _, _, 41
 ERA, _, _, factorial
 36 3, numero, 1, tempVar8
@@ -39,45 +39,49 @@ GOSUB, factorial, _, 31
 39 1, factorial, __, tempVar9
 40 4, numero, tempVar9, tempVar10
 41 1, tempVar10, __, resultado
-RETURN, resultado, _,  UNDEF
+RETURN, resultado, _, factorial
+END_PROC, _, _, _
+44 1, 1, __, x
+RETURN, 0, _,  UNDEF
 END_PROC, _, _, _
 ERA, _, _, factorial
-45 1, 3, __, 3
+48 1, 3, __, 3
 PARAM, Parameter1, _, 3
 GOSUB, factorial, _, 31
-48 1, factorial, __, tempVar11
-49 1, tempVar11, __, resultadoFactorial
+51 1, factorial, __, tempVar11
+52 1, tempVar11, __, resultadoFactorial
 ERA, _, _, fibonacci
-51 1, 5, __, 5
+54 1, 5, __, 5
 PARAM, Parameter1, _, 5
 GOSUB, fibonacci, _, 12
-54 1, fibonacci, __, tempVar12
-55 1, tempVar12, __, resultadoFibonacci
-56 1, "Hola", __, "Hola"
+57 1, fibonacci, __, tempVar12
+58 1, tempVar12, __, resultadoFibonacci
+59 1, "Hola", __, "Hola"
 PRINT, _, _, "Hola"
 PRINT, _, _, x
-59 1, -1, __, -1
-60 1, -1, __, x
-61 1, 6, __, 6
-62 2, 6, 2, tempVar13
-63 3, z, x, tempVar14
-64 4, tempVar13, tempVar14, tempVar15
-65 5, tempVar15, 5, tempVar16
-66 1, tempVar16, __, x
-67 5, y, x, tempVar17
-68 1, tempVar17, __, y
-69 2, x, 1, tempVar18
-70 1, tempVar18, __, x
-71 1, -1, __, x
-72 7, x, 2, tempVar19
-73 GoToFalse, tempVar19, _, 79
-74 4, 10, z, tempVar20
-75 1, tempVar20, __, x
-76 1, 2.0, __, 2.0
-77 1, 2.0, __, y
+62 1, -1, __, -1
+63 1, -1, __, x
+64 1, 6, __, 6
+65 2, 6, 2, tempVar13
+66 3, z, x, tempVar14
+67 4, tempVar13, tempVar14, tempVar15
+68 5, tempVar15, 5, tempVar16
+69 1, tempVar16, __, x
+70 5, y, x, tempVar17
+71 1, tempVar17, __, y
+72 2, x, 1, tempVar18
+73 1, tempVar18, __, x
+74 1, -1, __, x
+75 7, x, 2, tempVar19
+76 GoToFalse, tempVar19, _, 82
+77 4, 10, z, tempVar20
+78 1, tempVar20, __, x
+79 1, 2.0, __, 2.0
+80 1, 2.0, __, y
 SHOOT, _, _, _
-79 7, x, 10, tempVar21
-80 GoToFalse, tempVar21, _, 84
-81 2, x, 1, tempVar22
-82 1, tempVar22, __, x
-83 GoTo, _, _, 79
+82 7, x, 10, tempVar21
+83 GoToFalse, tempVar21, _, 87
+84 2, x, 1, tempVar22
+85 1, tempVar22, __, x
+86 GoTo, _, _, 82
+RETURN, 0, _,  UNDEF
