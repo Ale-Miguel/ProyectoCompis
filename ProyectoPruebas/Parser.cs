@@ -409,6 +409,7 @@ string variableName;
 
 	void FOR() {
 		Expect(44);
+		tab.addVariableLayer();
 		tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); 
 		Expect(14);
 		EXPRESSION();
@@ -429,11 +430,13 @@ string variableName;
 			STATUTE();
 		}
 		Expect(45);
-		tab.codeGenerator.solveFor(); 
+		tab.codeGenerator.solveFor();
+		tab.removeVariableLayer(); 
 	}
 
 	void LOOP() {
 		Expect(46);
+		tab.addVariableLayer();
 		if (la.kind == 18) {
 			Get();
 		} else if (la.kind == 1) {
@@ -446,6 +449,7 @@ string variableName;
 		}
 		Expect(47);
 		tab.codeGenerator.solveLoop();
+		tab.removeVariableLayer();
 	}
 
 	void EXPRESSION() {
@@ -468,6 +472,7 @@ string variableName;
 		else{
 		
 		  tab.codeGenerator.pushGoToF(result);
+		  tab.addVariableLayer();
 		}
 		
 		STATUTE();
@@ -479,6 +484,7 @@ string variableName;
 		}
 		Expect(13);
 		tab.codeGenerator.popJumpStack();
+		tab.removeVariableLayer();
 	}
 
 	void CONDITION_ELSE() {

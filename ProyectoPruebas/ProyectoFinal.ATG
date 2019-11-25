@@ -132,7 +132,8 @@ VAR
 NUMBER = CTE_I 
         | CTE_F.
 
-MODULE = Function       (. string functName; int type;.)
+MODULE = Function       (.
+                          string functName; int type;.)
         (TYPE | Void)   (. type = t.kind;.)
         Id              (. functName = t.val; 
                            ProyectoPruebas.Function fun = new ProyectoPruebas.Function(functName, type);
@@ -212,7 +213,8 @@ PRINT = Print LeftParenthesis
 CYCLE = FOR 
         | LOOP.
 
-FOR = For (. tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); .)
+FOR = For (. tab.addVariableLayer();
+            tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); .)
       LeftParenthesis EXPRESSION 
       RightParenthesis (. ProyectoPruebas.Variable result = tab.codeGenerator.popSymnbolStack();
 
@@ -226,13 +228,15 @@ FOR = For (. tab.codeGenerator.pushJumpStack(tab.codeGenerator.getLineCont() ); 
                           }
                       .)
       STATUTE {STATUTE} 
-      EndFor  (. tab.codeGenerator.solveFor(); .)
+      EndFor  (. tab.codeGenerator.solveFor();
+                tab.removeVariableLayer(); .)
       .
 
-LOOP = Loop     
+LOOP = Loop    (.tab.addVariableLayer();.) 
       (CTE_I | Id)  (.tab.codeGenerator.createLoopCondition(new ProyectoPruebas.Variable(t.val, t.kind));.) 
       STATUTE {STATUTE} 
-      EndLoop   (.tab.codeGenerator.solveLoop();.) 
+      EndLoop   (.tab.codeGenerator.solveLoop();
+                  tab.removeVariableLayer();.) 
       .
 
 CONDITION = If LeftParenthesis EXPRESSION 
@@ -244,11 +248,13 @@ CONDITION = If LeftParenthesis EXPRESSION
                                   else{
 
                                     tab.codeGenerator.pushGoToF(result);
+                                    tab.addVariableLayer();
                                   }
                                .)
             STATUTE 
             {STATUTE}  [CONDITION_ELSE] 
-            EndIf           (. tab.codeGenerator.popJumpStack();.)
+            EndIf           (. tab.codeGenerator.popJumpStack();
+                                tab.removeVariableLayer();.)
             .
 CONDITION_ELSE = ELSE 
                 | ELSEIF.

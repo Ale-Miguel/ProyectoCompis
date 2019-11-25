@@ -74,11 +74,14 @@ namespace ProyectoPruebas {
             //Se crea un nuevo set de variables locales
             addressManager.createNewLocalAddress();
             addVariableLayer();
+            tempContStack.Push(tempCont);
+            tempCont = 1;
         }
 
         public void destroyContext() {
             addressManager.destroyCurrentLocalAddress();
             removeVariableLayer();
+            tempCont = (int)tempContStack.Pop();
         }
    
         bool assignGlobalAddress(Variable var) {
@@ -269,16 +272,14 @@ namespace ProyectoPruebas {
 
             //Se le hace push al stack
             variableStack.Push(aux);
-            tempContStack.Push(tempCont);
-            tempCont = 1;
+           
         }
 
         public void addVariableLayer() {
             //Dictionary<string, Variable> aux = new Dictionary<string, Variable>();
             //Se le hace push al stack
             variableStack.Push(null);
-            tempContStack.Push(tempCont);
-            tempCont = 1;
+
         }
         //Función que quita una capa de la tabla de variables (removiendo variables locales)
         public void removeVariableLayer() {
@@ -288,7 +289,7 @@ namespace ProyectoPruebas {
             }
             //Se hace pop a la pila
             variableStack.Pop();
-            tempCont = (int)tempContStack.Pop();
+           
         }
 
         public void addGlobalVariable(Variable variable) {

@@ -97,11 +97,11 @@ RETURN, 0, _,  UNDEF
 97 1, tempVar15, __, x
 98 GoTo, _, _, 94
 99 1, 5, __, 1LOOP_AUX_VARIABLE
-100 11, 1LOOP_AUX_VARIABLE, 0, tempVar1
-101 GoToFalse, tempVar1, _, 107
-102 3, x, 1, tempVar2
-103 1, tempVar2, __, x
-104 3, 1, 1LOOP_AUX_VARIABLE, tempVar3
-105 1, tempVar3, __, 1LOOP_AUX_VARIABLE
+100 11, 1LOOP_AUX_VARIABLE, 0, tempVar16
+101 GoToFalse, tempVar16, _, 107
+102 3, x, 1, tempVar17
+103 1, tempVar17, __, x
+104 3, 1, 1LOOP_AUX_VARIABLE, tempVar18
+105 1, tempVar18, __, 1LOOP_AUX_VARIABLE
 106 GoTo, _, _, 100
 END_PROC, _, _, _

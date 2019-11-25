@@ -523,7 +523,7 @@ string variableName;
 			STATUTE();
 		}
 		tab.codeGenerator.popJumpStack();
-		tab.codeGenerator.pushGoTo();
+		
 		if (la.kind == 11 || la.kind == 12) {
 			CONDITION_ELSE();
 		}
