@@ -523,7 +523,12 @@ string variableName;
 			FUNCT_PARAMS();
 		}
 		Expect(15);
-		tab.codeGenerator.solveFunction();
+		if(!tab.codeGenerator.solveFunction()){
+		
+		 SemErr("Invalid number of arguments");
+		}
+		
+		
 	}
 
 	void ASSIGNMENT() {

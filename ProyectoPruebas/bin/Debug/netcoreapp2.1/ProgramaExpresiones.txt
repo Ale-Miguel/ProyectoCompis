@@ -48,7 +48,7 @@ x = -1;
 If( x < 2)
 	x = 10 * z;
 	y = 2.0;
-
+	Shoot;
 EndIf
 
 For( x < 10 )

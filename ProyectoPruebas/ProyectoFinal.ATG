@@ -181,7 +181,8 @@ TYPE = Float
       | String 
       | Bool.
 
-COMMAND = COMMAND_LIST Semicolon.
+COMMAND = COMMAND_LIST (.tab.codeGenerator.createCommand(t.kind);.)
+          Semicolon.
 
 COMMAND_LIST = TurnLeft 
               | TurnRight 

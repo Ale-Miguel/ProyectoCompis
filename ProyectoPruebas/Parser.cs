@@ -335,6 +335,7 @@ string variableName;
 
 	void COMMAND() {
 		COMMAND_LIST();
+		tab.codeGenerator.createCommand(t.kind);
 		Expect(9);
 	}
 

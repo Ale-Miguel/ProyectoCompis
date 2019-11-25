@@ -67,13 +67,14 @@ GOSUB, fibonacci, _, 12
 67 1, tempVar18, __, x
 68 1, -1, __, x
 69 7, x, 2, tempVar19
-70 GoToFalse, tempVar19, _, 75
+70 GoToFalse, tempVar19, _, 76
 71 4, 10, z, tempVar20
 72 1, tempVar20, __, x
 73 1, 2.0, __, 2.0
 74 1, 2.0, __, y
-75 7, x, 10, tempVar21
-76 GoToFalse, tempVar21, _, 80
-77 2, x, 1, tempVar22
-78 1, tempVar22, __, x
-79 GoTo, _, _, 75
+SHOOT, _, _, _
+76 7, x, 10, tempVar21
+77 GoToFalse, tempVar21, _, 81
+78 2, x, 1, tempVar22
+79 1, tempVar22, __, x
+80 GoTo, _, _, 76

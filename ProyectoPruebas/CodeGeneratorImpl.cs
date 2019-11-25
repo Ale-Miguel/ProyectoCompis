@@ -528,6 +528,7 @@ namespace ProyectoPruebas {
             lineCont--;
         }
 
+        //Función para indicar fin de función
         public void endFunction() {
             EndProc endProc = new EndProc();
 
@@ -536,20 +537,32 @@ namespace ProyectoPruebas {
             varTable.destroyContext();
         }
         
+        //Función para manejar cuando se ha invocado una función
         public void functionCall(Function funcion) {
+
+            //Se agrega la función al stack de funciones
             pushFunctionStack(funcion);
 
+            //Se genera el cuádruplo ERA
             Era eraQuad = new Era(funcion);
 
+            //Se inicializa el contador de argumentos
             funcArgCount = 1;
 
+            //Se escribe el cuádruplo de ERA
             writeIntermediateCode(eraQuad);
         }
 
+        //Función para crear el cuádruplo de RETURN
         public void createReturn() {
+
+            //Se va a regresar lo último que está en el stack de símbolos
             Variable returnVariable = popSymnbolStack();
+
+            //Se genera el RETURN
             Return returnObj = new Return(returnVariable);
 
+            //Se escribe el cuádruplo
             writeIntermediateCode(returnObj);
         }
 
@@ -637,6 +650,49 @@ namespace ProyectoPruebas {
             funcArgCount = 1;
 
             return true;
+        }
+
+        //Función que crea los cuádruplos de los comandos
+        public void createCommand(int command) {
+
+            IQuadruple commandObj;
+
+            //Se checa los códigos de comandos y se crea el objeto del comando
+            switch (command) {
+
+                case Parser._TurnLeft:                  //TurnLeft
+                    commandObj = new TurnLeft();
+                    break;
+
+                case Parser._TurnRight:                 //TurnRight
+                    commandObj = new TurnRight();
+                    break;
+
+                case Parser._Shoot:                     //Shoot
+                    commandObj = new Shoot();
+                    break;
+
+                case Parser._Wait:                      //Wait
+                    commandObj = new Wait();
+                    break;
+
+                case Parser._MoveForward:               //MoveForward
+                    commandObj = new MoveForward();
+                    break;
+
+                case Parser._Interact:                  //Interact
+                    commandObj = new Interact();
+                    break;
+
+                default:
+                    //Si no se encontró el comando, no se hace nada (tal vez fue un print pero eso se encarga otra función)
+                    return;
+
+            }
+
+            writeIntermediateCode(commandObj);
+
+
         }
 
         //Función que regresa la lista de cuádruplos
