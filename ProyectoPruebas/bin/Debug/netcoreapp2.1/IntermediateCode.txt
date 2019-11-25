@@ -1,112 +1,12 @@
-1 1, 1, __, 1
-2 1, 1, __, x
-3 1, 10, __, 10
-4 1, 10, __, z
-5 1, 0.0, __, 0.0
-6 1, 0.0, __, y
-7 1, 0, __, 0
-8 1, 0, __, resultado
-9 1, 0, __, resultadoFibonacci
-10 1, 0, __, resultadoFactorial
-11 1, "Hola", __, "Hola"
-12 1, "Hola", __, prueba
-13 1, "Mundo", __, "Mundo"
-14 1, "Mundo", __, prueba2
-15 GoTo, _, _, 50
-16 10, numero, 1, tempVar1
-17 GoToFalse, tempVar1, _, 20
-18 1, 1, __, resultado
-19 GoTo, _, _, 33
-ERA, _, _, fibonacci
-21 3, numero, 1, tempVar2
-PARAM, Parameter1, _, tempVar2
-GOSUB, fibonacci, _, 16
-24 1, fibonacci, __, tempVar3
-ERA, _, _, fibonacci
-26 1, 2, __, 2
-27 3, numero, 2, tempVar4
-PARAM, Parameter1, _, tempVar4
-GOSUB, fibonacci, _, 16
-30 1, fibonacci, __, tempVar5
-31 2, tempVar3, tempVar5, tempVar6
-32 1, tempVar6, __, resultado
-RETURN, resultado, _, fibonacci
-END_PROC, _, _, _
-35 10, numero, 1, tempVar1
-36 GoToFalse, tempVar1, _, 39
-RETURN, 1, _, factorial
-38 GoTo, _, _, 46
-ERA, _, _, factorial
-40 3, numero, 1, tempVar2
-PARAM, Parameter1, _, tempVar2
-GOSUB, factorial, _, 35
-43 1, factorial, __, tempVar3
-44 4, numero, tempVar3, tempVar4
-45 1, tempVar4, __, resultado
-RETURN, resultado, _, factorial
-END_PROC, _, _, _
-48 1, 1, __, x
-END_PROC, _, _, _
-ERA, _, _, factorial
-51 1, 3, __, 3
-PARAM, Parameter1, _, 3
-GOSUB, factorial, _, 35
-54 1, factorial, __, tempVar1
-55 1, tempVar1, __, resultadoFactorial
-ERA, _, _, fibonacci
-57 1, 5, __, 5
-PARAM, Parameter1, _, 5
-GOSUB, fibonacci, _, 16
-60 1, fibonacci, __, tempVar2
-61 1, tempVar2, __, resultadoFibonacci
-PRINT, _, _, "Hola"
-PRINT, _, _, x
-PRINT, _, _, prueba2
-65 1, -1, __, -1
-66 1, -1, __, x
-67 1, 6, __, 6
-68 2, 6, 2, tempVar3
-69 3, z, x, tempVar4
-70 4, tempVar3, tempVar4, tempVar5
-71 5, tempVar5, 5, tempVar6
-72 1, tempVar6, __, x
-73 5, y, x, tempVar7
-74 1, tempVar7, __, y
-75 2, x, 1, tempVar8
-76 1, tempVar8, __, x
-77 1, -1, __, x
-78 7, x, 2, tempVar9
-79 GoToFalse, tempVar9, _, 86
-80 4, 10, z, tempVar10
-81 1, tempVar10, __, x
-82 1, 2.0, __, 2.0
-83 1, 2.0, __, y
-SHOOT, _, _, _
-85 GoTo, _, _, 89
-86 8, x, 3, tempVar11
-87 GoToFalse, tempVar11, _, 90
+1 GoTo, _, _, 2
+2 1, 5, __, 5
+3 1, 5, __, 1LOOP_AUX_VARIABLE
+4 1, 0, __, 0
+5 11, 1LOOP_AUX_VARIABLE, 0, tempVar1
+6 GoToFalse, tempVar1, _, 12
 MOVE_FORWARD, _, _, _
-89 GoTo, _, _, 91
-TURN_RIGHT, _, _, _
-91 7, x, 10, tempVar12
-92 GoToFalse, tempVar12, _, 97
-93 2, x, 1, tempVar13
-94 1, tempVar13, __, x
-PICK, _, _, _
-96 GoTo, _, _, 91
-RETURN, UNDEF, _, UNDEF
-98 11, x, 0, tempVar14
-99 GoToFalse, tempVar14, _, 103
-100 2, x, 1, tempVar15
-101 1, tempVar15, __, x
-102 GoTo, _, _, 98
-103 1, 5, __, 1LOOP_AUX_VARIABLE
-104 11, 1LOOP_AUX_VARIABLE, 0, tempVar16
-105 GoToFalse, tempVar16, _, 112
-106 3, x, 1, tempVar17
-107 1, tempVar17, __, x
-DROP, _, _, _
-109 3, 1, 1LOOP_AUX_VARIABLE, tempVar18
-110 1, tempVar18, __, 1LOOP_AUX_VARIABLE
-111 GoTo, _, _, 104
+8 1, 1, __, 1
+9 3, 1, 1LOOP_AUX_VARIABLE, tempVar2
+10 1, tempVar2, __, 1LOOP_AUX_VARIABLE
+11 GoTo, _, _, 5
 END_PROC, _, _, _

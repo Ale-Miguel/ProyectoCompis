@@ -275,6 +275,7 @@ namespace ProyectoPruebas {
         public bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2) {
 
             if(var1 == null || var2 == null) {
+                Console.WriteLine("Alguna variable es nulo");
                 return false;
             }
 
@@ -287,7 +288,7 @@ namespace ProyectoPruebas {
 
             //Si el resultado es UNDEFINED
             if (resultType == OperationTypes.TYPE_UNDEFINED) {
-
+                Console.WriteLine("Var1: "+var1.getType() + "Var2: " + var2.getType());
                 //Se regresa false en señal de error
                 return false;
             }
@@ -798,7 +799,7 @@ namespace ProyectoPruebas {
             if (constantVariable != null) {
 
                 //Se obtiene la constante 1
-                Variable constant1 = varTable.addConstant( new Variable("1", OperationTypes.TYPE_INT, "1"));
+                Variable constant1 = varTable.addConstant(new Variable("1", Parser._CTE_I, "1"));
 
                 //Se genera el cuádruplo -, 1LOOP_AUX_VARIABLE, 1, tempX
                 createIntermediateCode(OperationTypes.MINUS, constant1, constantVariable);

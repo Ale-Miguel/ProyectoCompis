@@ -11,16 +11,31 @@ namespace ProyectoPruebas {
 
         //Direcciones default de las constantes
         public const int STARTING_ADDRESS = 1000;
+
+        private int startConstIntAddress = STARTING_ADDRESS;
         private int constIntAddress = 1000;
+
+        private int startConstFloatAddress = 2000;
         private int constFloatAddress = 2000;
+
+        private int startConstStringAddress = 3000;
         private int constStringAddress = 3000;
+
         private int maxConstAddress = 3999;
 
         //Direcciones default de las variables globales
+        private int startGlobalIntVarAddress = 4000;
         private int globalIntVarAddress = 4000;
+
+        private int startGlobalFloatVarAddress = 5000;
         private int globalFloatVarAddress = 5000;
+
+        private int startGlobalBoolVarAddress = 6000;
         private int globalBoolVarAddress = 6000;
+
+        private int startGlobalStringAddress = 7000;
         private int globalStringVarAddress = 7000;
+
         private int maxGlobalAddress = 7999;
 
         private Stack localAddressStack;
@@ -31,16 +46,19 @@ namespace ProyectoPruebas {
             //Dirección inicial de las constantes
             int addressCont = STARTING_ADDRESS;
 
+            startConstIntAddress = addressCont;
             constIntAddress = addressCont;
 
             //Si se quiere cambiar la cantidad de constantes enteras, modificar esta suma
             addressCont += 1000;
 
+            startConstFloatAddress = addressCont;
             constFloatAddress = addressCont;
 
             //Si se quiere cambiar la cantidad de constantes flotantes, modificar esta suma
             addressCont += 1000;
 
+            startConstStringAddress = addressCont;
             constStringAddress = addressCont;
 
             //Si se quiere cambiar la cantidad de constantes string, modificar esta suma
@@ -55,16 +73,19 @@ namespace ProyectoPruebas {
             //Dirección inicial de las variables locales
             int addressCont = maxConstAddress + 1;
 
-            globalIntVarAddress = addressCont;
+            startGlobalIntVarAddress = addressCont;
+            globalIntVarAddress = startGlobalIntVarAddress;
 
             //Si se quiere cambiar la cantidad de variables globales enteras, modificar esta suma
             addressCont += 1000;
 
-            globalFloatVarAddress = addressCont;
+            startGlobalFloatVarAddress = addressCont;
+            globalFloatVarAddress = startGlobalFloatVarAddress;
 
             //Si se quiere cambiar la cantidad de variables globales flotantes, modificar esta suma
             addressCont += 1000;
 
+            startGlobalStringAddress = addressCont;
             globalStringVarAddress = addressCont;
 
             //Si se quiere cambiar la cantidad de variables globales string, modificar esta suma
