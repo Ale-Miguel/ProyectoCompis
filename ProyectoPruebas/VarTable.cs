@@ -253,6 +253,9 @@ namespace ProyectoPruebas {
         //Función que quita una capa de la tabla de variables (removiendo variables locales)
         public void removeVariableLayer() {
 
+            if(variableStack.Count == 0) {
+                return;
+            }
             //Se hace pop a la pila
             variableStack.Pop();
         }

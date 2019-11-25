@@ -152,7 +152,7 @@ string variableName;
 		while (StartOf(1)) {
 			STATUTE();
 		}
-		tab.destroyContext();
+		tab.codeGenerator.endFunction();
 	}
 
 	void VARS() {
