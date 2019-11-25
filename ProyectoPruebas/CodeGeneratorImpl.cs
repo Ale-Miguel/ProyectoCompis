@@ -25,7 +25,6 @@ namespace ProyectoPruebas {
 
         private OperationTypes cuboSemantico;
 
-        bool loopIsConstant = false;
 
 
         private string filePath = "IntermediateCode.txt";   //Path y nombre del archivo que guarda el código intermedio
@@ -502,9 +501,12 @@ namespace ProyectoPruebas {
            
         }
 
+        //Función que pone el GoTo para el main
         public void pushGoToMain() {
             pushGoTo();
         }
+       
+        //Función que resuelve cuando entra a la sección principal del programa
         public void solveGoToMain() {
         
             popJumpStack();
@@ -688,6 +690,7 @@ namespace ProyectoPruebas {
 
         }
 
+        //Función que genera el cuádruplo del print
         public void solvePrint(Variable variable) {
             parseVariable(variable);
 
@@ -696,68 +699,88 @@ namespace ProyectoPruebas {
             writeIntermediateCode(printQuad);
         }
 
+        //Función que genera los cuádruplos de la condición del Loop
         public bool createLoopCondition(Variable variable) {
 
             Variable varReff;
 
             //Si lo que se recibió es una constante entera
             if(variable.getType() == Parser._CTE_I) {
+                //Agrega la constante a la tabla de constantes
                 varReff = varTable.addConstant(variable);
             }
             else {
+                //Si no es constante, es una variable
                 varReff = varTable.findVariable(variable.getName());
             }
 
+            //La variable debe de existir
             if(varReff == null) {
                 return false;
             }
 
-
+            //Variable que guarda la variable que vamos a comparar con cero
             Variable varToCompare;
 
             if (varReff.isConstant()) {
+                //Si se entregó una constante, se genera una variable auxiliar que es la que va a ir decrementándoce hasta llegar a cero
                 Variable tempVarConstant = new Variable("1LOOP_AUX_VARIABLE", Parser._Int);
 
+                //Se agrega esta variable a la tabla de variables
                 varTable.addVariable(tempVarConstant);
 
+                //Se parsea la variable
                 parseVariable(tempVarConstant);
 
+                //Se crea un cuádruplo donde se le asigna el valor de la constante a la variable auxiliar
                 createIntermediateCodeNoTemp(OperationTypes.EQUAL, varReff, tempVarConstant);
 
+                //Ahora sabemos que la variable a comparar es la que tiene el valor asignado de la constante
                 varToCompare = tempVarConstant;
-                loopIsConstant = true;
+
 
             }
             else {
+
+                //Si fue una variable, se obtiene su referencia para que sea comparada en el ciclo
                 varToCompare = varReff;
             }
 
-
+            //Se obtiene la constante 0 para hacer la condición del Loop
             Variable constantCero = varTable.addConstant(new Variable("0", Parser._CTE_I, "0"));
 
+            //Se hace push al stack de saltos indicando dónde está la comparación
             pushJumpStack(lineCont);
 
-            createIntermediateCode(OperationTypes.GREATER_THAN, varToCompare, constantCero);
+            //Se crea el cuádruplo <>. Variable, 0, tempX
+            createIntermediateCode(OperationTypes.DIFFERENT_THAN, varToCompare, constantCero);
 
+            //Se hace push al stack de saltos con un goToF por la condición
             pushGoToF(popSymnbolStack());
 
             return true;
         }
 
+        //Función que ejecuta el fin del Loop
         public void solveLoop() {
 
-            if (loopIsConstant) {
-                Variable constantVariable = varTable.findVariable("1LOOP_AUX_VARIABLE");
+            //Se busca la variable generada si es que se puso en la condición una constante
+            Variable constantVariable = varTable.findVariable("1LOOP_AUX_VARIABLE");
 
+            //Si en la condición se ingresó una constante (constantVariable tiene algo)
+            if (constantVariable != null) {
+
+                //Se obtiene la constante 1
                 Variable constant1 = varTable.addConstant( new Variable("1", OperationTypes.TYPE_INT, "1"));
 
-
+                //Se genera el cuádruplo -, 1LOOP_AUX_VARIABLE, 1, tempX
                 createIntermediateCode(OperationTypes.MINUS, constant1, constantVariable);
 
+                //Se guarda el resultado de la resta en la variable auxiliar de la constante para que sea comparada
                 createIntermediateCodeNoTemp(OperationTypes.EQUAL, popSymnbolStack(), constantVariable);
             }
 
-           
+           //Se resuelve el GoToFalse
             popJumpStack();
             
             //El siguiente valor de la pila guarda la línea a donde empiezan las operaciones de la condición
@@ -768,7 +791,6 @@ namespace ProyectoPruebas {
 
             //Se manda a escribir el cuádruplo
             writeIntermediateCode(goTo);
-            loopIsConstant = false;
 
           
         }

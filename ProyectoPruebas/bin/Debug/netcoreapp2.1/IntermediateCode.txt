@@ -91,13 +91,13 @@ TURN_RIGHT, _, _, _
 91 1, tempVar13, __, x
 92 GoTo, _, _, 88
 RETURN, 0, _,  UNDEF
-94 6, x, 0, tempVar14
+94 11, x, 0, tempVar14
 95 GoToFalse, tempVar14, _, 99
 96 2, x, 1, tempVar15
 97 1, tempVar15, __, x
 98 GoTo, _, _, 94
 99 1, 5, __, 1LOOP_AUX_VARIABLE
-100 6, 1LOOP_AUX_VARIABLE, 0, tempVar1
+100 11, 1LOOP_AUX_VARIABLE, 0, tempVar1
 101 GoToFalse, tempVar1, _, 107
 102 3, x, 1, tempVar2
 103 1, tempVar2, __, x
