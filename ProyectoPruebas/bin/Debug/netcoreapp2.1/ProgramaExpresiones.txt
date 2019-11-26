@@ -3,7 +3,7 @@ Function Int Func1(Int x):
 		Return 0;
 	Else
 		Return 2 + Func1(x - 1);
-	EndIf
+	EndIF
 EndFunction
 
 Var Int x = 0;

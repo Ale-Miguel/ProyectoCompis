@@ -247,6 +247,9 @@ namespace ProyectoPruebas {
         //Función que genera el cuádruplo con 3 variables (incluye la variable temporal)
         public void createIntermediateCode(int op, Variable var1, Variable var2) {
 
+            if(var1 == null || var2 == null) {
+                return;
+            }
 
             //Se obtiene el tipo que guarda la variable temporal. Al ser la variable que va a almacenar el resultado de una
             //operación, su tipo de dato es el que resulte de hacer esa operación
@@ -287,7 +290,7 @@ namespace ProyectoPruebas {
 
             //Si el resultado es UNDEFINED
             if (resultType == OperationTypes.TYPE_UNDEFINED) {
-                Console.WriteLine("Var1: "+var1.getType() + "Var2: " + var2.getType());
+
                 //Se regresa false en señal de error
                 return false;
             }
@@ -428,6 +431,10 @@ namespace ProyectoPruebas {
             popJumpStack();
            
             //El siguiente valor de la pila guarda la línea a donde empiezan las operaciones de la condición
+            if(jumpStack.Count == 0) {
+                return;
+            }
+
             int lineReturn = (int)jumpStack.Pop();
 
             //Se crea el goTo para regresarse a los cuádruplos de la condición y que se cree el ciclo
@@ -555,13 +562,18 @@ namespace ProyectoPruebas {
             Variable returnValue = popSymnbolStack();
 
             Return returnObj;
+
+            //Si se está en un return solo (sin regresar variable)
             if(token == Parser._Return) {
+                //Se crea un Return con nulo
                 returnObj = new Return(null);
             }
+            //Si no, quiere decir que si se va a regresar el resultado de una EXPR pero no se está en una función
             else if (getTopFunctionStack() == null) {
                
                 returnObj = new Return(returnValue);
             }
+            //Si no, quiere decir que si se va a regresar el resultado de una EXPR
             else {
 
                 Function funcion = getTopFunctionStack();
@@ -569,17 +581,18 @@ namespace ProyectoPruebas {
 
                 parseVariable(returnVariable);
                 parseVariable(returnValue);
+
+                //Si el tipo de dato que regresa la función es distinto al tipo de datod de lo que se va a sacar
                 if (returnVariable.getType() != returnValue.getType()) {
                     return false;
                 } 
 
                 returnObj = new Return(funcion, returnValue);
             }
-            //Se genera el RETURN
-          
 
             //Se escribe el cuádruplo
             writeIntermediateCode(returnObj);
+
             return true;
             
         }
@@ -726,6 +739,11 @@ namespace ProyectoPruebas {
 
         //Función que genera el cuádruplo del print
         public void solvePrint(Variable variable) {
+
+            if(variable == null) {
+                return;
+            }
+
             parseVariable(variable);
 
             PrintQuad printQuad = new PrintQuad(variable);
@@ -735,6 +753,10 @@ namespace ProyectoPruebas {
 
         //Función que genera los cuádruplos de la condición del Loop
         public bool createLoopCondition(Variable variable) {
+
+            if (variable == null) {
+                return false;
+            }
 
             Variable varReff;
 
@@ -818,6 +840,10 @@ namespace ProyectoPruebas {
             popJumpStack();
             
             //El siguiente valor de la pila guarda la línea a donde empiezan las operaciones de la condición
+            if(jumpStack.Count == 0) {
+                return;
+            }
+
             int lineReturn = (int)jumpStack.Pop();
 
             //Se crea el goTo para regresarse a los cuádruplos de la condición y que se cree el ciclo
