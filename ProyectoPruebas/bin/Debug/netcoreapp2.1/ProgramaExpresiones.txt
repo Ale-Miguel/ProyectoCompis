@@ -1,12 +1,11 @@
 Function Int Func1(Int x):
-	If(x == 0)
-		Return 0;
-	Else
-		Return 2 + Func1(x - 1);
-	EndIF
+	Return 3 - 4;
+
 EndFunction
 
 Var Int x = 0;
-
+Loop 5
+	Shoot;
+EndLoop
 x = Func1(3);
 Print(x);

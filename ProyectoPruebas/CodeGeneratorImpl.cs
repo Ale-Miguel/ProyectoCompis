@@ -830,7 +830,7 @@ namespace ProyectoPruebas {
                 Variable constant1 = varTable.addConstant(new Variable("1", Parser._CTE_I, "1"));
 
                 //Se genera el cuádruplo -, 1LOOP_AUX_VARIABLE, 1, tempX
-                createIntermediateCode(OperationTypes.MINUS, constant1, constantVariable);
+                createIntermediateCode(OperationTypes.MINUS, constantVariable, constant1);
 
                 //Se guarda el resultado de la resta en la variable auxiliar de la constante para que sea comparada
                 createIntermediateCodeNoTemp(OperationTypes.EQUAL, popSymnbolStack(), constantVariable);
