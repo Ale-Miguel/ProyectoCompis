@@ -78,7 +78,7 @@ string variableName;
 
   internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
   internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
-  internal ErrorHandler ErrorHandler { get => errorHandler; set => errorHandler = value; }
+  internal ProyectoPruebas.ErrorHandler ErrorHandler { get => errorHandler; set => errorHandler = value; }
 
 
 

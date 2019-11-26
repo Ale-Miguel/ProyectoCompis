@@ -1,3 +1,7 @@
-Loop 5
-MoveForward;
-EndLoop
+
+Function Void Func1(Int x):
+	Print(x);
+EndFunction
+Var Int y = 5;
+Func1(y);
+Print("Done");

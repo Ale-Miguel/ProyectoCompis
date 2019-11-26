@@ -292,7 +292,8 @@ STATUTE = COMMAND
           | CONDITION 
           | CYCLE 
           | ASGMT_OR_FUNCT
-          | MODULE_RETURN.
+          | MODULE_RETURN
+          |VAR.
           
 ASGMT_OR_FUNCT = 
                 Id (. variableName = t.val; .)

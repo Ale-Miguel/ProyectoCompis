@@ -1,12 +1,11 @@
-1 GoTo, _, _, 2
-2 1, 5, __, 5
-3 1, 5, __, 1LOOP_AUX_VARIABLE
-4 1, 0, __, 0
-5 11, 1LOOP_AUX_VARIABLE, 0, tempVar1
-6 GoToFalse, tempVar1, _, 12
-MOVE_FORWARD, _, _, _
-8 1, 1, __, 1
-9 3, 1, 1LOOP_AUX_VARIABLE, tempVar2
-10 1, tempVar2, __, 1LOOP_AUX_VARIABLE
-11 GoTo, _, _, 5
+1 GoTo, _, _, 4
+PRINT, _, _, x
+END_PROC, _, _, _
+4 1, 5, __, 5
+5 1, 5, __, y
+ERA, _, _, Func1
+PARAM, Parameter1, _, y
+GOSUB, Func1, _, 2
+9 1, "Done", __, "Done"
+PRINT, _, _, "Done"
 END_PROC, _, _, _
