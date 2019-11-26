@@ -275,7 +275,6 @@ namespace ProyectoPruebas {
         public bool createIntermediateCodeNoTemp(int op, Variable var1, Variable var2) {
 
             if(var1 == null || var2 == null) {
-                Console.WriteLine("Alguna variable es nulo");
                 return false;
             }
 

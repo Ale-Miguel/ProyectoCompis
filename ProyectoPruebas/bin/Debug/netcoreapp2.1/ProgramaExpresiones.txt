@@ -1,7 +1,9 @@
-Var Int x = 2;
-Print(x);
-Function Void Func1(String s):
 
-	Print(s);
+Function Int factorial():
+	
+	Return 7;
 EndFunction
-Func1("ddd");
+
+Var Int v = 0;
+v = factorial();
+Print(v);

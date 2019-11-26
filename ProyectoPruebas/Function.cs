@@ -32,8 +32,8 @@ namespace ProyectoPruebas {
 
         public Variable getReturnVariable() {
 
-            if(functParams.Count == 0) {
-                return null;
+            if(returnType == Parser._Void) {
+                 return null;
             }
             return returnVariable;
         }
