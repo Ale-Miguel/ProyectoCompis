@@ -77,9 +77,10 @@ TOKENS
 IGNORE '\r' + '\n' + '\t' + '\f'
 
 PRODUCTIONS
-ProyectoFinal = PROGRAM.
+ProyectoFinal =  PROGRAM.
 
-PROGRAM = VARS (.//Se crea el goTo para el main
+PROGRAM = (. errors.ErrorHandler = errorHandler; .)
+        VARS (.//Se crea el goTo para el main
                 tab.codeGenerator.pushGoToMain();.)
         { 
         MODULE

@@ -1,8 +1,7 @@
-Var Int x = 4;
-Function Void Func1():
+Var Int x = 2;
+Print(x);
+Function Void Func1(String s):
 
-	Print(x);
-	Print("Done");
+	Print(s);
 EndFunction
-Func1();
-Print("end");
+Func1("ddd");

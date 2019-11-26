@@ -1,0 +1,3 @@
+ErrorHandler.SemErr(s);
+ ProyectoPruebas.ErrorHandler errorHandler;
+ internal ProyectoPruebas.ErrorHandler ErrorHandler { get => errorHandler; set => errorHandler = value; }

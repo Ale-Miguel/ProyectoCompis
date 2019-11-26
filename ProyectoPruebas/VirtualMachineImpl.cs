@@ -5,7 +5,7 @@ using System.Text;
 namespace ProyectoPruebas {
     class VirtualMachineImpl : IVirtualMachine {
         public void setErrorMessage(string errorMessage) {
-            Console.WriteLine(errorMessage);
+            Console.WriteLine("VM: " + errorMessage);
         }
 
         public void setQuadruples(List<IQuadruple> quadruples) {

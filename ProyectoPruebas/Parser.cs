@@ -145,6 +145,7 @@ string variableName;
 	}
 
 	void PROGRAM() {
+		errors.ErrorHandler = errorHandler; 
 		VARS();
 		tab.codeGenerator.pushGoToMain();
 		while (la.kind == 32) {
@@ -788,8 +789,11 @@ public class Errors {
 	public int count = 0;                                    // number of errors detected
 	public System.IO.TextWriter errorStream = Console.Out;   // error messages go to this stream
 	public string errMsgFormat = "-- line {0} col {1}: {2}"; // 0=line, 1=column, 2=text
+    ProyectoPruebas.ErrorHandler errorHandler;
+    internal ProyectoPruebas.ErrorHandler ErrorHandler { get => errorHandler; set => errorHandler = value; }
 
-	public virtual void SynErr (int line, int col, int n) {
+
+    public virtual void SynErr (int line, int col, int n) {
 		string s;
 		switch (n) {
 			case 0: s = "EOF expected"; break;
@@ -863,7 +867,8 @@ public class Errors {
 			default: s = "error " + n; break;
 		}
 		errorStream.WriteLine(errMsgFormat, line, col, s);
-		count++;
+        ErrorHandler.SemErr(s);
+        count++;
 	}
 
 	public virtual void SemErr (int line, int col, string s) {
