@@ -1,0 +1,184 @@
+COMPILER ProyectoFinal
+
+  string variableName;
+  string functionName;
+  string signSymbol;
+
+  private ProyectoPruebas.VarTable tab;
+ private ProyectoPruebas.ErrorHandler errorHandler;
+
+  int constCont = 0;
+
+  internal ProyectoPruebas.VarTable Tab { get => Tab1; set => Tab1 = value; }
+  internal ProyectoPruebas.VarTable Tab1 { get => tab; set => tab = value; }
+  internal ProyectoPruebas.ErrorHandler ErrorHandler { get => errorHandler; set => errorHandler = value; }
+
+
+CHARACTERS
+  Letter = 'A'..'Z' + 'a'..'z'. 
+  Digit = '0'..'9'.
+  Zero = '0'.
+  NonZeroDigit = Digit - Zero.
+  CharInLine = ANY - '\r' - '\n'.
+  AnyButDoubleQuote = CharInLine - '\"'.
+  DoubleQuote = '\"'.
+
+TOKENS
+  Id = Letter { Letter | Digit }.
+  Program = "program".
+  Var = "Var".
+  Int = "Int".
+  Float = "Float".
+  Print = "Print".
+  Comma = ','.
+  Colon = ':'.
+  Semicolon = ';'.
+  If = "If".
+  Else = "Else".
+  ElseIf = "ElseIf".
+  EndIf = "EndIf".
+  LeftParenthesis = '('.
+  RightParenthesis = ')'.
+  LeftCurlyBracket = '{'.
+  RightCurlyBracket = '}'.
+  CTE_I = Zero | (NonZeroDigit { Digit }).
+  CTE_F = Digit '.' Digit { Digit }.
+  CTE_S = DoubleQuote { AnyButDoubleQuote } DoubleQuote.
+  Plus = '+'.
+  Minus = '-'.
+  Asterisk = '*'.
+  Slash = '/'.
+  Equal = '='.
+  EqualThan = "==".
+  GreaterThan = '>'.
+  LesserThan = '<'.
+  NotEqual = "<>".
+  GreaterThanOrEqual = ">=".
+  LessThanOrEqual = "<=".
+  Function = "Function".
+  Void = "Void".
+  Return = "Return".
+  EndFunction = "EndFunction".
+  Bool = "Bool".
+  String = "String".
+  TurnLeft = "TurnLeft".
+  TurnRight = "TurnRight".
+  Shoot = "Shoot".
+  Wait = "Wait".
+  MoveForward = "MoveForward".
+  Interact = "Interact".
+  Pick = "Pick".
+  Drop = "Drop".
+  For = "For".
+  EndFor = "EndFor".
+  Loop = "Loop".
+  EndLoop = "EndLoop".
+
+IGNORE '\r' + '\n' + '\t' + '\f'
+
+PRODUCTIONS
+ProyectoFinal =  PROGRAM.
+
+PROGRAM = VARS {MODULE} STATUTE  {STATUTE}.
+
+
+
+VARS = {VAR}.
+
+VAR = Var TYPE Id Equal [SIGNS] (NUMBER | CTE_S) Semicolon. 
+
+NUMBER = CTE_I 
+        | CTE_F.
+
+MODULE = Function (TYPE | Void) Id PARAMS Colon STATUTE {STATUTE} EndFunction.
+
+MODULE_RETURN = Return [EXPR] Semicolon.
+
+PARAMS = LeftParenthesis [PARAMS_1] RightParenthesis.
+
+
+PARAMS_1 = TYPE Id {PARAMS_2}.
+
+PARAMS_2 = Comma TYPE Id.
+
+TYPE = Float 
+      | Int 
+      | String 
+      | Bool.
+
+COMMAND = COMMAND_LIST Semicolon.
+
+COMMAND_LIST = TurnLeft 
+              | TurnRight 
+              | Shoot 
+              | Wait  
+              | MoveForward 
+              | Interact
+              | Pick
+              | Drop 
+              | PRINT.
+
+PRINT = Print LeftParenthesis (CTE_S | Id) RightParenthesis.
+
+CYCLE = FOR 
+        | LOOP.
+
+FOR = For LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE} EndFor.
+
+LOOP = Loop (CTE_I | Id) STATUTE {STATUTE} EndLoop.
+
+CONDITION = If LeftParenthesis EXPRESSION 
+            RightParenthesis STATUTE {STATUTE}  [CONDITION_ELSE] EndIf.
+
+CONDITION_ELSE = ELSE 
+                | ELSEIF.
+
+ELSE = Else STATUTE {STATUTE}.
+
+ELSEIF = ElseIf LeftParenthesis EXPRESSION RightParenthesis STATUTE {STATUTE} [CONDITION_ELSE].
+
+STATUTE = COMMAND 
+          | CONDITION 
+          | CYCLE 
+          | ASGMT_OR_FUNCT
+          | MODULE_RETURN
+          |VAR.
+          
+ASGMT_OR_FUNCT = Id (FUNCTCALL | ASSIGNMENT) Semicolon.
+
+FUNCTCALL  = LeftParenthesis [FUNCT_PARAMS] RightParenthesis.
+
+FUNCT_PARAMS = EXPR {Comma EXPR}.
+
+ASSIGNMENT = Equal(EXPR | CTE_S).
+
+EXPRESSION = EXPR [EXPRESSION_1].
+EXPRESSION_1 = RELOPS EXPR.
+
+RELOPS = EqualThan
+        | GreaterThan 
+        | GreaterThanOrEqual 
+        | LesserThan 
+        | LessThanOrEqual 
+        | NotEqual.
+
+
+
+EXPR = TERM {(Plus | Minus) TERM}.
+
+TERM = FACTOR { (Asterisk | Slash) FACTOR}.
+
+FACTOR = FACTOR_1 
+        | FACTOR_2.
+
+FACTOR_1 = LeftParenthesis EXPR RightParenthesis.
+
+FACTOR_2 = [SIGNS] FACTOR_VALUES.
+
+FACTOR_VALUES = Id [FUNCTCALL]  
+                | NUMBER.
+
+SIGNS = Plus
+        | Minus.
+	
+END ProyectoFinal.

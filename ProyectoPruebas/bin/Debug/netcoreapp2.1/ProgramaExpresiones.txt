@@ -1,9 +1,12 @@
-
-Function Int factorial():
-	
-	Return 7;
+Function Int Func1(Int x):
+	If(x == 0)
+		Return 0;
+	Else
+		Return 2 + Func1(x - 1);
+	EndIf
 EndFunction
 
-Var Int v = 0;
-v = factorial();
-Print(v);
+Var Int x = 0;
+
+x = Func1(3);
+Print(x);
