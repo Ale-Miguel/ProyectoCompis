@@ -452,7 +452,7 @@ namespace ProyectoPruebas {
                 constante.setValue(constante.getName());
 
                 //Genera un cu{adruplo de asignación para que guarde el valor de la constante en memoria
-                codeGenerator.createIntermediateCodeNoTemp(OperationTypes.EQUAL, constante, constante);
+                codeGenerator.createConstant(constante);
 
             }
             catch (ArgumentException) {

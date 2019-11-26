@@ -597,6 +597,11 @@ namespace ProyectoPruebas {
             
         }
 
+        public void createConstant(Variable constant) {
+            AssignConstant constantObj = new AssignConstant(constant);
+
+            writeIntermediateCode(constantObj);
+        }
         //Función  que agrega un parámetro a la función de la que se está trabajando
         public bool setFunctParam() {
 

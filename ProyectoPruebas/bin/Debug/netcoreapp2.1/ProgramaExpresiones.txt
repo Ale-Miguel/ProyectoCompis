@@ -1,11 +1,7 @@
 Function Int Func1(Int x):
-	Return 3 - 4;
-
+x = x + 2;
+Return x + 5;
 EndFunction
-
 Var Int x = 0;
-Loop 5
-	Shoot;
-EndLoop
-x = Func1(3);
+x = Func1(2);
 Print(x);
