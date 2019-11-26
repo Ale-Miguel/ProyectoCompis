@@ -16,7 +16,7 @@ namespace ProyectoPruebas {
         }
 
         public string getQuadruple() {
-            return "PARAM, " + numberParam.getAddress() + ", _, " + paramVariable.getName();
+            return "PARAM, " + numberParam.getName() + ", _, " + paramVariable.getName();
         }
 
         public Variable getSecondParameter() {

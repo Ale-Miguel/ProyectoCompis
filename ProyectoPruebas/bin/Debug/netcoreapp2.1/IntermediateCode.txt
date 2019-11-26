@@ -1,16 +1,12 @@
 1 1, 4, __, 4
 2 1, 4, __, x
-3 GoTo, _, _, 9
-PRINT, _, _, a
+3 GoTo, _, _, 8
 PRINT, _, _, x
-6 1, "Done", __, "Done"
+5 1, "Done", __, "Done"
 PRINT, _, _, "Done"
 END_PROC, _, _, _
 ERA, _, _, Func1
-10 1, 2, __, 2
-11 2, x, 2, tempVar1
-PARAM, 8000, _, tempVar1
-GOSUB, Func1, _, 4
-14 1, "end", __, "end"
+GOSUB, _, _, 4
+10 1, "end", __, "end"
 PRINT, _, _, "end"
 END_PROC, _, _, _

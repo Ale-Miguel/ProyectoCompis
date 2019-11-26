@@ -18,6 +18,10 @@ namespace ProyectoPruebas {
         }
 
         public string getQuadruple() {
+            if(funcionVar == null) {
+                return "GOSUB, _, _, " + dirDeInicio.getValue();
+            }
+
             return "GOSUB, " + this.funcionVar.getName() + ", _, " + dirDeInicio.getValue();
         }
 

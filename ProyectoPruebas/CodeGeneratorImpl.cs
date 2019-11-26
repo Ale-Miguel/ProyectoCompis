@@ -651,7 +651,7 @@ namespace ProyectoPruebas {
             parseVariable(returnFunctVariable);
 
             //Si el tipo de retorno de la función está definido
-            if(returnFunctVariable.getType() != OperationTypes.TYPE_UNDEFINED) {
+            if(returnFunctVariable != null && returnFunctVariable.getType() != OperationTypes.TYPE_UNDEFINED) {
 
                 //Se genera una variable temporal para que guarde el valor del retorno 
                 Variable returnTempVariable = getTempVar(returnFunctVariable.getType(), returnFunctVariable.isParsed());
