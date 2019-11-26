@@ -321,6 +321,9 @@ namespace ProyectoPruebas {
 
                 //Se escribe en el archivo cada cuádruplo almacenado en el buffer
                 foreach (IQuadruple quadruple in quadrupleBuffer) {
+                    if(quadruple == null) {
+                        return;
+                    }
 
                     quadrupleList.Add(quadruple);
                     writeToFile(quadruple.getQuadruple());
@@ -590,6 +593,9 @@ namespace ProyectoPruebas {
             //Se obtiene la funciónen la que se está trabajando
             Function funcion = getTopFunctionStack();
 
+            if(funcion == null || parametro == null) {
+                return false;
+            }
             //Se obtiene la variable de parámetro de acuerdo con el parámetro que se esté trabajando
             Variable funcParameter = funcion.getParam(funcArgCount);
 
