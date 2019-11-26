@@ -1,7 +1,8 @@
-
-Function Void Func1(Int x):
+Var Int x = 4;
+Function Void Func1(Int a):
+	Print(a);
 	Print(x);
+	Print("Done");
 EndFunction
-Var Int y = 5;
-Func1(y);
-Print("Done");
+Func1(x + 2);
+Print("end");

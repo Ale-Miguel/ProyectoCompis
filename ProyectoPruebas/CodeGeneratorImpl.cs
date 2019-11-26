@@ -603,13 +603,14 @@ namespace ProyectoPruebas {
             parseVariable(parametro);
             parseVariable(funcParameter);
 
+
             //Si los tipos de dato de las variables son diferentes igual hay un error
             if(parametro.getType() != funcParameter.getType()) {
                 return false;
             }
 
             //Se gemera el cuádruplo param
-            Param param = new Param(funcArgCount, parametro);
+            Param param = new Param(funcParameter, parametro);
 
             //Se manda a escribir el cuádruplo
             writeIntermediateCode(param);

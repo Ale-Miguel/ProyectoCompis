@@ -559,6 +559,8 @@ namespace ProyectoPruebas {
 
             codeGenerator.parseVariable(param);
 
+            //assignlocalAddress(param);
+
             //Se agrega a la lista de parámetros de la función
             actualFunction.addParam(param);
 

@@ -16,7 +16,7 @@ namespace ProyectoPruebas {
         }
 
         public string getQuadruple() {
-            return "PARAM, " + numberParam.getName() + ", _, " + paramVariable.getName();
+            return "PARAM, " + numberParam.getAddress() + ", _, " + paramVariable.getName();
         }
 
         public Variable getSecondParameter() {
@@ -27,9 +27,14 @@ namespace ProyectoPruebas {
             return null;
         }
 
-        public Param(int numberParam, Variable variable) {
-            this.numberParam = new Variable("Parameter" + numberParam, OperationTypes.TYPE_INT, numberParam.ToString());
-            this.paramVariable = variable;
+        public Param(Variable functionParameter, Variable parameterVariable) {
+            this.numberParam = functionParameter;
+            this.paramVariable = parameterVariable;
+        }
+
+        public Param(int numberParam, Function funcion, Variable parametro) {
+            this.numberParam = parametro;
+            this.paramVariable = funcion.getParam(numberParam);
         }
     }
 }
