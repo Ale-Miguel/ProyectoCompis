@@ -9,6 +9,7 @@ namespace ProyectoPruebas {
         private Scanner scanner;
         private Parser parser;
         private ErrorHandler errorHandler;
+        private bool errorsFound;
 
         public void compile(string fileName) {
             scanner = new Scanner(fileName);
@@ -18,16 +19,22 @@ namespace ProyectoPruebas {
             parser.ErrorHandler = errorHandler;
             parser.Parse();
             Console.WriteLine(parser.errors.count + " errors found");
-            virtualMachine.setQuadruples(parser.Tab.codeGenerator.getQuadrupleList());
+            if (!errorsFound) {
+                virtualMachine.setQuadruples(parser.Tab.codeGenerator.getQuadrupleList());
+            }
+           
             //Console.WriteLine(parser.errors.errMsgFormat);
         }
         public Compiler(IVirtualMachine virtualMachine) {
             this.virtualMachine = virtualMachine;
+            this.errorsFound = false;
         }
         
         public void sendError(string errorMessage) {
             this.virtualMachine.setErrorMessage(errorMessage);
             parser.SemErr(errorMessage);
+
+            errorsFound = true;
             
         }
 

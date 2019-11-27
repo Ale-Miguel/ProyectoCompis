@@ -5,4 +5,5 @@ If(x==1)
 TurnRight;
 Else
 TurnLeft;
+EndIf
 EndLoop
