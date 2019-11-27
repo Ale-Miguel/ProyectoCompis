@@ -867,7 +867,7 @@ public class Errors {
 			default: s = "error " + n; break;
 		}
 		errorStream.WriteLine(errMsgFormat, line, col, s);
-        ErrorHandler.SemErr(s);
+        ErrorHandler.SemErr("Line " + line + ": " + s);
         count++;
 	}
 

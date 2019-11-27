@@ -1,7 +1,8 @@
-Function Int Func1(Int x):
-x = x + 2;
-Return x + 5;
-EndFunction
 Var Int x = 0;
-x = Func1(2);
-Print(x);
+Loop 5
+MoveForward;
+If(x==1)
+TurnRight;
+Else
+TurnLeft;
+EndLoop
