@@ -1,18 +1,16 @@
-ASSIGN_CONSTANT, 0, _,_
-2 1, 1000, -1, 4000
+ASSIGN_CONSTANT, 3, _,_
+2 =, 1000, -1, 4000
 3 GoTo, _, _, 4
-ASSIGN_CONSTANT, 5, _,_
-5 1, 1001, -1, 8000
-6 11, 8000, 1000, 10000
-7 GoToFalse, tempVar1, _, 18
-MOVE_FORWARD, _, _, _
+ASSIGN_CONSTANT, 0, _,_
+5 <>, 4000, 1001, 10000
+6 GoToFalse, tempVar1, _, 13
 ASSIGN_CONSTANT, 1, _,_
-10 8, 4000, 1002, 10001
-11 GoToFalse, tempVar2, _, 14
-TURN_RIGHT, _, _, _
-13 GoTo, _, _, 15
-TURN_LEFT, _, _, _
-15 3, 8000, 1002, 8001
-16 1, 8001, -1, 8000
-17 GoTo, _, _, 6
+8 -, 4000, 1002, 8000
+9 =, 8000, -1, 4000
+ASSIGN_CONSTANT, "Hello", _,_
+PRINT, _, _, "Hello"
+12 GoTo, _, _, 5
+ASSIGN_CONSTANT, 2, _,_
+14 +, 1000, 1003, 8001
+15 =, 8001, -1, 4000
 END_PROC, _, _, _

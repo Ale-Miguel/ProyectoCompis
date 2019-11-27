@@ -59,6 +59,47 @@ namespace ProyectoPruebas {
 
         public int[,,] semanticCube = new int[NUMBER_OF_TYPES, NUMBER_OF_TYPES, NUMBER_OF_OPERATORS];
 
+        public static string getOperatorRepresentation(int operatorCode) {
+            switch (operatorCode) {
+
+                case EQUAL:
+                case ASSIGN_CONSTANT:   // =
+                    return "=";
+
+                case PLUS:
+                    return "+";             // +
+
+                case MINUS:
+                    return "-";            // -
+
+                case MULTIPLICATION:
+                    return "*";   // *
+
+                case DIVISION:
+                    return "/";         // /
+
+                case GREATER_THAN:
+                    return ">";     // >
+
+                case LESS_THAN:
+                    return "<";        // <
+
+                case EQUAL_THAN:
+                    return "==";       // ==
+
+                case GREATER_OR_EQUAL:
+                    return ">="; // >=
+
+                case LESS_OR_EQUAL:
+                    return "<=";    // <=
+
+                case DIFFERENT_THAN:
+                    return "<>";   // <>
+            }
+
+            return "_";
+        }
+
         //Función que sirve de traductor entre los números que asigna el parser a los tokens de tipos y operadores
         //Con las posiciones en el cubo semántico
         public int getCubePosition(int operatorValue) {

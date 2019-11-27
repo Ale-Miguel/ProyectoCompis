@@ -251,6 +251,9 @@ namespace ProyectoPruebas {
                 return;
             }
 
+            parseVariable(var1);
+            parseVariable(var2);
+
             //Se obtiene el tipo que guarda la variable temporal. Al ser la variable que va a almacenar el resultado de una
             //operación, su tipo de dato es el que resulte de hacer esa operación
             int resultType = cuboSemantico.semanticCube[var1.getType(), var2.getType(), op];

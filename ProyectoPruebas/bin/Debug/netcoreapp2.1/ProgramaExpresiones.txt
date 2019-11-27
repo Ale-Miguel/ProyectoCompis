@@ -1,9 +1,6 @@
-Var Int x = 0;
-Loop 5
-MoveForward;
-If(x==1)
-TurnRight;
-Else
-TurnLeft;
-EndIf
+Var Int x = 3;
+Loop x
+x = x-1;
+Print("Hello");
 EndLoop
+x = 3 + 2;
